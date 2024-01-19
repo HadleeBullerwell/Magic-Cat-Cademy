@@ -89,7 +89,7 @@ A rainforest with many tall trees. It is littered with forestry foliage, bushes 
 
 ## Sketch of World -
 
-![Environment](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/0c671fa1-86f0-4d58-92f2-55ff77641ff8)
+![Environment](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/e04f7726-9708-4047-814d-394161bcd8b9)
 
 ## Menus –
 Upon loading, you will have the name of the game across the top in a fantasy-style font. Underneath, you will see the option to play, select a level, and then options. I will have a solid colour filling the background. The colours and fonts, such as purples, browns, blues, and more, will represent the magic aspect of the game. 
