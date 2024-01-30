@@ -1,6 +1,7 @@
 #include "Scene_Menu.h"
-#include "Scene_Frogger.h"
+#include "Scene_MagicCatCademy.h"
 #include <memory>
+#include <iostream>
 
 void Scene_Menu::onEnd()
 {
@@ -15,19 +16,19 @@ Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 
 
 
-void Scene_Menu:: init()
+void Scene_Menu::init()
 {
-    registerAction(sf::Keyboard::W,			"UP");
-    registerAction(sf::Keyboard::Up,		"UP");
-    registerAction(sf::Keyboard::S,			"DOWN");
-    registerAction(sf::Keyboard::Down,	 	"DOWN");
-	registerAction(sf::Keyboard::D,			"PLAY");
-	registerAction(sf::Keyboard::Escape,	"QUIT");
+	registerAction(sf::Keyboard::W, "UP");
+	registerAction(sf::Keyboard::Up, "UP");
+	registerAction(sf::Keyboard::S, "DOWN");
+	registerAction(sf::Keyboard::Down, "DOWN");
+	registerAction(sf::Keyboard::D, "PLAY");
+	registerAction(sf::Keyboard::Escape, "QUIT");
 
-	m_title = "Frogger";
-	m_menuStrings.push_back("Level 1");
-	m_menuStrings.push_back("Level 2");
-	m_menuStrings.push_back("Level 3");
+	m_title = "Magic Cat-Cademy";
+	m_menuStrings.push_back("PLAY");
+	m_menuStrings.push_back("SETTINGS");
+	m_menuStrings.push_back("QUIT");
 
 	m_levelPaths.push_back("../assets/level1.txt");
 	m_levelPaths.push_back("../assets/level1.txt");
@@ -48,7 +49,7 @@ void Scene_Menu::update(sf::Time dt)
 
 void Scene_Menu::sRender()
 {
-	 
+
 	sf::View view = m_game->window().getView();
 	view.setCenter(m_game->window().getSize().x / 2.f, m_game->window().getSize().y / 2.f);
 	m_game->window().setView(view);
@@ -56,31 +57,36 @@ void Scene_Menu::sRender()
 	static const sf::Color selectedColor(255, 255, 255);
 	static const sf::Color normalColor(0, 0, 0);
 
-	static const sf::Color backgroundColor(100, 100, 255);
+	static const sf::Color backgroundColor(126, 45, 162);
 
-	sf::Text footer("UP: W    DOWN: S   PLAY:D    QUIT: ESC", 
+	sf::Text footer("UP: W    DOWN: S   ENTER :D    QUIT: ESC",
 		Assets::getInstance().getFont("main"), 20);
 	footer.setFillColor(normalColor);
-	footer.setPosition(32, 700);
+	footer.setOrigin(footer.getLocalBounds().width / 2, footer.getLocalBounds().height / 2);
+	footer.setPosition(m_game->window().getSize().x / 2.f, 700);
 
 	m_game->window().clear(backgroundColor);
 
 	m_menuText.setFillColor(normalColor);
 	m_menuText.setString(m_title);
-	m_menuText.setPosition(10, 10);
+	m_menuText.setCharacterSize(75);
+	m_menuText.setOrigin(m_menuText.getLocalBounds().width / 2, m_menuText.getLocalBounds().height / 2);
+	m_menuText.setPosition(m_game->window().getSize().x / 2.f, 70);
 	m_game->window().draw(m_menuText);
 
 	for (size_t i{ 0 }; i < m_menuStrings.size(); ++i)
 	{
-		m_menuText.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
-		m_menuText.setPosition(32, 32 + (i+1) * 96);
-		m_menuText.setString(m_menuStrings.at(i));
-		m_game->window().draw(m_menuText);
-	} 
+		sf::Text menuItem;
+		menuItem.setFont(Assets::getInstance().getFont("main"));
+		menuItem.setCharacterSize(50);
+		menuItem.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
+		menuItem.setOrigin(menuItem.getLocalBounds().width / 2, menuItem.getLocalBounds().height / 2);
+		menuItem.setPosition(m_game->window().getSize().x / 2.f, 100 + (i + 1) * 96);
+		menuItem.setString(m_menuStrings.at(i));
+		m_game->window().draw(menuItem);
+	}
 
 	m_game->window().draw(footer);
-	//m_game->window().display();
-
 }
 
 
@@ -91,14 +97,14 @@ void Scene_Menu::sDoAction(const Command& action)
 		if (action.name() == "UP")
 		{
 			m_menuIndex = (m_menuIndex + m_menuStrings.size() - 1) % m_menuStrings.size();
-		} 
+		}
 		else if (action.name() == "DOWN")
 		{
 			m_menuIndex = (m_menuIndex + 1) % m_menuStrings.size();
 		}
 		else if (action.name() == "PLAY")
 		{
-			m_game->changeScene("PLAY", std::make_shared<Scene_Frogger>(m_game, m_levelPaths[m_menuIndex]));
+			m_game->changeScene("PLAY", std::make_shared<Scene_MagicCatCademy>(m_game, m_levelPaths[m_menuIndex]));
 		}
 		else if (action.name() == "QUIT")
 		{

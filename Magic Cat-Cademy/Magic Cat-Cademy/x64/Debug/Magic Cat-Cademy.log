@@ -1,20 +1,6 @@
-﻿  Animation.cpp
-  Assets.cpp
-  Command.cpp
-  Entity.cpp
-  EntityManager.cpp
-  GameEngine.cpp
-  main.cpp
-  MusicPlayer.cpp
-  Physics.cpp
-  Scene.cpp
-  Scene_Frogger.cpp
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_Frogger.cpp(492,20): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_Frogger.cpp(493,17): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+﻿  Scene_MagicCatCademy.cpp
   Scene_Menu.cpp
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_Menu.cpp(76,33): warning C4244: 'argument': conversion from 'size_t' to 'float', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_Menu.cpp(93,59): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-  SoundPlayer.cpp
-  Utilities.cpp
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_Menu.cpp(84,64): warning C4244: 'argument': conversion from 'size_t' to 'float', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_Menu.cpp(99,59): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   Generating Code...
   Magic Cat-Cademy.vcxproj -> C:\Magic-Cat-Cademy\Magic Cat-Cademy\x64\Debug\Magic Cat-Cademy.exe

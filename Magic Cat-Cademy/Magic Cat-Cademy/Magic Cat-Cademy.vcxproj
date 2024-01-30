@@ -29,7 +29,7 @@
     <ClCompile Include="MusicPlayer.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Scene_Frogger.cpp" />
+    <ClCompile Include="Scene_MagicCatCademy.cpp" />
     <ClCompile Include="Scene_Menu.cpp" />
     <ClCompile Include="SoundPlayer.cpp" />
     <ClCompile Include="Utilities.cpp" />
@@ -46,14 +46,10 @@
     <ClInclude Include="MusicPlayer.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Scene_Frogger.h" />
+    <ClInclude Include="Scene_MagicCatCademy.h" />
     <ClInclude Include="Scene_Menu.h" />
     <ClInclude Include="SoundPlayer.h" />
     <ClInclude Include="Utilities.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Frogger.vcxproj" />
-    <None Include="Frogger.vcxproj.filters" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

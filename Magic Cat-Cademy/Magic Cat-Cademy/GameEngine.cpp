@@ -1,11 +1,11 @@
 #include "GameEngine.h"
 #include "Assets.h"
-#include "Scene_Frogger.h"
 #include "Scene_Menu.h"
 #include "Command.h"
 #include <fstream>
 #include <memory>
 #include <cstdlib>
+#include <iostream>
 
 
 GameEngine::GameEngine(const std::string& path)
@@ -22,9 +22,9 @@ void GameEngine::init(const std::string& path)
     loadConfigFromFile(path, width, height);
 
 
-    m_window.create(sf::VideoMode(width, height), "GEX Planes");
+    m_window.create(sf::VideoMode(width, height), "Magic Cat-Cademy");
 
-    m_statisticsText.setFont(Assets::getInstance().getFont("main"));
+	//m_statisticsText.setFont(Assets::getInstance().getFont("main"));
     m_statisticsText.setPosition(15.0f, 5.0f);
     m_statisticsText.setCharacterSize(15);
 

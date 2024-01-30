@@ -54,7 +54,7 @@
     <ClCompile Include="Utilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene_Frogger.cpp">
+    <ClCompile Include="Scene_MagicCatCademy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,9 +92,6 @@
     <ClInclude Include="Scene.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene_Frogger.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Scene_Menu.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -104,13 +101,8 @@
     <ClInclude Include="Utilities.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Frogger.vcxproj">
+    <ClInclude Include="Scene_MagicCatCademy.h">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="Frogger.vcxproj.filters">
-      <Filter>Source Files</Filter>
-    </None>
+    </ClInclude>
   </ItemGroup>
 </Project>
