@@ -1,2 +1,15 @@
-Window 1920 1080
-Font main ../assets/Fonts/FantasyMagist.otf
+Window 			1500 750
+
+Font main 		../assets/Fonts/FantasyMagist.otf
+
+# Textures
+Texture Background 	../assets/Textures/background.png
+Texture Lucy            ../assets/Textures/lucyWalk.png
+
+# Sprites
+Sprite Background 	Background 0 0 300 1000
+
+JSON 			../assets/Textures/lucyWalk.json
+
+# Animation 	Name 		Texture	Speed   Repeats
+Animation	lucyWalk 	Lucy	8	no

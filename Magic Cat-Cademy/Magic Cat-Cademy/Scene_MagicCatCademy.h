@@ -12,7 +12,16 @@ private:
 	bool			m_drawAABB{ false };
 	bool			m_drawGrid{ false };
 
-	void		  onEnd() override;
+	void			sUpdate(sf::Time dt);
+
+	void			spawnPlayer(sf::Vector2f pos);
+
+	void			onEnd() override;	
+
+	void			init();
+	void			loadLevel(const std::string& path);
+
+	void			registerActions();
 
 public:
 	Scene_MagicCatCademy(GameEngine* gameEngine, const std::string& levelPath);
@@ -20,8 +29,6 @@ public:
 	void		  update(sf::Time dt) override;
 	void		  sDoAction(const Command& command) override;
 	void		  sRender() override;
-	void          init();
-	void          loadLevel(const std::string& path);
-	void	      registerActions();
+
 };
 

@@ -46,10 +46,8 @@ void Scene_Menu::update(sf::Time dt)
 	m_entityManager.update();
 }
 
-
 void Scene_Menu::sRender()
 {
-
 	sf::View view = m_game->window().getView();
 	view.setCenter(m_game->window().getSize().x / 2.f, m_game->window().getSize().y / 2.f);
 	m_game->window().setView(view);
@@ -59,19 +57,13 @@ void Scene_Menu::sRender()
 
 	static const sf::Color backgroundColor(126, 45, 162);
 
-	sf::Text footer("UP: W    DOWN: S   ENTER :D    QUIT: ESC",
-		Assets::getInstance().getFont("main"), 20);
-	footer.setFillColor(normalColor);
-	footer.setOrigin(footer.getLocalBounds().width / 2, footer.getLocalBounds().height / 2);
-	footer.setPosition(m_game->window().getSize().x / 2.f, 700);
-
 	m_game->window().clear(backgroundColor);
 
 	m_menuText.setFillColor(normalColor);
 	m_menuText.setString(m_title);
 	m_menuText.setCharacterSize(75);
 	m_menuText.setOrigin(m_menuText.getLocalBounds().width / 2, m_menuText.getLocalBounds().height / 2);
-	m_menuText.setPosition(m_game->window().getSize().x / 2.f, 70);
+	m_menuText.setPosition(300, 70);
 	m_game->window().draw(m_menuText);
 
 	for (size_t i{ 0 }; i < m_menuStrings.size(); ++i)
@@ -80,15 +72,13 @@ void Scene_Menu::sRender()
 		menuItem.setFont(Assets::getInstance().getFont("main"));
 		menuItem.setCharacterSize(50);
 		menuItem.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
-		menuItem.setOrigin(menuItem.getLocalBounds().width / 2, menuItem.getLocalBounds().height / 2);
-		menuItem.setPosition(m_game->window().getSize().x / 2.f, 100 + (i + 1) * 96);
+		m_menuText.setOrigin(m_menuText.getLocalBounds().width / 2, m_menuText.getLocalBounds().height / 2);
+		menuItem.setPosition(m_menuText.getPosition().x - 275 , 100 + (i + 1) * 96);
 		menuItem.setString(m_menuStrings.at(i));
 		m_game->window().draw(menuItem);
 	}
 
-	m_game->window().draw(footer);
 }
-
 
 void Scene_Menu::sDoAction(const Command& action)
 {
