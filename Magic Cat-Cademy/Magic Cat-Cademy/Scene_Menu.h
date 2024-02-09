@@ -11,6 +11,7 @@ private:
 	int							m_menuIndex{0};
 	std::string					m_title;
 
+	void displayLogo(sf::Vector2f pos);
 
 	void init();
 	void onEnd() override;

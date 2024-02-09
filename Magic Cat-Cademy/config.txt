@@ -3,17 +3,28 @@ Window 			1500 750
 Font main 		../assets/Fonts/FantasyMagist.otf
 
 Music mainTune		../assets/Music/mainTune.ogg
+Music mainMenuMusic	../assets/Music/mainMenu.wav
+
+Sound meow		../assets/Sounds/catMeow.wav
+Sound select		../assets/Sounds/select.mp3
 
 # Textures
 Texture Background 	../assets/Textures/background.png
 Texture Lucy            ../assets/Textures/lucyAtlas.png
+Texture Logo		../assets/Textures/logo.png
+Texture	Magic		../assets/Textures/magic.png
 
 # Sprites
 Sprite Background 	Background 0 0 15000 750
 
 JSON 			../assets/Textures/lucyAtlas.json
+JSON			../assets/Textures/logo.json
+JSON			../assets/Textures/magic.json
 
 # Animation 	Name 		Texture	Speed   Repeats
+Animation	logo		Logo	1	no
+Animation	magic		Magic	1	yes
+
 Animation	lucyIdle        Lucy	3	yes
 Animation	lucyWalk 	Lucy	3	yes
 Animation	lucyJump	Lucy	3	no

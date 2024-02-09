@@ -51,7 +51,7 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 		if (action.name() == "RIGHT")
 			walkingRight = false;
 
-		if (action.name() == "UP") {
+		if (action.name() == "JUMP") {
 			jumping = false;
 		}
 	}

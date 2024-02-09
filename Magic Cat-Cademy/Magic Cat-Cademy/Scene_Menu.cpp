@@ -1,7 +1,11 @@
 #include "Scene_Menu.h"
 #include "Scene_MagicCatCademy.h"
+#include "SoundPlayer.h"
+#include "Entity.h"
+#include "MusicPlayer.h"
 #include <memory>
 #include <iostream>
+#include "Components.h"
 
 void Scene_Menu::onEnd()
 {
@@ -11,13 +15,25 @@ void Scene_Menu::onEnd()
 Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 	: Scene(gameEngine)
 {
+	MusicPlayer::getInstance().play("mainMenuMusic");
+	MusicPlayer::getInstance().setVolume(50);
+
 	init();
 }
 
 
 
+void Scene_Menu::displayLogo(sf::Vector2f pos)
+{
+	auto logo = m_entityManager.addEntity("logo");
+	logo->addComponent<CTransform>(pos);
+	logo->addComponent<CAnimation>(Assets::getInstance().getAnimation("logo"));
+}
+
 void Scene_Menu::init()
 {
+	displayLogo(sf::Vector2f(1200, 375));
+
 	registerAction(sf::Keyboard::W, "UP");
 	registerAction(sf::Keyboard::Up, "UP");
 	registerAction(sf::Keyboard::S, "DOWN");
@@ -63,7 +79,7 @@ void Scene_Menu::sRender()
 	m_menuText.setString(m_title);
 	m_menuText.setCharacterSize(75);
 	m_menuText.setOrigin(m_menuText.getLocalBounds().width / 2, m_menuText.getLocalBounds().height / 2);
-	m_menuText.setPosition(300, 70);
+	m_menuText.setPosition(300, 225);
 	m_game->window().draw(m_menuText);
 
 	for (size_t i{ 0 }; i < m_menuStrings.size(); ++i)
@@ -72,12 +88,23 @@ void Scene_Menu::sRender()
 		menuItem.setFont(Assets::getInstance().getFont("main"));
 		menuItem.setCharacterSize(50);
 		menuItem.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
-		m_menuText.setOrigin(m_menuText.getLocalBounds().width / 2, m_menuText.getLocalBounds().height / 2);
-		menuItem.setPosition(m_menuText.getPosition().x - 275 , 100 + (i + 1) * 96);
+		menuItem.setOrigin(menuItem.getLocalBounds().width / 2, menuItem.getLocalBounds().height / 2);
+		menuItem.setPosition(menuItem.getPosition().x + 20 , 185 + (i + 1) * 96);
 		menuItem.setString(m_menuStrings.at(i));
 		m_game->window().draw(menuItem);
 	}
 
+	for (auto& e : m_entityManager.getEntities()) {
+		if (!e->hasComponent<CAnimation>())
+			continue;
+
+		// Draw Sprite
+		auto& anim = e->getComponent<CAnimation>().animation;
+		auto& tfm = e->getComponent<CTransform>();
+		anim.getSprite().setPosition(tfm.pos);
+		anim.getSprite().setRotation(tfm.angle);
+		m_game->window().draw(anim.getSprite());
+	}
 }
 
 void Scene_Menu::sDoAction(const Command& action)
@@ -94,6 +121,7 @@ void Scene_Menu::sDoAction(const Command& action)
 		}
 		else if (action.name() == "PLAY")
 		{
+			SoundPlayer::getInstance().play("select");
 			m_game->changeScene("PLAY", std::make_shared<Scene_MagicCatCademy>(m_game, m_levelPaths[m_menuIndex]));
 		}
 		else if (action.name() == "QUIT")

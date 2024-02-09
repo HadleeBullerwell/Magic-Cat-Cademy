@@ -8,6 +8,7 @@
 
 MusicPlayer::MusicPlayer() {
     m_filenames["mainTune"] = "../assets/Music/mainTune.ogg";
+    m_filenames["mainMenuMusic"] = "../assets/Music/mainMenu.wav";
 }
 
 void MusicPlayer::addSong(const std::string&name, const std::string&path) {
