@@ -106,8 +106,11 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 {
 	m_entityManager.update();
 
+	m_worldView.move(m_config.scrollSpeed * dt.asSeconds() * 1, 0);
+
 	sAnimation(dt);
 	sMovement(dt);
+	checkPlayerState();
 }
 
 void Scene_MagicCatCademy::sAnimation(sf::Time dt)
@@ -162,12 +165,12 @@ void Scene_MagicCatCademy::playerMovement()
 	
 	if (dir & CInput::LEFT) {
 		walkingLeft = true;
-		pos.x -= 1.f;
+		pos.x -= 2.f;
 	}
 
 	if (dir & CInput::RIGHT) {
 		walkingRight = true;
-		pos.x += 1.f;
+		pos.x += 2.f;
 	}
 	
 	if (dir & CInput::UP) {

@@ -1,12 +1,21 @@
 #pragma once
 #include "Scene.h"
 
+struct LevelConfig {
+	float       scrollSpeed{ 60.f };
+
+	std::map<std::string,
+		std::vector<std::pair<float, sf::Time>>> directions;
+};
+
 class Scene_MagicCatCademy : public Scene
 {
 private:
 	sPtrEntt        m_player{ nullptr };
 	sf::View        m_worldView;
 	sf::FloatRect   m_worldBounds;
+
+	LevelConfig		m_config;
 
 	bool			walkingLeft{ false };
 	bool			walkingRight{ false };

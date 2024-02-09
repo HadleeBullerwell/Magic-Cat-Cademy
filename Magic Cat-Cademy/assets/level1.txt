@@ -4,3 +4,5 @@ World 1500 750
 
 
 Bkg Background 0 0
+
+Scroll Speed 60

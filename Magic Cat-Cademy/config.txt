@@ -9,7 +9,7 @@ Texture Background 	../assets/Textures/background.png
 Texture Lucy            ../assets/Textures/lucyAtlas.png
 
 # Sprites
-Sprite Background 	Background 0 0 300 1000
+Sprite Background 	Background 0 0 15000 750
 
 JSON 			../assets/Textures/lucyAtlas.json
 
