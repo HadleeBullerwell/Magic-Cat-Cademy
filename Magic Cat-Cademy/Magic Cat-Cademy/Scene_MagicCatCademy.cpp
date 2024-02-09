@@ -1,5 +1,7 @@
 #include "Scene_MagicCatCademy.h"
 #include "Components.h"
+#include "SoundPlayer.h"
+#include "MusicPlayer.h"
 #include "Entity.h"
 #include <fstream>
 #include <iostream>
@@ -9,6 +11,9 @@ Scene_MagicCatCademy::Scene_MagicCatCademy(GameEngine* gameEngine, const std::st
 	m_worldView(gameEngine->window().getDefaultView()) {
 	loadLevel(levelPath);
 	registerActions();
+
+	MusicPlayer::getInstance().play("mainTune");
+	MusicPlayer::getInstance().setVolume(50);
 
 	init();
 }
@@ -33,15 +38,22 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 		// Player control
 		if (action.name() == "LEFT") { m_player->getComponent<CInput>().dir = CInput::LEFT; }
 		else if (action.name() == "RIGHT") { m_player->getComponent<CInput>().dir = CInput::RIGHT; }
-		else if (action.name() == "UP") { m_player->getComponent<CInput>().dir = CInput::UP; }
-		else if (action.name() == "DOWN") { m_player->getComponent<CInput>().dir = CInput::DOWN; }
+		else if (action.name() == "JUMP") { m_player->getComponent<CInput>().dir = CInput::UP; }
+		else if (action.name() == "MEOW") { SoundPlayer::getInstance().play("meow", m_player->getComponent<CTransform>().pos); }
 	}
-	// on Key Release
-	// the frog can only go in one direction at a time, no angles
-	// use a bitset and exclusive setting.
-	else if (action.type() == "END" && (action.name() == "LEFT" || action.name() == "RIGHT" || action.name() == "UP" ||
-		action.name() == "DOWN")) {
+
+	else if (action.type() == "END" && (action.name() == "LEFT" || action.name() == "RIGHT" || action.name() == "JUMP")) {
 		m_player->getComponent<CInput>().dir = 0;
+
+		if (action.name() == "LEFT")
+			walkingLeft = false;
+
+		if (action.name() == "RIGHT")
+			walkingRight = false;
+
+		if (action.name() == "UP") {
+			jumping = false;
+		}
 	}
 }
 
@@ -93,6 +105,39 @@ void Scene_MagicCatCademy::init()
 void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 {
 	m_entityManager.update();
+
+	sAnimation(dt);
+	sMovement(dt);
+}
+
+void Scene_MagicCatCademy::sAnimation(sf::Time dt)
+{
+	auto list = m_entityManager.getEntities();
+	for (auto e : m_entityManager.getEntities()) {
+		// update all animations
+		if (e->hasComponent<CAnimation>()) {
+			auto& anim = e->getComponent<CAnimation>();
+			anim.animation.update(dt);
+
+			checkPlayerState();
+		}
+	}
+}
+
+void Scene_MagicCatCademy::sMovement(sf::Time dt)
+{
+	playerMovement();
+
+	// move all objects
+	for (auto e : m_entityManager.getEntities()) {
+
+		if (e->hasComponent<CTransform>()) {
+			auto& tfm = e->getComponent<CTransform>();
+
+			tfm.pos += tfm.vel * dt.asSeconds();
+			tfm.angle += tfm.angVel * dt.asSeconds();
+		}
+	}
 }
 
 void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
@@ -101,7 +146,71 @@ void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 	m_player->addComponent<CTransform>(pos);
 	m_player->addComponent<CBoundingBox>(sf::Vector2f(100.f, 100.f));
 	m_player->addComponent<CInput>();
-	m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyWalk"));
+	m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
+	m_player->addComponent<CState>("idle");
+}
+
+void Scene_MagicCatCademy::playerMovement()
+{
+	// no movement if player is dead
+	if (m_player->hasComponent<CState>() && m_player->getComponent<CState>().state == "dead")
+		return;
+
+	auto& dir = m_player->getComponent<CInput>().dir;
+	auto& pos = m_player->getComponent<CTransform>().pos;
+
+	
+	if (dir & CInput::LEFT) {
+		walkingLeft = true;
+		pos.x -= 1.f;
+	}
+
+	if (dir & CInput::RIGHT) {
+		walkingRight = true;
+		pos.x += 1.f;
+	}
+	
+	if (dir & CInput::UP) {
+		jumping = true;
+		pos.y -= 10.f;
+	}
+}
+
+void Scene_MagicCatCademy::checkPlayerState()
+{
+	if (m_player->hasComponent<CState>()) {
+		std::string newState = "idle";
+
+		if (walkingRight)
+			newState = "walkingRight";
+
+		if (walkingLeft)
+			newState = "walkingLeft";
+
+		if (jumping)
+			newState = "jumping";
+
+		auto& state = m_player->getComponent<CState>().state;
+		if (state != "dead") {
+
+			if (state != newState) {
+				state = newState;
+
+				if (state == "walkingLeft")
+					m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyWalk"));
+
+				if (state == "walkingRight")
+					m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyWalk"));
+
+				if (state == "jumping")
+					m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyJump"));
+
+				if (state == "idle")
+					m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
+			}
+
+		}
+	}
 }
 
 void Scene_MagicCatCademy::onEnd()
@@ -153,4 +262,5 @@ void Scene_MagicCatCademy::registerActions()
 	registerAction(sf::Keyboard::Right, "RIGHT");
 	registerAction(sf::Keyboard::Space, "JUMP");
 	registerAction(sf::Mouse::Left, "SHOOT");
+	registerAction(sf::Keyboard::M, "MEOW");
 }

@@ -1,9 +1,114 @@
 {
 	"frames": [
 		{
+			"filename": "lucyIdle (1).png",
+			"frame": {
+			  "x": 5,
+			  "y": 5,
+			  "w": 84,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 84,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 84,
+			  "h": 56
+			}
+		  },
+		  {
+			"filename": "lucyIdle (2).png",
+			"frame": {
+			  "x": 5,
+			  "y": 71,
+			  "w": 86,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 86,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 86,
+			  "h": 56
+			}
+		  },
+		  {
+			"filename": "lucyIdle (3).png",
+			"frame": {
+			  "x": 5,
+			  "y": 137,
+			  "w": 90,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 90,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 90,
+			  "h": 56
+			}
+		  },
+		  {
+			"filename": "lucyIdle (4).png",
+			"frame": {
+			  "x": 99,
+			  "y": 5,
+			  "w": 91,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 91,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 91,
+			  "h": 56
+			}
+		  },
+		  {
+			"filename": "lucyIdle (5).png",
+			"frame": {
+			  "x": 99,
+			  "y": 5,
+			  "w": 91,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 91,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 91,
+			  "h": 56
+			}
+		  },
+		{
 			"filename": "lucyWalk (1).png",
 			"frame": {
-				"x": 1,
+				"x": 103,
 				"y": 1,
 				"w": 100,
 				"h": 100
@@ -24,49 +129,7 @@
 		{
 			"filename": "lucyWalk (2).png",
 			"frame": {
-				"x": 103,
-				"y": 1,
-				"w": 100,
-				"h": 100
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 100,
-				"h": 100
-			},
-			"sourceSize": {
-				"w": 100,
-				"h": 100
-			}
-		},
-		{
-			"filename": "lucyWalk (3).png",
-			"frame": {
 				"x": 1,
-				"y": 103,
-				"w": 100,
-				"h": 100
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 100,
-				"h": 100
-			},
-			"sourceSize": {
-				"w": 100,
-				"h": 100
-			}
-		},
-		{
-			"filename": "lucyWalk (4).png",
-			"frame": {
-				"x": 103,
 				"y": 103,
 				"w": 100,
 				"h": 100
@@ -88,7 +151,7 @@
 	"meta": {
 		"app": "http://www.codeandweb.com/texturepacker",
 		"version": "1.0",
-		"image": "lucyWalk.png",
+		"image": "lucyAtlas.png",
 		"format": "RGBA8888",
 		"size": {
 			"w": 204,

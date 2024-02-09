@@ -2,14 +2,18 @@ Window 			1500 750
 
 Font main 		../assets/Fonts/FantasyMagist.otf
 
+Music mainTune		../assets/Music/mainTune.ogg
+
 # Textures
 Texture Background 	../assets/Textures/background.png
-Texture Lucy            ../assets/Textures/lucyWalk.png
+Texture Lucy            ../assets/Textures/lucyAtlas.png
 
 # Sprites
 Sprite Background 	Background 0 0 300 1000
 
-JSON 			../assets/Textures/lucyWalk.json
+JSON 			../assets/Textures/lucyAtlas.json
 
 # Animation 	Name 		Texture	Speed   Repeats
-Animation	lucyWalk 	Lucy	8	no
+Animation	lucyIdle        Lucy	3	yes
+Animation	lucyWalk 	Lucy	3	yes
+Animation	lucyJump	Lucy	3	no

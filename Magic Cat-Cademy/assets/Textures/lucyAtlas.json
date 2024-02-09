@@ -1,0 +1,250 @@
+{
+	"frames": [
+		{
+			"filename": "lucyIdle (1).png",
+			"frame": {
+			  "x": 5,
+			  "y": 5,
+			  "w": 84,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 84,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 84,
+			  "h": 56
+			}
+		  },
+		  {
+			"filename": "lucyIdle (2).png",
+			"frame": {
+			  "x": 5,
+			  "y": 71,
+			  "w": 86,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 86,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 86,
+			  "h": 56
+			}
+		  },
+		  {
+			"filename": "lucyIdle (3).png",
+			"frame": {
+			  "x": 5,
+			  "y": 137,
+			  "w": 90,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 90,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 90,
+			  "h": 56
+			}
+		  },
+		  {
+			"filename": "lucyIdle (4).png",
+			"frame": {
+			  "x": 99,
+			  "y": 5,
+			  "w": 91,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 91,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 91,
+			  "h": 56
+			}
+		  },
+		  {
+			"filename": "lucyIdle (5).png",
+			"frame": {
+			  "x": 99,
+			  "y": 5,
+			  "w": 91,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 91,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 91,
+			  "h": 56
+			}
+		  },
+          {
+			"filename": "lucyIdle (6).png",
+			"frame": {
+			  "x": 99,
+			  "y": 5,
+			  "w": 91,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 91,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 91,
+			  "h": 56
+			}
+		  },
+          {
+			"filename": "lucyIdle (7).png",
+			"frame": {
+			  "x": 5,
+			  "y": 137,
+			  "w": 90,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 90,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 90,
+			  "h": 56
+			}
+		  },
+          {
+			"filename": "lucyIdle (8).png",
+			"frame": {
+			  "x": 5,
+			  "y": 71,
+			  "w": 86,
+			  "h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+			  "x": 0,
+			  "y": 0,
+			  "w": 86,
+			  "h": 56
+			},
+			"sourceSize": {
+			  "w": 86,
+			  "h": 56
+			}
+		  },
+          {
+            "filename": "lucyJump (1).png",
+            "frame": {
+              "x": 5,
+              "y": 203,
+              "w": 95,
+              "h": 51
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+              "x": 0,
+              "y": 0,
+              "w": 95,
+              "h": 51
+            },
+            "sourceSize": {
+              "w": 95,
+              "h": 51
+            },
+            "pivot": {
+              "x": 0.5,
+              "y": 0.5
+            }
+          },
+		{
+			"filename": "lucyWalk (1).png",
+			"frame": {
+				"x": 101,
+				"y": 71,
+				"w": 85,
+				"h": 55
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 85,
+				"h": 55
+			},
+			"sourceSize": {
+				"w": 85,
+				"h": 55
+			}
+		},
+		{
+			"filename": "lucyWalk (2).png",
+			"frame": {
+				"x": 200,
+				"y": 5,
+				"w": 86,
+				"h": 56
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 86,
+				"h": 56
+			},
+			"sourceSize": {
+				"w": 86,
+				"h": 56
+			}
+		}
+	],
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "lucyAtlas.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 204,
+			"h": 204
+		},
+		"scale": "1"
+	}
+}
