@@ -396,7 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-Magic Cat-Cademy/.vs/Magic Cat-Cademy/v17/ipch/AutoPCH/8bc4f6524aeae72f/ASSETS.ipch
-Magic Cat-Cademy/.vs/Magic Cat-Cademy/v17/ipch/AutoPCH/8bc4f6524aeae72f/ASSETS.ipch
-Magic Cat-Cademy/.vs/Magic Cat-Cademy/v17/ipch/AutoPCH/8bc4f6524aeae72f/ASSETS.ipch
 *.ipch
