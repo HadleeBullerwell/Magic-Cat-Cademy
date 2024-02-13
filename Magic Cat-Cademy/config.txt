@@ -11,19 +11,19 @@ Sound select		../assets/Sounds/select.mp3
 # Textures
 Texture Background 	../assets/Textures/background.png
 Texture Lucy            ../assets/Textures/lucyAtlas.png
-Texture Logo		../assets/Textures/logo.png
-Texture	Magic		../assets/Textures/magic.png
+Texture Menu		../assets/Textures/menu.png
+Texture MenuBackground ../assets/Textures/menuBackground.png
 
 # Sprites
-Sprite Background 	Background 0 0 15000 750
+Sprite Background 	Background	0 0 15000 750
+Sprite MenuBackground	MenuBackground	0 0 574   324
 
 JSON 			../assets/Textures/lucyAtlas.json
-JSON			../assets/Textures/logo.json
-JSON			../assets/Textures/magic.json
+JSON			../assets/Textures/menu.json
 
 # Animation 	Name 		Texture	Speed   Repeats
-Animation	logo		Logo	1	no
-Animation	magic		Magic	1	yes
+Animation	logo		Menu	1	no
+Animation       lucySit         Menu    2	yes
 
 Animation	lucyIdle        Lucy	3	yes
 Animation	lucyWalk 	Lucy	3	yes

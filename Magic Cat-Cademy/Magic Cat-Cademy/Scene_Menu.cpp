@@ -5,6 +5,7 @@
 #include "MusicPlayer.h"
 #include <memory>
 #include <iostream>
+#include <istream>
 #include "Components.h"
 
 void Scene_Menu::onEnd()
@@ -30,9 +31,38 @@ void Scene_Menu::displayLogo(sf::Vector2f pos)
 	logo->addComponent<CAnimation>(Assets::getInstance().getAnimation("logo"));
 }
 
+void Scene_Menu::spawnCat(sf::Vector2f pos)
+{
+	auto cat = m_entityManager.addEntity("lucyMenu");
+	cat->addComponent<CTransform>(pos);
+	cat->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucySit"));
+}
+
+void Scene_Menu::displayBackground(sf::Vector2f pos)
+{
+	auto e = m_entityManager.addEntity("bkg");
+	auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture("MenuBackground")).sprite;
+	sprite.setOrigin(0.f, 0.f);
+	sprite.setPosition(pos);
+}
+
+void Scene_Menu::sAnimation(sf::Time dt)
+{
+	auto list = m_entityManager.getEntities();
+	for (auto e : m_entityManager.getEntities()) {
+		// update all animations
+		if (e->hasComponent<CAnimation>()) {
+			auto& anim = e->getComponent<CAnimation>();
+			anim.animation.update(dt);
+		}
+	}
+}
+
 void Scene_Menu::init()
 {
 	displayLogo(sf::Vector2f(1200, 375));
+	spawnCat(sf::Vector2f(1400, 550));
+	displayBackground(sf::Vector2f(0, 0));
 
 	registerAction(sf::Keyboard::W, "UP");
 	registerAction(sf::Keyboard::Up, "UP");
@@ -60,6 +90,8 @@ void Scene_Menu::init()
 void Scene_Menu::update(sf::Time dt)
 {
 	m_entityManager.update();
+
+	sAnimation(dt);
 }
 
 void Scene_Menu::sRender()
@@ -69,18 +101,26 @@ void Scene_Menu::sRender()
 	m_game->window().setView(view);
 
 	static const sf::Color selectedColor(255, 255, 255);
-	static const sf::Color normalColor(0, 0, 0);
+	static const sf::Color outlineColor(54, 1, 77);
+	static const sf::Color normalColor(177, 100, 245);
 
-	static const sf::Color backgroundColor(126, 45, 162);
-
-	m_game->window().clear(backgroundColor);
+	for (auto e : m_entityManager.getEntities("bkg")) {
+		if (e->getComponent<CSprite>().has) {
+			auto& sprite = e->getComponent<CSprite>().sprite;
+			m_game->window().draw(sprite);
+		}
+	}
 
 	m_menuText.setFillColor(normalColor);
 	m_menuText.setString(m_title);
 	m_menuText.setCharacterSize(75);
+	m_menuText.setOutlineThickness(3);
+	m_menuText.setOutlineColor(outlineColor);
 	m_menuText.setOrigin(m_menuText.getLocalBounds().width / 2, m_menuText.getLocalBounds().height / 2);
 	m_menuText.setPosition(300, 225);
 	m_game->window().draw(m_menuText);
+
+
 
 	for (size_t i{ 0 }; i < m_menuStrings.size(); ++i)
 	{
@@ -88,6 +128,8 @@ void Scene_Menu::sRender()
 		menuItem.setFont(Assets::getInstance().getFont("main"));
 		menuItem.setCharacterSize(50);
 		menuItem.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
+		menuItem.setOutlineThickness(3);
+		menuItem.setOutlineColor(outlineColor);
 		menuItem.setOrigin(menuItem.getLocalBounds().width / 2, menuItem.getLocalBounds().height / 2);
 		menuItem.setPosition(menuItem.getPosition().x + 20 , 185 + (i + 1) * 96);
 		menuItem.setString(m_menuStrings.at(i));

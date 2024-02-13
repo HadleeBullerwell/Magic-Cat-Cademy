@@ -28,6 +28,7 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 	// On Key Press
 	if (action.type() == "START") {
 		if (action.name() == "PAUSE") { setPaused(!m_isPaused); }
+		if (action.name() == "PAUSE") { setPaused(!m_isPaused); }
 		else if (action.name() == "QUIT") { m_game->quitLevel(); }
 		else if (action.name() == "BACK") { m_game->backLevel(); }
 

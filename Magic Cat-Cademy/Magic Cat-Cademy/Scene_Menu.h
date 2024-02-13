@@ -10,8 +10,13 @@ private:
 	std::vector<std::string>	m_levelPaths;
 	int							m_menuIndex{0};
 	std::string					m_title;
+	sf::View					m_worldView;
 
 	void displayLogo(sf::Vector2f pos);
+	void spawnCat(sf::Vector2f pos);
+	void displayBackground(sf::Vector2f pos);
+
+	void sAnimation(sf::Time dt);
 
 	void init();
 	void onEnd() override;

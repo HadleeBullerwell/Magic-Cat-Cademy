@@ -1,0 +1,267 @@
+{
+  "frames": [
+    {
+      "filename": "logo.png",
+      "frame": {
+        "x": 5,
+        "y": 5,
+        "w": 412,
+        "h": 394
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 412,
+        "h": 394
+      },
+      "sourceSize": {
+        "w": 412,
+        "h": 394
+      }
+    },
+    {
+      "filename": "lucySit (1).png",
+      "frame": {
+        "x": 1070,
+        "y": 5,
+        "w": 175,
+        "h": 168
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 175,
+        "h": 168
+      },
+      "sourceSize": {
+        "w": 175,
+        "h": 168
+      }
+    },
+     {
+      "filename": "lucySit (2).png",
+      "frame": {
+        "x": 427,
+        "y": 166,
+        "w": 192,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 192,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 151
+      }
+    },
+    {
+      "filename": "lucySit (3).png",
+      "frame": {
+        "x": 644,
+        "y": 5,
+        "w": 207,
+        "h": 144
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 207,
+        "h": 144
+      },
+      "sourceSize": {
+        "w": 207,
+        "h": 144
+      }
+    },
+    {
+      "filename": "lucySit (4).png",
+      "frame": {
+        "x": 427,
+        "y": 5,
+        "w": 207,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 207,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 207,
+        "h": 151
+      }
+    },
+    {
+      "filename": "lucySit (5).png",
+      "frame": {
+        "x": 861,
+        "y": 5,
+        "w": 199,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 199,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 199,
+        "h": 151
+      }
+    },
+    {
+      "filename": "lucySit (6).png",
+      "frame": {
+        "x": 644,
+        "y": 159,
+        "w": 199,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 199,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 199,
+        "h": 151
+      }
+    },
+    {
+      "filename": "lucySit (7).png",
+      "frame": {
+        "x": 861,
+        "y": 5,
+        "w": 199,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 199,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 199,
+        "h": 151
+      }
+    },
+    {
+      "filename": "lucySit (8).png",
+      "frame": {
+        "x": 427,
+        "y": 5,
+        "w": 207,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 207,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 207,
+        "h": 151
+      }
+    },
+    {
+      "filename": "lucySit (9).png",
+      "frame": {
+        "x": 427,
+        "y": 5,
+        "w": 207,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 207,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 207,
+        "h": 151
+      }
+    },
+    {
+      "filename": "lucySit (10).png",
+      "frame": {
+        "x": 644,
+        "y": 5,
+        "w": 207,
+        "h": 144
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 207,
+        "h": 144
+      },
+      "sourceSize": {
+        "w": 207,
+        "h": 144
+      }
+    },
+    {
+      "filename": "lucySit (11).png",
+      "frame": {
+        "x": 427,
+        "y": 166,
+        "w": 192,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 192,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 192,
+        "h": 151
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "menu.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 660,
+      "h": 404
+    },
+    "scale": 1
+  }
+}
