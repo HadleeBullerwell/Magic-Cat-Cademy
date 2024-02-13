@@ -20,6 +20,7 @@ private:
 	bool			walkingLeft{ false };
 	bool			walkingRight{ false };
 	bool			jumping{ false };
+	bool			isGrounded{ false };
 
 	bool			m_drawTextures{ true };
 	bool			m_drawAABB{ false };
@@ -28,8 +29,10 @@ private:
 	void			sUpdate(sf::Time dt);
 	void			sAnimation(sf::Time dt);
 	void			sMovement(sf::Time dt);
+	void			sCollision();
 
 	void			spawnPlayer(sf::Vector2f pos);
+	void			spawnGroundEntity(sf::Vector2f pos);
 	void			playerMovement();
 	void			checkPlayerState();
 

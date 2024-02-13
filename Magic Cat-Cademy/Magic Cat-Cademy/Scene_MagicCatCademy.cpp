@@ -3,11 +3,12 @@
 #include "SoundPlayer.h"
 #include "MusicPlayer.h"
 #include "Entity.h"
+#include "Physics.h"
 #include <fstream>
 #include <iostream>
 
-Scene_MagicCatCademy::Scene_MagicCatCademy(GameEngine* gameEngine, const std::string& levelPath) : 
-	Scene(gameEngine), 
+Scene_MagicCatCademy::Scene_MagicCatCademy(GameEngine* gameEngine, const std::string& levelPath) :
+	Scene(gameEngine),
 	m_worldView(gameEngine->window().getDefaultView()) {
 	loadLevel(levelPath);
 	registerActions();
@@ -37,7 +38,10 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 		else if (action.name() == "TOGGLE_GRID") { m_drawGrid = !m_drawGrid; }
 
 		// Player control
-		if (action.name() == "LEFT") { m_player->getComponent<CInput>().dir = CInput::LEFT; }
+		if (action.name() == "LEFT") {
+			m_player->getComponent<CInput>().dir = CInput::LEFT;
+			std::cout << "left";
+		}
 		else if (action.name() == "RIGHT") { m_player->getComponent<CInput>().dir = CInput::RIGHT; }
 		else if (action.name() == "JUMP") { m_player->getComponent<CInput>().dir = CInput::UP; }
 		else if (action.name() == "MEOW") { SoundPlayer::getInstance().play("meow", m_player->getComponent<CTransform>().pos); }
@@ -93,6 +97,23 @@ void Scene_MagicCatCademy::sRender()
 				m_game->window().draw(rect);
 			}
 		}
+
+
+	}
+	for (auto& e : m_entityManager.getEntities()) {
+		if (m_drawAABB) {
+			if (e->hasComponent<CBoundingBox>()) {
+				auto box = e->getComponent<CBoundingBox>();
+				sf::RectangleShape rect;
+				rect.setSize(sf::Vector2f{ box.size.x, box.size.y });
+				centerOrigin(rect);
+				rect.setPosition(e->getComponent<CTransform>().pos);
+				rect.setFillColor(sf::Color(0, 0, 0, 0));
+				rect.setOutlineColor(sf::Color{ 0, 255, 0 });
+				rect.setOutlineThickness(2.f);
+				m_game->window().draw(rect);
+			}
+		}
 	}
 }
 
@@ -101,6 +122,7 @@ void Scene_MagicCatCademy::init()
 	auto pos = sf::Vector2f(200.f, 350.f);
 
 	spawnPlayer(pos);
+	spawnGroundEntity(sf::Vector2f(0, 375.f));
 }
 
 void Scene_MagicCatCademy::sUpdate(sf::Time dt)
@@ -144,6 +166,21 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 	}
 }
 
+void Scene_MagicCatCademy::sCollision()
+{	
+	auto ground = m_entityManager.getEntities("ground");
+	auto player = m_entityManager.getEntities("lucy");
+
+	for (auto p : player) {
+		for (auto g : ground) {
+			auto overlap = Physics::getOverlap(p, g);
+
+			if (overlap.x > 0 && overlap.y > 0) {
+			}
+		}
+	}
+}
+
 void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 {
 	m_player = m_entityManager.addEntity("lucy");
@@ -152,6 +189,14 @@ void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 	m_player->addComponent<CInput>();
 	m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
 	m_player->addComponent<CState>("idle");
+	m_player->addComponent<CGravity>(5.0f);
+}
+
+void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
+{
+	auto ground = m_entityManager.addEntity("ground");
+	ground->addComponent<CTransform>(pos);
+	ground->addComponent<CBoundingBox>(sf::Vector2f(15000, 5.f));
 }
 
 void Scene_MagicCatCademy::playerMovement()
@@ -162,8 +207,10 @@ void Scene_MagicCatCademy::playerMovement()
 
 	auto& dir = m_player->getComponent<CInput>().dir;
 	auto& pos = m_player->getComponent<CTransform>().pos;
+	auto& vel = m_player->getComponent<CTransform>().vel;
+	auto& gravity = m_player->getComponent<CGravity>().g;
+	auto& ground = m_player->getComponent<CTransform>().pos.y;
 
-	
 	if (dir & CInput::LEFT) {
 		walkingLeft = true;
 		pos.x -= 2.f;
@@ -176,7 +223,7 @@ void Scene_MagicCatCademy::playerMovement()
 	
 	if (dir & CInput::UP) {
 		jumping = true;
-		pos.y -= 10.f;
+		vel.y -= 10.f;
 	}
 }
 
@@ -200,19 +247,25 @@ void Scene_MagicCatCademy::checkPlayerState()
 			if (state != newState) {
 				state = newState;
 
-				if (state == "walkingLeft")
-					m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyWalk"));
+				Animation anim;
 
-				if (state == "walkingRight")
-					m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyWalk"));
+				if (state == "walkingLeft" || state == "walkingRight")
+					anim = Assets::getInstance().getAnimation("lucyWalk");
 
 				if (state == "jumping")
-					m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyJump"));
+					anim = Assets::getInstance().getAnimation("lucyJump");
 
 				if (state == "idle")
-					m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
-			}
+					anim = Assets::getInstance().getAnimation("lucyIdle");
 
+
+				if (state == "walkingLeft")
+					anim.setFlipped(true);
+				else
+					anim.setFlipped(false);
+
+				m_player->addComponent<CAnimation>(anim);
+			}
 		}
 	}
 }

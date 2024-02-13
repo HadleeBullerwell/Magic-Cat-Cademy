@@ -18,7 +18,8 @@ public:
     bool                        m_isRepeating{true};
     bool                        m_hasEnded{false};
     sf::Sprite                  m_sprite;
-
+    void                        setFlipped(bool flipped);
+    bool                        isFlipped{ false };
 
 public:
     Animation() = default;

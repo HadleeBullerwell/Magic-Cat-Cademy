@@ -27,4 +27,4 @@ Animation       lucySit         Menu    2	yes
 
 Animation	lucyIdle        Lucy	3	yes
 Animation	lucyWalk 	Lucy	3	yes
-Animation	lucyJump	Lucy	3	no
+Animation	lucyJump	Lucy	1	yes

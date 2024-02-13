@@ -6,6 +6,16 @@
 #include "Utilities.h"
 
 
+void Animation::setFlipped(bool flipped)
+{
+    isFlipped = flipped;
+
+    if (isFlipped)
+        m_sprite.setScale(-1.f, 1.f);
+    else
+        m_sprite.setScale(1.f, 1.f);
+}
+
 Animation::Animation(const std::string &name,
                      const sf::Texture &t,
                      std::vector<sf::IntRect> frames,

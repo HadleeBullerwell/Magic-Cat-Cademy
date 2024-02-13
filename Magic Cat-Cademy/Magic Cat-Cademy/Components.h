@@ -99,5 +99,12 @@ struct CInput : public Component
     CInput() = default;
 };
 
+struct CGravity : public Component
+{
+    float g{ 0 };
+
+    CGravity() = default;
+    CGravity(float g) : g(g) {}
+};
 
 #endif //BREAKOUT_COMPONENTS_H
