@@ -29,7 +29,7 @@ private:
 	void			sUpdate(sf::Time dt);
 	void			sAnimation(sf::Time dt);
 	void			sMovement(sf::Time dt);
-	void			sCollision();
+	void			sCollision(sf::Time dt);
 
 	void			spawnPlayer(sf::Vector2f pos);
 	void			spawnGroundEntity(sf::Vector2f pos);

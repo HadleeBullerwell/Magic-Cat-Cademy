@@ -119,7 +119,7 @@ void Scene_MagicCatCademy::sRender()
 
 void Scene_MagicCatCademy::init()
 {
-	auto pos = sf::Vector2f(200.f, 350.f);
+	auto pos = sf::Vector2f(200.f, 340.f);
 
 	spawnPlayer(pos);
 	spawnGroundEntity(sf::Vector2f(0, 375.f));
@@ -131,8 +131,9 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 
 	m_worldView.move(m_config.scrollSpeed * dt.asSeconds() * 1, 0);
 
-	sAnimation(dt);
 	sMovement(dt);
+	sCollision(dt);
+	sAnimation(dt);
 	checkPlayerState();
 }
 
@@ -166,7 +167,7 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 	}
 }
 
-void Scene_MagicCatCademy::sCollision()
+void Scene_MagicCatCademy::sCollision(sf::Time dt)
 {	
 	auto ground = m_entityManager.getEntities("ground");
 	auto player = m_entityManager.getEntities("lucy");
@@ -176,6 +177,19 @@ void Scene_MagicCatCademy::sCollision()
 			auto overlap = Physics::getOverlap(p, g);
 
 			if (overlap.x > 0 && overlap.y > 0) {
+				auto prevOverlap = Physics::getPreviousOverlap(p, g);
+				auto& pTransform = p->getComponent<CTransform>();
+				auto& gTransform = g->getComponent<CTransform>();
+
+				if (prevOverlap.x > 0) {
+					if (pTransform.prevPos.y < gTransform.prevPos.y) {
+						p->getComponent<CTransform>().pos.y -= overlap.y;
+					}
+					else {
+						p->getComponent<CTransform>().pos.y += overlap.y;
+					}
+					p->getComponent<CTransform>().vel.y = 0.f;
+				}
 			}
 		}
 	}
@@ -185,18 +199,18 @@ void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 {
 	m_player = m_entityManager.addEntity("lucy");
 	m_player->addComponent<CTransform>(pos);
-	m_player->addComponent<CBoundingBox>(sf::Vector2f(100.f, 100.f));
+	m_player->addComponent<CBoundingBox>(sf::Vector2f(80, 60));
 	m_player->addComponent<CInput>();
 	m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
 	m_player->addComponent<CState>("idle");
-	m_player->addComponent<CGravity>(5.0f);
+	m_player->addComponent<CGravity>(0.5f);
 }
 
 void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
 {
 	auto ground = m_entityManager.addEntity("ground");
 	ground->addComponent<CTransform>(pos);
-	ground->addComponent<CBoundingBox>(sf::Vector2f(15000, 5.f));
+	ground->addComponent<CBoundingBox>(sf::Vector2f(15000, 2.f));
 }
 
 void Scene_MagicCatCademy::playerMovement()
@@ -213,17 +227,26 @@ void Scene_MagicCatCademy::playerMovement()
 
 	if (dir & CInput::LEFT) {
 		walkingLeft = true;
-		pos.x -= 2.f;
+		pos.x -= 3.f;
 	}
 
 	if (dir & CInput::RIGHT) {
 		walkingRight = true;
-		pos.x += 2.f;
+		pos.x += 3.f;
 	}
 	
 	if (dir & CInput::UP) {
 		jumping = true;
-		vel.y -= 10.f;
+		vel.y = -10.f;
+	}
+
+	vel.y += gravity;
+	vel.x = vel.x * 5.f;
+
+	for (auto e : m_entityManager.getEntities()) {
+		auto& tx = e->getComponent<CTransform>();
+		tx.prevPos = tx.pos;
+		tx.pos += tx.vel;
 	}
 }
 
