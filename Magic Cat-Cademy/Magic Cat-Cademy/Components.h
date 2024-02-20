@@ -107,4 +107,11 @@ struct CGravity : public Component
     CGravity(float g) : g(g) {}
 };
 
+struct CHealth : public Component {
+    int         hp{ 1 };
+
+    CHealth() = default;
+    CHealth(int hp) : hp(hp) {}
+};
+
 #endif //BREAKOUT_COMPONENTS_H

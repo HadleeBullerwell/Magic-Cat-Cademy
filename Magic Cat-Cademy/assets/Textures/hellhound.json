@@ -1,0 +1,78 @@
+{
+  "frames": [
+    {
+      "filename": "hellhoundIdle (1).png",
+      "frame": {
+        "x": 5,
+        "y": 99,
+        "w": 110,
+        "h": 86
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 26,
+        "w": 110,
+        "h": 86
+      },
+      "sourceSize": {
+        "w": 150,
+        "h": 150
+      }
+    },
+    {
+      "filename": "hellhoundWalk (1).png",
+      "frame": {
+        "x": 125,
+        "y": 5,
+        "w": 110,
+        "h": 86
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 26,
+        "w": 110,
+        "h": 86
+      },
+      "sourceSize": {
+        "w": 150,
+        "h": 150
+      }
+    },
+    {
+      "filename": "hellhoundWalk (2).png",
+      "frame": {
+        "x": 5,
+        "y": 5,
+        "w": 110,
+        "h": 84
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 26,
+        "w": 110,
+        "h": 84
+      },
+      "sourceSize": {
+        "w": 150,
+        "h": 150
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "hellhound.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 240,
+      "h": 190
+    },
+    "scale": 1
+  }
+}

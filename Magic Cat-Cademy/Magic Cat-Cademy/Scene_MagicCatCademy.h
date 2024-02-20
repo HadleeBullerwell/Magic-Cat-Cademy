@@ -22,6 +22,8 @@ private:
 	bool			jumping{ false };
 	bool			isGrounded{ false };
 
+	int				lives{ 3 };
+
 	bool			m_drawTextures{ true };
 	bool			m_drawAABB{ false };
 	bool			m_drawGrid{ false };
@@ -32,9 +34,13 @@ private:
 	void			sCollision(sf::Time dt);
 
 	void			spawnPlayer(sf::Vector2f pos);
+	void			spawnEnemies(sf::Vector2f pos);
 	void			spawnGroundEntity(sf::Vector2f pos);
+	void			drawLives(int lives);
+	void			fireMagic(sf::Vector2f pos);
 	void			playerMovement();
 	void			checkPlayerState();
+	void			checkIfDead(std::shared_ptr<Entity> e);
 
 	void			onEnd() override;	
 
