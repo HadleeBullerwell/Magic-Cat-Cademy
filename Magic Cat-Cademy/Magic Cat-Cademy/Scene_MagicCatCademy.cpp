@@ -38,17 +38,12 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 		else if (action.name() == "TOGGLE_GRID") { m_drawGrid = !m_drawGrid; }
 
 		// Player control
-		if (action.name() == "LEFT") {
-			m_player->getComponent<CInput>().dir = CInput::LEFT;
-			std::cout << "left";
-		}
+		if (action.name() == "LEFT") m_player->getComponent<CInput>().dir = CInput::LEFT;
 		else if (action.name() == "RIGHT") { m_player->getComponent<CInput>().dir = CInput::RIGHT; }
 		else if (action.name() == "JUMP") { m_player->getComponent<CInput>().dir = CInput::UP; }
 		else if (action.name() == "MEOW") { SoundPlayer::getInstance().play("meow", m_player->getComponent<CTransform>().pos); }
 		else if (action.name() == "SHOOT") {
-			auto mousePos = sf::Mouse::getPosition();
-			sf::Vector2f mouse(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-			fireMagic(mouse);
+			fireMagic();
 		}
 	}
 
@@ -129,7 +124,7 @@ void Scene_MagicCatCademy::init()
 	auto pos = sf::Vector2f(200.f, 340.f);
 
 	spawnPlayer(pos);
-	spawnEnemies(sf::Vector2f(600.f, 340.f));
+	spawnEnemies(sf::Vector2f(1500.f, 340.f));
 	spawnGroundEntity(sf::Vector2f(0, 375.f));
 }
 
@@ -173,6 +168,15 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 		if (e->hasComponent<CTransform>()) {
 			auto& tfm = e->getComponent<CTransform>();
 
+			if (e->getTag() == "hellhound") {
+				e->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundWalk"));
+				auto& playerPos = m_player->getComponent<CTransform>().pos;
+				sf::Vector2f direction = playerPos - tfm.pos;
+				direction = normalize(direction);
+
+				tfm.vel.x = direction.x * 50.f * dt.asSeconds();
+			}
+
 			tfm.pos += tfm.vel * dt.asSeconds();
 			tfm.angle += tfm.angVel * dt.asSeconds();
 		}
@@ -184,6 +188,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 	auto ground = m_entityManager.getEntities("ground");
 	auto hellhounds = m_entityManager.getEntities("hellhound");
 	auto player = m_entityManager.getEntities("lucy");
+	auto magic = m_entityManager.getEntities("magic");
 
 	for (auto p : player) {
 		for (auto g : ground) {
@@ -211,6 +216,19 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 
 			if (overlap.x > 0 && overlap.y > 0) {
 				p->getComponent<CHealth>().hp -= 10;
+				//checkIfDead(p);
+			}
+		}
+	}
+
+	for (auto m : magic) {
+		for (auto h : hellhounds) {
+			auto overlap = Physics::getOverlap(m, h);
+
+			if (overlap.x > 0 && overlap.y > 0) {
+				m->destroy();
+				h->getComponent<CHealth>().hp -= 10;
+				checkIfDead(h);
 			}
 		}
 	}
@@ -226,14 +244,21 @@ void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 	m_player->addComponent<CState>("idle");
 	m_player->addComponent<CGravity>(0.5f);
 	m_player->addComponent<CHealth>(100);
+	m_player->addComponent<CMagic>();
 }
 
 void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos)
 {
-	auto hellhound = m_entityManager.addEntity("hellhound");
-	hellhound->addComponent<CTransform>(pos);
-	hellhound->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundIdle"));
-	hellhound->addComponent<CHealth>(100);
+	for (int i{ 0 }; i < 5; i++) {
+		auto hellhound = m_entityManager.addEntity("hellhound");
+		hellhound->addComponent<CTransform>(pos);
+		hellhound->addComponent<CBoundingBox>(sf::Vector2f(115, 100));
+		hellhound->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundWalk"));
+		hellhound->addComponent<CHealth>(100);
+		pos.x += 500.f;
+	}
+
+	
 }
 
 void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
@@ -257,22 +282,25 @@ void Scene_MagicCatCademy::drawLives(int lives)
 		life->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHealthIcon"));
 		pos.x += 50;
 	}
-
 }
 
-void Scene_MagicCatCademy::fireMagic(sf::Vector2f pos)
+void Scene_MagicCatCademy::fireMagic()
 {
-	auto spawn = m_player->getComponent<CTransform>().pos;
-	spawn.x += 80;
-	spawn.y -= 20;
-	sf::Vector2f mouseClickLocation = pos - spawn;
-	float length = std::sqrt(mouseClickLocation.x * mouseClickLocation.x + mouseClickLocation.y * mouseClickLocation.y);
+	int spell = rand() % 2;
 
 	auto magic = m_entityManager.addEntity("magic");
-	magic->addComponent<CTransform>(spawn);
-	magic->addComponent<CBoundingBox>();
+	magic->addComponent<CTransform>(m_player->getComponent<CTransform>().pos);
+	magic->addComponent<CBoundingBox>(sf::Vector2f(50.f, 50.f));
 	magic->addComponent<CState>();
-	magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magic"));
+	magic->getComponent<CTransform>().vel.x = 10;
+	magic->getComponent<CTransform>().vel.y = 0;
+
+	if (spell == 1) {
+		magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magicStar"));
+	}
+	else {
+		magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magic"));
+	}
 }
 
 void Scene_MagicCatCademy::playerMovement()
@@ -285,7 +313,6 @@ void Scene_MagicCatCademy::playerMovement()
 	auto& pos = m_player->getComponent<CTransform>().pos;
 	auto& vel = m_player->getComponent<CTransform>().vel;
 	auto& gravity = m_player->getComponent<CGravity>().g;
-	auto& ground = m_player->getComponent<CTransform>().pos.y;
 
 	if (dir & CInput::LEFT) {
 		walkingLeft = true;
@@ -317,14 +344,9 @@ void Scene_MagicCatCademy::checkPlayerState()
 	if (m_player->hasComponent<CState>()) {
 		std::string newState = "idle";
 
-		if (walkingRight)
-			newState = "walkingRight";
-
-		if (walkingLeft)
-			newState = "walkingLeft";
-
-		if (jumping)
-			newState = "jumping";
+		if (walkingRight) newState = "walkingRight";
+		if (walkingLeft) newState = "walkingLeft";
+		if (jumping) newState = "jumping";
 
 		auto& state = m_player->getComponent<CState>().state;
 		if (state != "dead") {
@@ -343,7 +365,6 @@ void Scene_MagicCatCademy::checkPlayerState()
 				if (state == "idle")
 					anim = Assets::getInstance().getAnimation("lucyIdle");
 
-
 				if (state == "walkingLeft")
 					anim.setFlipped(true);
 				else
@@ -358,8 +379,8 @@ void Scene_MagicCatCademy::checkPlayerState()
 void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 {
 	if (e->hasComponent<CHealth>()) {
-		if (e->getComponent<CHealth>().hp <= 0) {
-			e->destroy();
+		if (e->getComponent<CHealth>().hp <= 0) {	
+			e->destroy();			
 		}
 	}
 }

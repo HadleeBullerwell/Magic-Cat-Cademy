@@ -81,9 +81,7 @@ struct CState : public Component {
 
     CState() = default;
     CState(const std::string& s) : state(s){}
-
 };
-
 
 struct CInput : public Component
 {
@@ -112,6 +110,13 @@ struct CHealth : public Component {
 
     CHealth() = default;
     CHealth(int hp) : hp(hp) {}
+};
+
+struct CMagic : public Component {
+    bool usingMagic{ false };
+    sf::Time cooldown{ sf::Time::Zero };
+
+    CMagic() = default;
 };
 
 #endif //BREAKOUT_COMPONENTS_H

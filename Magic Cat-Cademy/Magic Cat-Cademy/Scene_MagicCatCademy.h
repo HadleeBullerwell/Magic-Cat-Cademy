@@ -37,7 +37,7 @@ private:
 	void			spawnEnemies(sf::Vector2f pos);
 	void			spawnGroundEntity(sf::Vector2f pos);
 	void			drawLives(int lives);
-	void			fireMagic(sf::Vector2f pos);
+	void			fireMagic();
 	void			playerMovement();
 	void			checkPlayerState();
 	void			checkIfDead(std::shared_ptr<Entity> e);

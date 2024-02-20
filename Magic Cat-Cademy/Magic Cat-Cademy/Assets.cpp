@@ -137,7 +137,7 @@ void Assets::loadJson(const std::string& path) {
             std::ifstream f(path);
             json data = json::parse(f)["frames"];
 
-           // std::cout << std::setw(4) << data << "\n\n";
+           //std::cout << std::setw(4) << data << "\n\n";
 
             for (auto i : data) {
 

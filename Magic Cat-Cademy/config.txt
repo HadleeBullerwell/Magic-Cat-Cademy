@@ -15,6 +15,7 @@ Texture Hellhound	../assets/Textures/hellhound.png
 Texture Menu		../assets/Textures/menu.png
 Texture MenuBackground ../assets/Textures/menuBackground.png
 Texture Magic		../assets/Textures/magic.png
+Texture	Star		../assets/Textures/star.png
 
 # Sprites
 Sprite Background 	Background	0 0 15000 750
@@ -24,6 +25,7 @@ JSON 			../assets/Textures/lucyAtlas.json
 JSON			../assets/Textures/hellhound.json
 JSON			../assets/Textures/menu.json
 JSON			../assets/Textures/magic.json
+JSON			../assets/Textures/star.json
 
 # Animation 	Name 		Texture	Speed   Repeats
 Animation	logo		Menu	1	no
@@ -32,10 +34,11 @@ Animation       lucySit         Menu    2	yes
 Animation	lucyIdle        Lucy	3	yes
 Animation	lucyWalk 	Lucy	3	yes
 Animation	lucyJump	Lucy	1	yes
-Animation	lucyMagic	Lucy	3	no
+Animation	lucyMagic	Lucy	5	no
 Animation	lucyHealthIcon	Lucy	2	yes
 
 Animation	hellhoundWalk	Hellhound 3	yes	
 Animation	hellhoundIdle	Hellhound 1	no
 
 Animation	magic		Magic	12	no
+Animation	magicStar	Star	12	no

@@ -24,27 +24,6 @@
     {
       "filename": "hellhoundWalk (1).png",
       "frame": {
-        "x": 125,
-        "y": 5,
-        "w": 110,
-        "h": 86
-      },
-      "rotated": false,
-      "trimmed": true,
-      "spriteSourceSize": {
-        "x": 20,
-        "y": 26,
-        "w": 110,
-        "h": 86
-      },
-      "sourceSize": {
-        "w": 150,
-        "h": 150
-      }
-    },
-    {
-      "filename": "hellhoundWalk (2).png",
-      "frame": {
         "x": 5,
         "y": 5,
         "w": 110,
@@ -57,6 +36,27 @@
         "y": 26,
         "w": 110,
         "h": 84
+      },
+      "sourceSize": {
+        "w": 150,
+        "h": 150
+      }
+    },
+    {
+      "filename": "hellhoundWalk (2).png",
+      "frame": {
+        "x": 125,
+        "y": 5,
+        "w": 110,
+        "h": 86
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 20,
+        "y": 26,
+        "w": 110,
+        "h": 86
       },
       "sourceSize": {
         "w": 150,
