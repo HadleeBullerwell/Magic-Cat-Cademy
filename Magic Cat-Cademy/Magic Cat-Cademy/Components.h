@@ -119,4 +119,14 @@ struct CMagic : public Component {
     CMagic() = default;
 };
 
+struct CLifespan : public Component
+{
+    int total{ 0 };
+    int remaining{ 0 };
+
+    CLifespan() = default;
+    CLifespan(int t) : total(t), remaining{ t } {}
+
+};
+
 #endif //BREAKOUT_COMPONENTS_H

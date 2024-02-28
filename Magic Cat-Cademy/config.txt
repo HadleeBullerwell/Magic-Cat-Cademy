@@ -15,7 +15,7 @@ Texture Hellhound	../assets/Textures/hellhound.png
 Texture Menu		../assets/Textures/menu.png
 Texture MenuBackground ../assets/Textures/menuBackground.png
 Texture Magic		../assets/Textures/magic.png
-Texture	Star		../assets/Textures/star.png
+Texture Star		../assets/Textures/star.png
 
 # Sprites
 Sprite Background 	Background	0 0 15000 750
@@ -40,5 +40,5 @@ Animation	lucyHealthIcon	Lucy	2	yes
 Animation	hellhoundWalk	Hellhound 3	yes	
 Animation	hellhoundIdle	Hellhound 1	no
 
-Animation	magic		Magic	12	no
+Animation	magicOne	Magic	12	no
 Animation	magicStar	Star	12	no

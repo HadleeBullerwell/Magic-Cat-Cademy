@@ -4,17 +4,17 @@
       "filename": "hellhoundIdle (1).png",
       "frame": {
         "x": 5,
-        "y": 99,
-        "w": 110,
-        "h": 86
+        "y": 5,
+        "w": 108,
+        "h": 84
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 20,
-        "y": 26,
-        "w": 110,
-        "h": 86
+        "x": 21,
+        "y": 27,
+        "w": 108,
+        "h": 84
       },
       "sourceSize": {
         "w": 150,
@@ -24,18 +24,18 @@
     {
       "filename": "hellhoundWalk (1).png",
       "frame": {
-        "x": 5,
+        "x": 123,
         "y": 5,
-        "w": 110,
-        "h": 84
+        "w": 108,
+        "h": 82
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 20,
-        "y": 26,
-        "w": 110,
-        "h": 84
+        "x": 21,
+        "y": 27,
+        "w": 108,
+        "h": 82
       },
       "sourceSize": {
         "w": 150,
@@ -45,18 +45,18 @@
     {
       "filename": "hellhoundWalk (2).png",
       "frame": {
-        "x": 125,
+        "x": 241,
         "y": 5,
-        "w": 110,
-        "h": 86
+        "w": 108,
+        "h": 82
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 20,
-        "y": 26,
-        "w": 110,
-        "h": 86
+        "x": 21,
+        "y": 27,
+        "w": 108,
+        "h": 82
       },
       "sourceSize": {
         "w": 150,

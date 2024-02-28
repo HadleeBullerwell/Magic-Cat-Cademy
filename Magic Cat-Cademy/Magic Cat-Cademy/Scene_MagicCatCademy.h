@@ -32,6 +32,7 @@ private:
 	void			sAnimation(sf::Time dt);
 	void			sMovement(sf::Time dt);
 	void			sCollision(sf::Time dt);
+	void			sLifespan(sf::Time dt);
 
 	void			spawnPlayer(sf::Vector2f pos);
 	void			spawnEnemies(sf::Vector2f pos);
@@ -41,6 +42,7 @@ private:
 	void			playerMovement();
 	void			checkPlayerState();
 	void			checkIfDead(std::shared_ptr<Entity> e);
+	void			keepPlayerInBounds();
 
 	void			onEnd() override;	
 
