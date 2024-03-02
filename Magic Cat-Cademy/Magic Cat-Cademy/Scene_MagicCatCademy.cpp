@@ -141,6 +141,8 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 	sLifespan(dt);
 	keepPlayerInBounds();
 	checkPlayerState();
+	//checkEnemyState();
+	drawLives(lives);
 }
 
 void Scene_MagicCatCademy::sAnimation(sf::Time dt)
@@ -153,6 +155,7 @@ void Scene_MagicCatCademy::sAnimation(sf::Time dt)
 			anim.animation.update(dt);
 
 			checkPlayerState();
+			//checkEnemyState();
 		}
 	}
 }
@@ -177,8 +180,16 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 				if (e->hasComponent<CGravity>()) {
 					auto& g = e->getComponent<CGravity>().g;
 					tfm.vel.y += g;
+				}			
+				
+				if (playerPos.x < tfm.pos.x) {
+					e->getComponent<CState>().state = "facingLeft";
+				}
+				else {
+					e->getComponent<CState>().state = "facingRight";
 				}
 			}
+
 
 			tfm.pos += tfm.vel * dt.asSeconds();
 			tfm.angle += tfm.angVel * dt.asSeconds();
@@ -222,7 +233,14 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 				p->getComponent<CTransform>().vel.y -= 7.5;
 				p->getComponent<CTransform>().pos.x -= 40;
 				p->getComponent<CTransform>().vel.y += p->getComponent<CGravity>().g;
-				//checkIfDead(p);
+
+				auto& prevAnim = p->getComponent<CAnimation>().animation;
+				p->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHurt"));
+
+				if (p->getComponent<CAnimation>().animation.m_currentFrame == 1) {
+					p->addComponent<CAnimation>(prevAnim);
+				}
+				checkIfDead(p);
 			}
 		}
 
@@ -302,13 +320,14 @@ void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 
 void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos)
 {
-	for (int i{ 0 }; i < 5; i++) {
+	for (int i{ 0 }; i < 15; i++) {
 		auto hellhound = m_entityManager.addEntity("hellhound");
 		hellhound->addComponent<CTransform>(pos);
 		hellhound->addComponent<CBoundingBox>(sf::Vector2f(115, 80));
 		hellhound->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundWalk"));
 		hellhound->addComponent<CHealth>(100);
 		hellhound->addComponent<CGravity>(0.5f);
+		hellhound->addComponent<CState>();
 		pos.x += 500.f;
 	}
 }
@@ -327,10 +346,11 @@ void Scene_MagicCatCademy::drawLives(int lives)
 	}
 
 	sf::Vector2f pos{ 30, 30 };
+	sf::Vector2f background = m_worldView.getCenter() - m_worldView.getSize() / 2.f;
 
 	for (int i{ 0 }; i < lives; ++i) {
 		auto life = m_entityManager.addEntity("life");
-		life->addComponent<CTransform>(pos);
+		life->addComponent<CTransform>(pos + background);
 		life->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHealthIcon"));
 		pos.x += 50;
 	}
@@ -446,7 +466,6 @@ void Scene_MagicCatCademy::checkPlayerState()
 					}
 				}
 
-
 				if (state == "walkingLeft")
 					anim.setFlipped(true);
 				
@@ -459,11 +478,44 @@ void Scene_MagicCatCademy::checkPlayerState()
 	}
 }
 
+void Scene_MagicCatCademy::checkEnemyState()
+{
+	auto& hellhounds = m_entityManager.getEntities("hellhound");
+	std::string newState = "idle";
+
+	for (auto h : hellhounds) {
+		auto& state = h->getComponent<CState>().state;
+
+		Animation anim;
+
+		if (state == "facingLeft") {
+			anim = Assets::getInstance().getAnimation("hellhoundWalk");
+		}
+		else if (state == "facingRight") {
+ 			anim = Assets::getInstance().getAnimation("hellhoundWalk");
+			anim.setFlipped(true);
+		}
+
+		anim.m_currentFrame = h->getComponent<CAnimation>().animation.m_currentFrame;
+		h->addComponent<CAnimation>(anim);
+	}
+}
+
 void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 {
 	if (e->hasComponent<CHealth>()) {
 		if (e->getComponent<CHealth>().hp <= 0) {
 			e->destroy();
+			lives--;
+
+			if (lives == 0) {
+				onEnd();
+			}
+			
+			if (e->getTag() == "lucy") {	
+				spawnPlayer(sf::Vector2f(200.f, 340.f));
+				m_worldView.reset(sf::FloatRect(0.f, 0.f, m_worldView.getSize().x, m_worldView.getSize().y));
+			}
 		}
 	}
 }
@@ -490,6 +542,8 @@ void Scene_MagicCatCademy::keepPlayerInBounds()
 
 void Scene_MagicCatCademy::onEnd()
 {
+	m_game->changeScene("MENU", nullptr, false);
+	lives = 3;
 }
 
 void Scene_MagicCatCademy::loadLevel(const std::string& path)

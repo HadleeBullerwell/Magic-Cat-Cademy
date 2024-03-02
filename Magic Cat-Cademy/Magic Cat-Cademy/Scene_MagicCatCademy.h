@@ -41,6 +41,7 @@ private:
 	void			fireMagic();
 	void			playerMovement();
 	void			checkPlayerState();
+	void			checkEnemyState();
 	void			checkIfDead(std::shared_ptr<Entity> e);
 	void			keepPlayerInBounds();
 
