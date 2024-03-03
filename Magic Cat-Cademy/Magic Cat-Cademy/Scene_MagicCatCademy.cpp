@@ -44,10 +44,12 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 		else if (action.name() == "MEOW") { SoundPlayer::getInstance().play("meow", m_player->getComponent<CTransform>().pos); }
 		else if (action.name() == "SHOOT") {
 			fireMagic();
+			firingMagic = true;
+			SoundPlayer::getInstance().play("magic", m_player->getComponent<CTransform>().pos);
 		}
 	}
 
-	else if (action.type() == "END" && (action.name() == "LEFT" || action.name() == "RIGHT" || action.name() == "JUMP")) {
+	else if (action.type() == "END" && (action.name() == "LEFT" || action.name() == "RIGHT" || action.name() == "JUMP" || action.name() == "SHOOT")) {
 		m_player->getComponent<CInput>().dir = 0;
 
 		if (action.name() == "LEFT")
@@ -58,6 +60,10 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 
 		if (action.name() == "JUMP") {
 			jumping = false;
+		}
+
+		if (action.name() == "SHOOT") {
+			firingMagic = false;
 		}
 	}
 }
@@ -141,7 +147,6 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 	sLifespan(dt);
 	keepPlayerInBounds();
 	checkPlayerState();
-	//checkEnemyState();
 	drawLives(lives);
 }
 
@@ -155,7 +160,6 @@ void Scene_MagicCatCademy::sAnimation(sf::Time dt)
 			anim.animation.update(dt);
 
 			checkPlayerState();
-			//checkEnemyState();
 		}
 	}
 }
@@ -183,10 +187,10 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 				}			
 				
 				if (playerPos.x < tfm.pos.x) {
-					e->getComponent<CState>().state = "facingLeft";
+					enemyWalkingRight = false;
 				}
 				else {
-					e->getComponent<CState>().state = "facingRight";
+					enemyWalkingRight = true;
 				}
 			}
 
@@ -273,6 +277,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 			auto overlap = Physics::getOverlap(m, h);
 
 			if (overlap.x > 0 && overlap.y > 0) {
+				SoundPlayer::getInstance().play("hellhoundHurt", h->getComponent<CTransform>().pos);
 				m->destroy();
 				h->getComponent<CHealth>().hp -= 10;
 				checkIfDead(h);
@@ -327,7 +332,7 @@ void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos)
 		hellhound->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundWalk"));
 		hellhound->addComponent<CHealth>(100);
 		hellhound->addComponent<CGravity>(0.5f);
-		hellhound->addComponent<CState>();
+		hellhound->addComponent<CState>("walking");
 		pos.x += 500.f;
 	}
 }
@@ -434,6 +439,7 @@ void Scene_MagicCatCademy::checkPlayerState()
 		if (walkingRight) newState = "walkingRight";
 		if (walkingLeft) newState = "walkingLeft";
 		if (jumping) newState = "jumping";
+		if (firingMagic) newState = "firingMagic";
 
 		auto& state = m_player->getComponent<CState>().state;
 		if (state != "dead") {
@@ -456,6 +462,16 @@ void Scene_MagicCatCademy::checkPlayerState()
 					}
 				}
 
+				if (state == "firingMagic") {
+					if (m_player->getComponent<CTransform>().scale.x < 0) {
+						anim = Assets::getInstance().getAnimation("lucyMagic");
+						anim.setFlipped(true);
+					}
+					else {
+						anim = Assets::getInstance().getAnimation("lucyMagic");
+					}
+				}
+
 				if (state == "idle") {
 					if (m_player->getComponent<CTransform>().scale.x < 0) {
 						anim = Assets::getInstance().getAnimation("lucyIdle");	
@@ -466,6 +482,7 @@ void Scene_MagicCatCademy::checkPlayerState()
 					}
 				}
 
+				
 				if (state == "walkingLeft")
 					anim.setFlipped(true);
 				
@@ -484,20 +501,35 @@ void Scene_MagicCatCademy::checkEnemyState()
 	std::string newState = "idle";
 
 	for (auto h : hellhounds) {
+
+		if (enemyWalkingRight) newState = "walkingRight";
+
+		auto& tx = h->getComponent<CTransform>();
+
+		if (std::abs(tx.vel.x) > 0.1f)
+			tx.scale.x = (tx.vel.x > 0) ? 1 : -1;
+
 		auto& state = h->getComponent<CState>().state;
 
-		Animation anim;
+		if (state != "dead") {
+			if (state != newState) {
+				state = newState;
 
-		if (state == "facingLeft") {
-			anim = Assets::getInstance().getAnimation("hellhoundWalk");
-		}
-		else if (state == "facingRight") {
- 			anim = Assets::getInstance().getAnimation("hellhoundWalk");
-			anim.setFlipped(true);
-		}
+				Animation anim;
 
-		anim.m_currentFrame = h->getComponent<CAnimation>().animation.m_currentFrame;
-		h->addComponent<CAnimation>(anim);
+					if (state == "walkingRight") {
+						if (h->getComponent<CTransform>().scale.x < 0) {
+							anim = Assets::getInstance().getAnimation("hellhoundWalk");
+							anim.setFlipped(true);
+						}
+						else {
+							anim = Assets::getInstance().getAnimation("hellhoundWalk");
+						}
+					}		
+					
+					h->addComponent<CAnimation>(anim);
+			}
+		}
 	}
 }
 

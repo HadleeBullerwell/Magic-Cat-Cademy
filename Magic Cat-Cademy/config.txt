@@ -7,6 +7,10 @@ Music mainMenuMusic	../assets/Music/mainMenu.wav
 
 Sound meow		../assets/Sounds/catMeow.wav
 Sound select		../assets/Sounds/select.mp3
+Sound magic		../assets/Sounds/magic.mp3
+Sound hellhoundHurt	../assets/Sounds/hellhoundHurt.mp3
+Sound hellhoundGrowl	../assets/Sounds/hellhoundGrowl.mp3
+Sound hellhoundBark	../assets/Sounds/hellhoundBark.mp3
 
 # Textures
 Texture Background 	../assets/Textures/background.png

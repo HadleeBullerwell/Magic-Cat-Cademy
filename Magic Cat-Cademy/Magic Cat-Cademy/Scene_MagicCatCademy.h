@@ -20,7 +20,9 @@ private:
 	bool			walkingLeft{ false };
 	bool			walkingRight{ false };
 	bool			jumping{ false };
-	bool			isGrounded{ false };
+	bool			firingMagic{ false };
+
+	bool			enemyWalkingRight{ false };
 
 	int				lives{ 3 };
 
