@@ -24,6 +24,10 @@ private:
 
 	bool			enemyWalkingRight{ false };
 
+	sf::Clock		attackTimer;
+	sf::Time		timeSinceLastAttack;
+	const sf::Time	attackInterval{ sf::seconds(10.f) };
+
 	int				lives{ 3 };
 
 	bool			m_drawTextures{ true };
@@ -35,15 +39,17 @@ private:
 	void			sMovement(sf::Time dt);
 	void			sCollision(sf::Time dt);
 	void			sLifespan(sf::Time dt);
+	void			sEnemyAttack(sf::Time dt);
 
 	void			spawnPlayer(sf::Vector2f pos);
 	void			spawnEnemies(sf::Vector2f pos);
 	void			spawnGroundEntity(sf::Vector2f pos);
 	void			drawLives(int lives);
 	void			fireMagic();
+	void			enemyAttack();
 	void			playerMovement();
 	void			checkPlayerState();
-	void			checkEnemyState();
+	void			checkEnemyState(std::shared_ptr<Entity> e);
 	void			checkIfDead(std::shared_ptr<Entity> e);
 	void			keepPlayerInBounds();
 

@@ -62,7 +62,50 @@
         "w": 150,
         "h": 150
       }
+    },  
+    {    
+    "filename": "hellhoundAttack (1).png",
+    "frame": {
+      "x": 5,
+      "y": 99,
+      "w": 108,
+      "h": 84
+    },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": {
+      "x": 21,
+      "y": 25,
+      "w": 108,
+      "h": 84
+    },
+    "sourceSize": {
+      "w": 150,
+      "h": 150
     }
+  },
+  {
+    "filename": "hellhoundAttack (2).png",
+    "frame": {
+      "x": 359,
+      "y": 5,
+      "w": 108,
+      "h": 88
+    },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": {
+      "x": 21,
+      "y": 22,
+      "w": 108,
+      "h": 88
+    },
+    "sourceSize": {
+      "w": 150,
+      "h": 150
+    }
+  }
+
   ],
   "meta": {
     "app": "http://free-tex-packer.com",

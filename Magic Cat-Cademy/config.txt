@@ -44,6 +44,7 @@ Animation	lucyHurt	Lucy 	1	no
 
 Animation	hellhoundWalk	Hellhound 3	yes	
 Animation	hellhoundIdle	Hellhound 1	no
+Animation	hellhoundAttack	Hellhound 3	yes
 
 Animation	magicOne	Magic	12	no
 Animation	magicStar	Star	12	no
