@@ -29,7 +29,6 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 	// On Key Press
 	if (action.type() == "START") {
 		if (action.name() == "PAUSE") { setPaused(!m_isPaused); }
-		if (action.name() == "PAUSE") { setPaused(!m_isPaused); }
 		else if (action.name() == "QUIT") { m_game->quitLevel(); }
 		else if (action.name() == "BACK") { m_game->backLevel(); }
 
@@ -53,10 +52,10 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 		m_player->getComponent<CInput>().dir = 0;
 
 		if (action.name() == "LEFT")
-			walkingLeft = false;
+			walking = false;
 
 		if (action.name() == "RIGHT")
-			walkingRight = false;
+			walking = false;
 
 		if (action.name() == "JUMP") {
 			jumping = false;
@@ -145,11 +144,12 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 	sCollision(dt);
 	sAnimation(dt);
 	sLifespan(dt);
+	sEnemyAttack(dt);
+	sDestroyOutOfBounds();
 	keepPlayerInBounds();
+	enemyAttack();
 	checkPlayerState();
 	drawLives(lives);
-
-
 }
 
 void Scene_MagicCatCademy::sAnimation(sf::Time dt)
@@ -186,13 +186,6 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 				if (e->hasComponent<CGravity>()) {
 					auto& g = e->getComponent<CGravity>().g;
 					tfm.vel.y += g;
-				}
-
-				if (playerPos.x < tfm.pos.x) {
-					enemyWalkingRight = false;
-				}
-				else {
-					enemyWalkingRight = true;
 				}
 
 				checkEnemyState(e);
@@ -235,7 +228,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 
 		for (auto h : hellhounds) {
 			auto overlap = Physics::getOverlap(p, h);
-
+		
 			if (overlap.x > 0 && overlap.y > 0) {
 				p->getComponent<CHealth>().hp -= 10;
 
@@ -245,6 +238,12 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 				if (p->getComponent<CAnimation>().animation.m_currentFrame == 1) {
 					p->addComponent<CAnimation>(prevAnim);
 				}
+
+				auto& tx = p->getComponent<CTransform>();
+				auto offset = (tx.scale.x > 0) ? 80 : -80;
+				tx.pos.x -= offset;
+				tx.pos.y -= 50;
+
 				checkIfDead(p);
 			}
 		}
@@ -314,17 +313,58 @@ void Scene_MagicCatCademy::sEnemyAttack(sf::Time dt)
 {
 	timeSinceLastAttack += dt;
 	if (timeSinceLastAttack >= attackInterval) {
-		enemyAttack();
+		auto& pPos = m_player->getComponent<CTransform>().pos;
+		float attackRange = 50;
+		std::shared_ptr<Entity> closestEnemy = nullptr;
+
+		for (auto& h : m_entityManager.getEntities("hellhound")) {
+			auto& hPos = h->getComponent<CTransform>().pos;
+			float distance = std::abs(hPos.x - pPos.x);
+
+			if (distance >= attackRange) {
+				attackRange = distance;
+				closestEnemy = h;
+			}
+		}
+
+		if (closestEnemy) {
+			auto& tx = closestEnemy->getComponent<CTransform>();
+
+			if (std::abs(tx.vel.x) > 0.1f)
+				tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
+
+			SoundPlayer::getInstance().play("hellhoundGrowl");
+			enemyAttacking = true;
+
+			auto offset = (tx.scale.x < 0) ? 50 : -50;
+			tx.pos.x += offset;
+			tx.pos.y -= 50;
+
+			checkEnemyState(closestEnemy);		
+		}		
+		//enemyAttacking = false;
 		timeSinceLastAttack = sf::Time::Zero;
 	}
 }
 
+void Scene_MagicCatCademy::sDestroyOutOfBounds()
+{
+	auto bounds = getViewBounds();
+	for (auto h : m_entityManager.getEntities("hellhound")) {
+		if (h->hasComponent<CTransform>() && h->hasComponent<CBoundingBox>()) {
+			auto pos = h->getComponent<CTransform>().pos;
+			if (!bounds.contains(pos)) {
+				h->destroy();
+			}
+		}
+	}
+}
 
 void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 {
 	m_player = m_entityManager.addEntity("lucy");
 	m_player->addComponent<CTransform>(pos);
-	m_player->addComponent<CBoundingBox>(sf::Vector2f(80, 60));
+	m_player->addComponent<CBoundingBox>(sf::Vector2f(55, 60));
 	m_player->addComponent<CInput>();
 	m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
 	m_player->addComponent<CState>("idle");
@@ -335,10 +375,10 @@ void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 
 void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos)
 {
-	for (int i{ 0 }; i < 15; i++) {
+	for (int i{ 0 }; i < 1; i++) {
 		auto hellhound = m_entityManager.addEntity("hellhound");
 		hellhound->addComponent<CTransform>(pos);
-		hellhound->addComponent<CBoundingBox>(sf::Vector2f(115, 80));
+		hellhound->addComponent<CBoundingBox>(sf::Vector2f(90, 80));
 		hellhound->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundWalk"));
 		hellhound->addComponent<CHealth>(100);
 		hellhound->addComponent<CGravity>(0.5f);
@@ -403,7 +443,38 @@ void Scene_MagicCatCademy::fireMagic()
 void Scene_MagicCatCademy::enemyAttack()
 {
 
+	auto& pPos = m_player->getComponent<CTransform>().pos;
+	float attackRange = 50;
+	std::shared_ptr<Entity> closestEnemy = nullptr;
+
+	for (auto& h : m_entityManager.getEntities("hellhound")) {
+		auto& hPos = h->getComponent<CTransform>().pos;
+		float distance = std::abs(hPos.x - pPos.x);
+
+		if (distance >= attackRange) {
+			attackRange = distance;
+			closestEnemy = h;
+			return;
+		}
+
+	}
+
+	if (closestEnemy) {
+		auto& tx = closestEnemy->getComponent<CTransform>();
+
+		if (std::abs(tx.vel.x) > 0.1f)
+			tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
+
+		enemyAttacking = true;
+		SoundPlayer::getInstance().play("hellhoundGrowl");
+
+		auto offset = (tx.scale.x < 0) ? 30 : -30;
+		tx.pos.x += offset;
+
+		checkEnemyState(closestEnemy);
+	}
 }
+
 
 void Scene_MagicCatCademy::playerMovement()
 {
@@ -420,12 +491,12 @@ void Scene_MagicCatCademy::playerMovement()
 	vel.x = 0.f;
 
 	if (dir & CInput::LEFT) {
-		walkingLeft = true;
+		walking = true;
 		vel.x -= 1.f;
 	}
 
 	if (dir & CInput::RIGHT) {
-		walkingRight = true;
+		walking = true;
 		vel.x += 1.f;
 	}
 
@@ -454,8 +525,7 @@ void Scene_MagicCatCademy::checkPlayerState()
 		if (std::abs(tx.vel.x) > 0.1f)
 			tx.scale.x = (tx.vel.x > 0) ? 1 : -1;
 
-		if (walkingRight) newState = "walkingRight";
-		if (walkingLeft) newState = "walkingLeft";
+		if (walking) newState = "walking";
 		if (jumping) newState = "jumping";
 		if (firingMagic) newState = "firingMagic";
 
@@ -465,48 +535,18 @@ void Scene_MagicCatCademy::checkPlayerState()
 			if (state != newState) {
 				state = newState;
 
-				Animation anim;
+				if (state == "walking")
+					checkEntityScale("lucyWalk", m_player);
 
-				if (state == "walkingLeft" || state == "walkingRight")
-					anim = Assets::getInstance().getAnimation("lucyWalk");
-
-				if (state == "jumping") {
-					if (m_player->getComponent<CTransform>().scale.x < 0) {
-						anim = Assets::getInstance().getAnimation("lucyJump");
-						anim.setFlipped(true);
-					}
-					else {
-						anim = Assets::getInstance().getAnimation("lucyJump");
-					}
-				}
-
-				if (state == "firingMagic") {
-					if (m_player->getComponent<CTransform>().scale.x < 0) {
-						anim = Assets::getInstance().getAnimation("lucyMagic");
-						anim.setFlipped(true);
-					}
-					else {
-						anim = Assets::getInstance().getAnimation("lucyMagic");
-					}
-				}
-
-				if (state == "idle") {
-					if (m_player->getComponent<CTransform>().scale.x < 0) {
-						anim = Assets::getInstance().getAnimation("lucyIdle");
-						anim.setFlipped(true);
-					}
-					else {
-						anim = Assets::getInstance().getAnimation("lucyIdle");
-					}
-				}
-
-				if (state == "walkingLeft")
-					anim.setFlipped(true);
-
-				else
-					anim.setFlipped(false);
-
-				m_player->addComponent<CAnimation>(anim);
+				if (state == "jumping") 
+					checkEntityScale("lucyJump", m_player);
+				
+				if (state == "firingMagic")
+					checkEntityScale("lucyMagic", m_player);
+			
+				if (state == "idle") 
+					checkEntityScale("lucyIdle", m_player);
+			
 			}
 		}
 	}
@@ -514,11 +554,11 @@ void Scene_MagicCatCademy::checkPlayerState()
 
 void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
 {
-	std::string newState = "idle";
+	std::string newState = "walking";
 
 	if (e->hasComponent<CState>()) {
 
-		if (enemyWalkingRight) newState = "walkingRight";
+		if (enemyAttacking) newState = "attacking";
 
 		auto& tx = e->getComponent<CTransform>();
 		auto& state = e->getComponent<CState>().state;
@@ -531,18 +571,18 @@ void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
 				state = newState;
 
 				Animation anim;
-
-				if (state == "walkingRight") {
-					if (e->getComponent<CTransform>().scale.x < 0) {
-						anim = Assets::getInstance().getAnimation("hellhoundWalk");
-						anim.setFlipped(true);
-					}
-					else {
-						anim = Assets::getInstance().getAnimation("hellhoundWalk");
-					}
+				if (state == "attacking") {
+					checkEntityScale("hellhoundAttack", e);
 				}
 
-				e->addComponent<CAnimation>(anim);
+				if (state == "idle") {
+					checkEntityScale("hellhoundIdle", e);
+				}				
+				
+				if (state == "walking") {
+					checkEntityScale("hellhoundWalk", e);
+				}
+
 			}
 		}
 	}
@@ -593,6 +633,34 @@ void Scene_MagicCatCademy::keepPlayerInBounds()
 	player_pos.y = std::min(player_pos.y, bot - halfSize.y);
 }
 
+sf::FloatRect Scene_MagicCatCademy::getViewBounds()
+{
+	auto center = m_worldView.getCenter();
+	auto size = m_worldView.getSize();
+	auto leftTop = center - size / 2.f;
+
+	leftTop.y -= size.y / 2.f;
+	size.y += size.y;
+	leftTop.x -= size.x / 2.f;
+	size.x += size.x;
+	return sf::FloatRect(leftTop, size);
+}
+
+void Scene_MagicCatCademy::checkEntityScale(std::string animationName, std::shared_ptr<Entity> e)
+{
+	Animation anim;
+
+	if (e->getComponent<CTransform>().scale.x < 0) {
+		anim = Assets::getInstance().getAnimation(animationName);
+		anim.setFlipped(true);
+	}
+	else {
+		anim = Assets::getInstance().getAnimation(animationName);
+	}
+
+	e->addComponent<CAnimation>(anim);
+}
+
 void Scene_MagicCatCademy::onEnd()
 {
 	m_game->changeScene("MENU", nullptr, false);
@@ -631,18 +699,18 @@ void Scene_MagicCatCademy::loadLevel(const std::string& path)
 	config.close();
 }
 
+
 void Scene_MagicCatCademy::registerActions()
 {
-	registerAction(sf::Keyboard::P, "PAUSE");
-	registerAction(sf::Keyboard::Escape, "BACK");
-	registerAction(sf::Keyboard::Q, "QUIT");
-	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION");
-
-	registerAction(sf::Keyboard::A, "LEFT");
-	registerAction(sf::Keyboard::Left, "LEFT");
-	registerAction(sf::Keyboard::D, "RIGHT");
-	registerAction(sf::Keyboard::Right, "RIGHT");
-	registerAction(sf::Keyboard::Space, "JUMP");
-	registerAction(sf::Keyboard::T, "SHOOT");
-	registerAction(sf::Keyboard::M, "MEOW");
+	registerAction(sf::Keyboard::P, "PAUSE", Action::Keyboard);
+	registerAction(sf::Keyboard::Escape, "BACK", Action::Keyboard);
+	registerAction(sf::Keyboard::Q, "QUIT", Action::Keyboard);
+	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION", Action::Keyboard);
+	registerAction(sf::Keyboard::A, "LEFT", Action::Keyboard);
+	registerAction(sf::Keyboard::Left, "LEFT", Action::Keyboard);
+	registerAction(sf::Keyboard::D, "RIGHT", Action::Keyboard);
+	registerAction(sf::Keyboard::Right, "RIGHT", Action::Keyboard);
+	registerAction(sf::Keyboard::Space, "JUMP", Action::Keyboard);
+	registerAction(1024, "SHOOT", Action::Mouse);
+	registerAction(sf::Keyboard::M, "MEOW", Action::Keyboard);
 }

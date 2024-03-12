@@ -38,13 +38,13 @@ Animation       lucySit         Menu    2	yes
 Animation	lucyIdle        Lucy	3	yes
 Animation	lucyWalk 	Lucy	3	yes
 Animation	lucyJump	Lucy	1	yes
-Animation	lucyMagic	Lucy	5	no
+Animation	lucyMagic	Lucy	14	no
 Animation	lucyHealthIcon	Lucy	2	yes
 Animation	lucyHurt	Lucy 	1	no
 
 Animation	hellhoundWalk	Hellhound 3	yes	
 Animation	hellhoundIdle	Hellhound 1	no
-Animation	hellhoundAttack	Hellhound 3	yes
+Animation	hellhoundAttack	Hellhound 10	no
 
 Animation	magicOne	Magic	12	no
 Animation	magicStar	Star	12	no

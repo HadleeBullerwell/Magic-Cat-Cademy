@@ -27,7 +27,7 @@ const CommandMap Scene::getActionMap() const
 	return m_commands;
 }
 
-void Scene::registerAction(int inputKey, std::string command)
+void Scene::registerAction(int inputKey, std::string command, Action::Actions type)
 {
 	m_commands[inputKey] = command;
 }

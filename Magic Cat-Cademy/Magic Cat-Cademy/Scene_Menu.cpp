@@ -64,12 +64,12 @@ void Scene_Menu::init()
 	spawnCat(sf::Vector2f(1400, 550));
 	displayBackground(sf::Vector2f(0, 0));
 
-	registerAction(sf::Keyboard::W, "UP");
-	registerAction(sf::Keyboard::Up, "UP");
-	registerAction(sf::Keyboard::S, "DOWN");
-	registerAction(sf::Keyboard::Down, "DOWN");
-	registerAction(sf::Keyboard::D, "PLAY");
-	registerAction(sf::Keyboard::Escape, "QUIT");
+	registerAction(sf::Keyboard::W, "UP", Action::Keyboard);
+	registerAction(sf::Keyboard::Up, "UP", Action::Keyboard);
+	registerAction(sf::Keyboard::S, "DOWN", Action::Keyboard);
+	registerAction(sf::Keyboard::Down, "DOWN", Action::Keyboard);
+	registerAction(sf::Keyboard::D, "PLAY", Action::Keyboard);
+	registerAction(sf::Keyboard::Escape, "QUIT", Action::Keyboard);
 
 	m_title = "Magic Cat-Cademy";
 	m_menuStrings.push_back("PLAY");

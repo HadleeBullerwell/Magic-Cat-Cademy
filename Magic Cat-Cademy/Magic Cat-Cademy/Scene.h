@@ -8,8 +8,9 @@
 
 
 using CommandMap = std::map<int, std::string>;
+using ActionMap = std::map<std::string, Action::Actions>;
 
-class Scene_Frogger;
+class Scene_MagicCatCademy;
 
 class Scene
 {
@@ -19,6 +20,7 @@ protected:
 	GameEngine	    *m_game;
 	EntityManager	m_entityManager;
 	CommandMap		m_commands;
+	ActionMap		m_actions;
 	bool			m_isPaused{false};
 	bool			m_hasEnded{false};
 	size_t			m_currentFrame{ 0 };
@@ -36,7 +38,7 @@ public:
 
 	void				simulate(int);
 	void				doAction(Command);
-	void				registerAction(int, std::string);
+	void				registerAction(int, std::string, Action::Actions type);
 	const CommandMap	getActionMap() const;
 };
 

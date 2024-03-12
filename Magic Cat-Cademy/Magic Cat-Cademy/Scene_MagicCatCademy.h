@@ -17,16 +17,16 @@ private:
 
 	LevelConfig		m_config;
 
-	bool			walkingLeft{ false };
-	bool			walkingRight{ false };
+	bool			walking{ false };
 	bool			jumping{ false };
 	bool			firingMagic{ false };
 
-	bool			enemyWalkingRight{ false };
+	bool			enemyAttacking{ false };
+
 
 	sf::Clock		attackTimer;
 	sf::Time		timeSinceLastAttack;
-	const sf::Time	attackInterval{ sf::seconds(10.f) };
+	const sf::Time	attackInterval{ sf::seconds(5.f) };
 
 	int				lives{ 3 };
 
@@ -40,6 +40,7 @@ private:
 	void			sCollision(sf::Time dt);
 	void			sLifespan(sf::Time dt);
 	void			sEnemyAttack(sf::Time dt);
+	void			sDestroyOutOfBounds();
 
 	void			spawnPlayer(sf::Vector2f pos);
 	void			spawnEnemies(sf::Vector2f pos);
@@ -52,7 +53,8 @@ private:
 	void			checkEnemyState(std::shared_ptr<Entity> e);
 	void			checkIfDead(std::shared_ptr<Entity> e);
 	void			keepPlayerInBounds();
-
+	sf::FloatRect	getViewBounds();
+	void			checkEntityScale(std::string animationName, std::shared_ptr<Entity> e);
 	void			onEnd() override;	
 
 	void			init();

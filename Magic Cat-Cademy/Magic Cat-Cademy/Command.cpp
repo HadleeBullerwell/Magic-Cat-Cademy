@@ -4,9 +4,11 @@ Command::Command()
 {
 }
 
-Command::Command(const std::string& name, const std::string& type)
-	: m_name(name)
-	, m_type(type)
+Command::Command(const std::string& name, const std::string& type, Action::Actions action)
+	: action(action),
+	m_name(name), 
+	m_type(type)
+	
 {
 }
 
