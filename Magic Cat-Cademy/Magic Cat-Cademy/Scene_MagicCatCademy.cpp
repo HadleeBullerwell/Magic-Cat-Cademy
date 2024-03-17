@@ -136,12 +136,8 @@ void Scene_MagicCatCademy::init()
 {
 	auto pos = sf::Vector2f(200.f, 340.f);
 
-	std::uniform_int_distribution<int> rand(3, 8);
-
-	int amount = rand(rng);
-
 	spawnPlayer(pos);
-	spawnEnemies(sf::Vector2f(1500.f, 325.f), amount);
+	spawnEnemies(sf::Vector2f(1500.f, 325.f));
 	spawnGroundEntity(sf::Vector2f(0, 375.f));
 	spawnFireObstacles(sf::Vector2f(750.f, 340.f));
 }
@@ -401,9 +397,9 @@ void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 	m_player->addComponent<CMagic>();
 }
 
-void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos, int amount)
+void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos)
 {
-	for (int i{ 0 }; i < amount; i++) {
+	for (int i{ 0 }; i < 15; i++) {
 		auto hellhound = m_entityManager.addEntity("hellhound");
 		hellhound->addComponent<CTransform>(pos);
 		hellhound->addComponent<CBoundingBox>(sf::Vector2f(80, 80));
@@ -453,7 +449,7 @@ void Scene_MagicCatCademy::drawLives(int lives)
 
 void Scene_MagicCatCademy::fireMagic()
 {
-	std::uniform_int_distribution<int> rand(1, 3);
+	std::uniform_int_distribution<int> rand(1, 2);
 
 	int spell = rand(rng);
 
@@ -476,10 +472,6 @@ void Scene_MagicCatCademy::fireMagic()
 	else if (spell == 2) {
 		magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magicStar"));
 	}
-	else {
-		magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magicStar"));
-	}
-
 }
 
 void Scene_MagicCatCademy::enemyAttack(std::shared_ptr<Entity> e)
@@ -621,10 +613,6 @@ void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
 
 void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 {
-	std::uniform_int_distribution<int> rand(3, 8);
-
-	int amount = rand(rng);
-
 	if (e->hasComponent<CHealth>()) {
 		if (e->getComponent<CHealth>().hp <= 0) {
 			e->destroy();
@@ -636,7 +624,7 @@ void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 					h->destroy();
 				}
 				spawnPlayer(sf::Vector2f(200.f, 340.f));
-				spawnEnemies(sf::Vector2f(1500.f, 325.f), amount);
+				spawnEnemies(sf::Vector2f(1500.f, 325.f));
 				m_worldView.reset(sf::FloatRect(0.f, 0.f, m_worldView.getSize().x, m_worldView.getSize().y));
 
 				if (lives == 0) {

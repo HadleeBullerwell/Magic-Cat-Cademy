@@ -42,7 +42,7 @@ private:
 	void			sDestroyOutOfBounds();
 
 	void			spawnPlayer(sf::Vector2f pos);
-	void			spawnEnemies(sf::Vector2f pos, int amount);
+	void			spawnEnemies(sf::Vector2f pos);
 	void			spawnGroundEntity(sf::Vector2f pos);
 	void			spawnFireObstacles(sf::Vector2f pos);
 	void			drawLives(int lives);
