@@ -5,7 +5,14 @@
 #include "Entity.h"
 #include "Physics.h"
 #include <fstream>
+#include <cmath>
+#include <random>
 #include <iostream>
+
+namespace {
+	std::random_device rd;
+	std::mt19937 rng(rd());
+}
 
 Scene_MagicCatCademy::Scene_MagicCatCademy(GameEngine* gameEngine, const std::string& levelPath) :
 	Scene(gameEngine),
@@ -129,13 +136,21 @@ void Scene_MagicCatCademy::init()
 {
 	auto pos = sf::Vector2f(200.f, 340.f);
 
+	std::uniform_int_distribution<int> rand(3, 8);
+
+	int amount = rand(rng);
+
 	spawnPlayer(pos);
-	spawnEnemies(sf::Vector2f(1500.f, 325.f));
+	spawnEnemies(sf::Vector2f(1500.f, 325.f), amount);
 	spawnGroundEntity(sf::Vector2f(0, 375.f));
+	spawnFireObstacles(sf::Vector2f(750.f, 340.f));
 }
 
 void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 {
+	if (m_isPaused)
+		return;
+
 	m_entityManager.update();
 
 	m_worldView.move(m_config.scrollSpeed * dt.asSeconds() * 1, 0);
@@ -145,9 +160,8 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 	sAnimation(dt);
 	sLifespan(dt);
 	sEnemyAttack(dt);
-	sDestroyOutOfBounds();
+	//sDestroyOutOfBounds();
 	keepPlayerInBounds();
-	enemyAttack();
 	checkPlayerState();
 	drawLives(lives);
 }
@@ -204,6 +218,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 	auto hellhounds = m_entityManager.getEntities("hellhound");
 	auto player = m_entityManager.getEntities("lucy");
 	auto magic = m_entityManager.getEntities("magic");
+	auto fire = m_entityManager.getEntities("fire");
 
 	for (auto p : player) {
 		for (auto g : ground) {
@@ -228,23 +243,44 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 
 		for (auto h : hellhounds) {
 			auto overlap = Physics::getOverlap(p, h);
-		
+
 			if (overlap.x > 0 && overlap.y > 0) {
+				SoundPlayer::getInstance().play("hellhoundBark", h->getComponent<CTransform>().pos);
+				SoundPlayer::getInstance().play("sadMeow", p->getComponent<CTransform>().pos);
 				p->getComponent<CHealth>().hp -= 10;
 
 				auto& prevAnim = p->getComponent<CAnimation>().animation;
 				p->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHurt"));
 
-				if (p->getComponent<CAnimation>().animation.m_currentFrame == 1) {
+				if (p->getComponent<CAnimation>().animation.m_currentFrame == p->getComponent<CAnimation>().animation.m_frames.size() - 1) {
 					p->addComponent<CAnimation>(prevAnim);
 				}
 
 				auto& tx = p->getComponent<CTransform>();
-				auto offset = (tx.scale.x > 0) ? 80 : -80;
+				auto offset = (tx.scale.x > 0) ? 100 : -100;
 				tx.pos.x -= offset;
 				tx.pos.y -= 50;
 
 				checkIfDead(p);
+			}
+		}
+
+		for (auto f : fire) {
+			auto overlap = Physics::getOverlap(f, p);
+
+			if (overlap.x > 0 && overlap.y > 0) {
+				SoundPlayer::getInstance().play("sadMeow", p->getComponent<CTransform>().pos);
+				p->getComponent<CHealth>().hp -= 5;
+
+				auto& tx = p->getComponent<CTransform>();
+				auto offset = (tx.scale.x > 0) ? 30 : -30;
+				tx.pos.x -= offset;
+				tx.pos.y -= 50;
+
+				p->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHurt"));
+
+				checkIfDead(p);
+
 			}
 		}
 
@@ -311,39 +347,31 @@ void Scene_MagicCatCademy::sLifespan(sf::Time dt)
 
 void Scene_MagicCatCademy::sEnemyAttack(sf::Time dt)
 {
-	timeSinceLastAttack += dt;
-	if (timeSinceLastAttack >= attackInterval) {
-		auto& pPos = m_player->getComponent<CTransform>().pos;
-		float attackRange = 50;
-		std::shared_ptr<Entity> closestEnemy = nullptr;
+	auto hellhounds = m_entityManager.getEntities("hellhound");
+	auto attackRange = 250.f;
 
-		for (auto& h : m_entityManager.getEntities("hellhound")) {
-			auto& hPos = h->getComponent<CTransform>().pos;
-			float distance = std::abs(hPos.x - pPos.x);
+	if (attackTimer.getElapsedTime() >= attackInterval) {
+		auto pPos = m_player->getComponent<CTransform>().pos;
+		std::shared_ptr<Entity> closestHellhound = nullptr;
+		float closestDistance = std::numeric_limits<float>::max();
 
-			if (distance >= attackRange) {
-				attackRange = distance;
-				closestEnemy = h;
+		for (auto h : hellhounds) {
+
+			auto hPos = h->getComponent<CTransform>().pos;
+
+			float distance = sqrt(pow(pPos.x - hPos.x, 2) + pow(pPos.y - hPos.y, 2));
+
+			if (distance < attackRange && distance < closestDistance) {
+				closestDistance = distance;
+				closestHellhound = h;
+				break;
 			}
 		}
 
-		if (closestEnemy) {
-			auto& tx = closestEnemy->getComponent<CTransform>();
-
-			if (std::abs(tx.vel.x) > 0.1f)
-				tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
-
-			SoundPlayer::getInstance().play("hellhoundGrowl");
-			enemyAttacking = true;
-
-			auto offset = (tx.scale.x < 0) ? 50 : -50;
-			tx.pos.x += offset;
-			tx.pos.y -= 50;
-
-			checkEnemyState(closestEnemy);		
-		}		
-		//enemyAttacking = false;
-		timeSinceLastAttack = sf::Time::Zero;
+		if (closestHellhound != nullptr) {
+			enemyAttack(closestHellhound);
+		}
+		attackTimer.restart();
 	}
 }
 
@@ -373,16 +401,17 @@ void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
 	m_player->addComponent<CMagic>();
 }
 
-void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos)
+void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos, int amount)
 {
-	for (int i{ 0 }; i < 1; i++) {
+	for (int i{ 0 }; i < amount; i++) {
 		auto hellhound = m_entityManager.addEntity("hellhound");
 		hellhound->addComponent<CTransform>(pos);
-		hellhound->addComponent<CBoundingBox>(sf::Vector2f(90, 80));
+		hellhound->addComponent<CBoundingBox>(sf::Vector2f(80, 80));
 		hellhound->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundWalk"));
 		hellhound->addComponent<CHealth>(100);
 		hellhound->addComponent<CGravity>(0.5f);
 		hellhound->addComponent<CState>("idle");
+		hellhound->addComponent<CAttack>(false);
 		pos.x += 500.f;
 	}
 }
@@ -392,6 +421,17 @@ void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
 	auto ground = m_entityManager.addEntity("ground");
 	ground->addComponent<CTransform>(pos);
 	ground->addComponent<CBoundingBox>(sf::Vector2f(15000, 2.f));
+}
+
+void Scene_MagicCatCademy::spawnFireObstacles(sf::Vector2f pos)
+{
+	for (int i{ 0 }; i < 15; i++) {
+		auto fire = m_entityManager.addEntity("fire");
+		fire->addComponent<CTransform>(pos);
+		fire->addComponent<CBoundingBox>(sf::Vector2f(30, 60));
+		fire->addComponent<CAnimation>(Assets::getInstance().getAnimation("fire"));
+		pos.x += 750.f;
+	}
 }
 
 void Scene_MagicCatCademy::drawLives(int lives)
@@ -413,7 +453,9 @@ void Scene_MagicCatCademy::drawLives(int lives)
 
 void Scene_MagicCatCademy::fireMagic()
 {
-	int spell = rand() % 3;
+	std::uniform_int_distribution<int> rand(1, 3);
+
+	int spell = rand(rng);
 
 	auto magic = m_entityManager.addEntity("magic");
 	magic->addComponent<CTransform>(m_player->getComponent<CTransform>().pos);
@@ -440,41 +482,28 @@ void Scene_MagicCatCademy::fireMagic()
 
 }
 
-void Scene_MagicCatCademy::enemyAttack()
+void Scene_MagicCatCademy::enemyAttack(std::shared_ptr<Entity> e)
 {
+	auto& tx = e->getComponent<CTransform>();
+	auto& attack = e->getComponent<CAttack>();
 
-	auto& pPos = m_player->getComponent<CTransform>().pos;
-	float attackRange = 50;
-	std::shared_ptr<Entity> closestEnemy = nullptr;
+	if (std::abs(tx.vel.x) > 0.1f)
+		tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
 
-	for (auto& h : m_entityManager.getEntities("hellhound")) {
-		auto& hPos = h->getComponent<CTransform>().pos;
-		float distance = std::abs(hPos.x - pPos.x);
+	SoundPlayer::getInstance().play("hellhoundGrowl", tx.pos);
 
-		if (distance >= attackRange) {
-			attackRange = distance;
-			closestEnemy = h;
-			return;
-		}
+	auto offset = (tx.scale.x < 0) ? 50 : -50;
+	tx.pos.x += offset;
+	tx.pos.y -= 80;
 
-	}
+	attack.isAttacking = true;
+	checkEnemyState(e);
 
-	if (closestEnemy) {
-		auto& tx = closestEnemy->getComponent<CTransform>();
+	attack.isAttacking = false;
+	std::cout << tx.pos.y << "\n";
+	checkEnemyState(e);
 
-		if (std::abs(tx.vel.x) > 0.1f)
-			tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
-
-		enemyAttacking = true;
-		SoundPlayer::getInstance().play("hellhoundGrowl");
-
-		auto offset = (tx.scale.x < 0) ? 30 : -30;
-		tx.pos.x += offset;
-
-		checkEnemyState(closestEnemy);
-	}
 }
-
 
 void Scene_MagicCatCademy::playerMovement()
 {
@@ -538,15 +567,15 @@ void Scene_MagicCatCademy::checkPlayerState()
 				if (state == "walking")
 					checkEntityScale("lucyWalk", m_player);
 
-				if (state == "jumping") 
+				if (state == "jumping")
 					checkEntityScale("lucyJump", m_player);
-				
+
 				if (state == "firingMagic")
 					checkEntityScale("lucyMagic", m_player);
-			
-				if (state == "idle") 
+
+				if (state == "idle")
 					checkEntityScale("lucyIdle", m_player);
-			
+
 			}
 		}
 	}
@@ -558,7 +587,7 @@ void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
 
 	if (e->hasComponent<CState>()) {
 
-		if (enemyAttacking) newState = "attacking";
+		if (e->getComponent<CAttack>().isAttacking) newState = "attacking";
 
 		auto& tx = e->getComponent<CTransform>();
 		auto& state = e->getComponent<CState>().state;
@@ -570,19 +599,20 @@ void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
 			if (state != newState) {
 				state = newState;
 
+
 				Animation anim;
+
 				if (state == "attacking") {
 					checkEntityScale("hellhoundAttack", e);
 				}
 
-				if (state == "idle") {
-					checkEntityScale("hellhoundIdle", e);
-				}				
-				
 				if (state == "walking") {
 					checkEntityScale("hellhoundWalk", e);
 				}
 
+				if (state == "idle") {
+					checkEntityScale("hellhoundIdle", e);
+				}
 			}
 		}
 	}
@@ -591,6 +621,10 @@ void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
 
 void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 {
+	std::uniform_int_distribution<int> rand(3, 8);
+
+	int amount = rand(rng);
+
 	if (e->hasComponent<CHealth>()) {
 		if (e->getComponent<CHealth>().hp <= 0) {
 			e->destroy();
@@ -602,7 +636,7 @@ void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 					h->destroy();
 				}
 				spawnPlayer(sf::Vector2f(200.f, 340.f));
-				spawnEnemies(sf::Vector2f(1500.f, 325.f));
+				spawnEnemies(sf::Vector2f(1500.f, 325.f), amount);
 				m_worldView.reset(sf::FloatRect(0.f, 0.f, m_worldView.getSize().x, m_worldView.getSize().y));
 
 				if (lives == 0) {
@@ -648,17 +682,12 @@ sf::FloatRect Scene_MagicCatCademy::getViewBounds()
 
 void Scene_MagicCatCademy::checkEntityScale(std::string animationName, std::shared_ptr<Entity> e)
 {
-	Animation anim;
+	Animation anim = Assets::getInstance().getAnimation(animationName);
 
-	if (e->getComponent<CTransform>().scale.x < 0) {
-		anim = Assets::getInstance().getAnimation(animationName);
-		anim.setFlipped(true);
-	}
-	else {
-		anim = Assets::getInstance().getAnimation(animationName);
-	}
+	bool flip = (e->getComponent<CTransform>().scale.x < 0);
+	anim.setFlipped(flip);
 
-	e->addComponent<CAnimation>(anim);
+	e->getComponent<CAnimation>().animation = anim;
 }
 
 void Scene_MagicCatCademy::onEnd()

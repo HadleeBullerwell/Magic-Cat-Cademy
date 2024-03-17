@@ -1,0 +1,492 @@
+{ 
+  "frames": [
+  {
+   "filename": "fire (1).png",
+    "frame": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (2).png", 
+    "frame": { "x": 75, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (3).png", 
+    "frame": { "x": 150, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (4).png", 
+    "frame": { "x": 225, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (5).png", 
+    "frame": { "x": 300, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (6).png",
+    "frame": { "x": 375, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (7).png",
+    "frame": { "x": 450, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (8).png",
+    "frame": { "x": 525, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (9).png",
+    "frame": { "x": 600, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (10).png",
+    "frame": { "x": 675, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (11).png",
+    "frame": { "x": 750, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (12).png",
+    "frame": { "x": 825, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (13).png",
+    "frame": { "x": 900, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (14).png",
+    "frame": { "x": 975, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (15).png",
+    "frame": { "x": 1050, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (16).png",
+    "frame": { "x": 1125, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (17).png",
+    "frame": { "x": 1200, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (18).png",
+    "frame": { "x": 1275, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (19).png",
+    "frame": { "x": 1350, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (20).png",
+    "frame": { "x": 1425, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (21).png",
+    "frame": { "x": 1500, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (22).png",
+    "frame": { "x": 1575, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (23).png",
+    "frame": { "x": 1650, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (24).png",
+    "frame": { "x": 1725, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (25).png",
+    "frame": { "x": 1800, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (26).png",
+    "frame": { "x": 1875, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (27).png",
+    "frame": { "x": 1950, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (28).png",
+    "frame": { "x": 2025, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (29).png",
+    "frame": { "x": 2100, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (30).png",
+    "frame": { "x": 2175, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (31).png",
+    "frame": { "x": 2250, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (32).png",
+    "frame": { "x": 2325, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (33).png",
+    "frame": { "x": 2400, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (34).png",
+    "frame": { "x": 2475, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (35).png",
+    "frame": { "x": 2550, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (36).png",
+    "frame": { "x": 2625, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (37).png",
+    "frame": { "x": 2700, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (38).png",
+    "frame": { "x": 2775, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (39).png",
+    "frame": { "x": 2850, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (40).png",
+    "frame": { "x": 2925, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (41).png",
+    "frame": { "x": 3000, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (42).png",
+    "frame": { "x": 3075, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (43).png",
+    "frame": { "x": 3150, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (44).png",
+    "frame": { "x": 3225, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (45).png",
+    "frame": { "x": 3300, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (46).png",
+    "frame": { "x": 3375, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (47).png",
+    "frame": { "x": 3450, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (48).png",
+    "frame": { "x": 3525, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (49).png",
+    "frame": { "x": 3600, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (50).png",
+    "frame": { "x": 3675, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (51).png",
+    "frame": { "x": 3750, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (52).png",
+    "frame": { "x": 3825, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+   },
+   {
+   "filename": "fire (53).png",
+    "frame": { "x": 3900, "y": 0, "w": 75, "h": 75 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 75, "h": 75 },
+    "sourceSize": { "w": 75, "h": 75 },
+    "duration": 100
+  }
+],
+"meta": {
+  "app": "http://free-tex-packer.com",
+  "version": "0.6.7",
+  "image": "fire.png",
+  "format": "RGBA8888",
+  "size": {
+    "w": 240,
+    "h": 190
+  },
+  "scale": 1
+}
+}

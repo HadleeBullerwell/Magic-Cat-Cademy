@@ -6,6 +6,7 @@ Music mainTune		../assets/Music/mainTune.ogg
 Music mainMenuMusic	../assets/Music/mainMenu.wav
 
 Sound meow		../assets/Sounds/catMeow.wav
+Sound sadMeow		../assets/Sounds/sadMeow.mp3
 Sound select		../assets/Sounds/select.mp3
 Sound magic		../assets/Sounds/magic.mp3
 Sound hellhoundHurt	../assets/Sounds/hellhoundHurt.mp3
@@ -20,6 +21,7 @@ Texture Menu		../assets/Textures/menu.png
 Texture MenuBackground ../assets/Textures/menuBackground.png
 Texture Magic		../assets/Textures/magic.png
 Texture Star		../assets/Textures/star.png
+Texture Fire		../assets/Textures/fire.png
 
 # Sprites
 Sprite Background 	Background	0 0 15000 750
@@ -30,6 +32,7 @@ JSON			../assets/Textures/hellhound.json
 JSON			../assets/Textures/menu.json
 JSON			../assets/Textures/magic.json
 JSON			../assets/Textures/star.json
+JSON			../assets/Textures/fire.json
 
 # Animation 	Name 		Texture	Speed   Repeats
 Animation	logo		Menu	1	no
@@ -48,3 +51,5 @@ Animation	hellhoundAttack	Hellhound 10	no
 
 Animation	magicOne	Magic	12	no
 Animation	magicStar	Star	12	no
+
+Animation	fire		Fire	20	yes

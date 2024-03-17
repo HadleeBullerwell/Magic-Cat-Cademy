@@ -23,10 +23,9 @@ private:
 
 	bool			enemyAttacking{ false };
 
-
 	sf::Clock		attackTimer;
-	sf::Time		timeSinceLastAttack;
-	const sf::Time	attackInterval{ sf::seconds(5.f) };
+	sf::Clock		currentAttackingTimer;
+	sf::Time		attackInterval{ sf::seconds(5.f) };
 
 	int				lives{ 3 };
 
@@ -43,11 +42,12 @@ private:
 	void			sDestroyOutOfBounds();
 
 	void			spawnPlayer(sf::Vector2f pos);
-	void			spawnEnemies(sf::Vector2f pos);
+	void			spawnEnemies(sf::Vector2f pos, int amount);
 	void			spawnGroundEntity(sf::Vector2f pos);
+	void			spawnFireObstacles(sf::Vector2f pos);
 	void			drawLives(int lives);
 	void			fireMagic();
-	void			enemyAttack();
+	void			enemyAttack(std::shared_ptr<Entity> e);
 	void			playerMovement();
 	void			checkPlayerState();
 	void			checkEnemyState(std::shared_ptr<Entity> e);

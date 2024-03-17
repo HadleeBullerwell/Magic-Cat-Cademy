@@ -129,4 +129,11 @@ struct CLifespan : public Component
 
 };
 
+struct CAttack : public Component
+{
+    bool isAttacking{ false };
+
+    CAttack() = default;
+    CAttack(bool isAttacking) : isAttacking(isAttacking) {}
+};
 #endif //BREAKOUT_COMPONENTS_H
