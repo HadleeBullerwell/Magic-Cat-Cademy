@@ -113,10 +113,12 @@ struct CHealth : public Component {
 };
 
 struct CMagic : public Component {
-    bool usingMagic{ false };
     sf::Time cooldown{ sf::Time::Zero };
+    sf::Clock cooldownTimer;
+
 
     CMagic() = default;
+    CMagic(sf::Time cooldown) : cooldown(cooldown) {};
 };
 
 struct CLifespan : public Component
@@ -136,4 +138,14 @@ struct CAttack : public Component
     CAttack() = default;
     CAttack(bool isAttacking) : isAttacking(isAttacking) {}
 };
-#endif //BREAKOUT_COMPONENTS_H
+
+struct CImmunity : public Component
+{
+public:
+    float duration;
+    bool isImmune;
+
+    CImmunity() : duration(0.0f), isImmune(false) {};
+    CImmunity(float immunityDuration) : duration(immunityDuration), isImmune(true) {};
+};
+#endif //BREAKOUT_COMPONENTSH

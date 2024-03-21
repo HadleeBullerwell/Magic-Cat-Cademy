@@ -22,6 +22,7 @@ Texture MenuBackground ../assets/Textures/menuBackground.png
 Texture Magic		../assets/Textures/magic.png
 Texture Star		../assets/Textures/star.png
 Texture Fire		../assets/Textures/fire.png
+Texture Powerup		../assets/Textures/powerups.png
 
 # Sprites
 Sprite Background 	Background	0 0 15000 750
@@ -33,6 +34,7 @@ JSON			../assets/Textures/menu.json
 JSON			../assets/Textures/magic.json
 JSON			../assets/Textures/star.json
 JSON			../assets/Textures/fire.json
+JSON			../assets/Textures/powerups.json
 
 # Animation 	Name 		Texture	Speed   Repeats
 Animation	logo		Menu	1	no
@@ -53,3 +55,8 @@ Animation	magicOne	Magic	12	no
 Animation	magicStar	Star	12	no
 
 Animation	fire		Fire	20	yes
+
+Animation	shieldPowerup		Powerup	1	no
+Animation	speedPowerup		Powerup 1	no
+Animation	magicCooldownPowerup 	Powerup	1	no
+Animation	magicStrengthPowerup	Powerup	1	no

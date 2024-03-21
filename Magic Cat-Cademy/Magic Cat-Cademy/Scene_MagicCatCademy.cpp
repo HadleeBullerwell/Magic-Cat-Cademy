@@ -49,9 +49,12 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 		else if (action.name() == "JUMP") { m_player->getComponent<CInput>().dir = CInput::UP; }
 		else if (action.name() == "MEOW") { SoundPlayer::getInstance().play("meow", m_player->getComponent<CTransform>().pos); }
 		else if (action.name() == "SHOOT") {
-			fireMagic();
-			firingMagic = true;
-			SoundPlayer::getInstance().play("magic", m_player->getComponent<CTransform>().pos);
+			if (m_player->getComponent<CMagic>().cooldownTimer.getElapsedTime() >= m_player->getComponent<CMagic>().cooldown) {
+				fireMagic();
+				firingMagic = true;
+				SoundPlayer::getInstance().play("magic", m_player->getComponent<CTransform>().pos);
+				m_player->getComponent<CMagic>().cooldownTimer.restart();
+			}
 		}
 	}
 
@@ -137,7 +140,7 @@ void Scene_MagicCatCademy::init()
 	auto pos = sf::Vector2f(200.f, 340.f);
 
 	spawnPlayer(pos);
-	spawnEnemies(sf::Vector2f(1500.f, 325.f));
+	spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
 	spawnGroundEntity(sf::Vector2f(0, 375.f));
 	spawnFireObstacles(sf::Vector2f(750.f, 340.f));
 }
@@ -151,11 +154,13 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 
 	m_worldView.move(m_config.scrollSpeed * dt.asSeconds() * 1, 0);
 
+	sSpawnEnemies(dt);
 	sMovement(dt);
 	sCollision(dt);
 	sAnimation(dt);
 	sLifespan(dt);
 	sEnemyAttack(dt);
+	sManagePowerups(dt);
 	//sDestroyOutOfBounds();
 	keepPlayerInBounds();
 	checkPlayerState();
@@ -215,6 +220,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 	auto player = m_entityManager.getEntities("lucy");
 	auto magic = m_entityManager.getEntities("magic");
 	auto fire = m_entityManager.getEntities("fire");
+	auto powerups = m_entityManager.getEntities("powerup");
 
 	for (auto p : player) {
 		for (auto g : ground) {
@@ -241,6 +247,14 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 			auto overlap = Physics::getOverlap(p, h);
 
 			if (overlap.x > 0 && overlap.y > 0) {
+				if (m_player->hasComponent<CImmunity>()) {
+					auto& immunity = m_player->getComponent<CImmunity>().isImmune;
+
+					if (immunity) {
+						continue;
+					}
+				}
+
 				SoundPlayer::getInstance().play("hellhoundBark", h->getComponent<CTransform>().pos);
 				SoundPlayer::getInstance().play("sadMeow", p->getComponent<CTransform>().pos);
 				p->getComponent<CHealth>().hp -= 10;
@@ -265,6 +279,14 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 			auto overlap = Physics::getOverlap(f, p);
 
 			if (overlap.x > 0 && overlap.y > 0) {
+				if (m_player->hasComponent<CImmunity>()) {
+					auto& immunity = m_player->getComponent<CImmunity>().isImmune;
+
+					if (immunity) {
+						continue;
+					}
+				}
+
 				SoundPlayer::getInstance().play("sadMeow", p->getComponent<CTransform>().pos);
 				p->getComponent<CHealth>().hp -= 5;
 
@@ -280,6 +302,31 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 			}
 		}
 
+		for (auto powerup : powerups) {
+			auto overlap = Physics::getOverlap(p, powerup);
+
+			if (overlap.x > 0 && overlap.y > 0) {
+				auto powerupName = powerup->getComponent<CAnimation>().animation.getName();
+
+				if (powerupName == "shieldPowerup") {
+					m_player->addComponent<CImmunity>(8.f);
+				}
+				else if (powerupName == "speedPowerup") {
+					speed = 3.f;
+					powerupDuration["speedPowerup"] = 3.f;
+				}
+				else if (powerupName == "magicCooldownPowerup") {
+					m_player->getComponent<CMagic>().cooldown = sf::seconds(0);
+					powerupDuration["magicCooldownPowerup"] = 5.f;
+				}
+				else if (powerupName == "magicStrengthPowerup") {
+					magicStrength = 20;
+					powerupDuration["magicStrengthPowerup"] = 5.f;
+				}
+
+				powerup->destroy();
+			}
+		}
 	}
 
 	for (auto h : hellhounds) {
@@ -311,7 +358,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 			if (overlap.x > 0 && overlap.y > 0) {
 				SoundPlayer::getInstance().play("hellhoundHurt", h->getComponent<CTransform>().pos);
 				m->destroy();
-				h->getComponent<CHealth>().hp -= 10;
+				h->getComponent<CHealth>().hp -= magicStrength;
 				checkIfDead(h);
 
 				if (h->hasComponent<CGravity>()) {
@@ -371,6 +418,16 @@ void Scene_MagicCatCademy::sEnemyAttack(sf::Time dt)
 	}
 }
 
+void Scene_MagicCatCademy::sSpawnEnemies(sf::Time dt)
+{
+	int amount = 4;
+	if (enemySpawnTimer.getElapsedTime() >= enemySpawnInterval) {
+		spawnEnemies(sf::Vector2f(m_player->getComponent<CTransform>().pos.x + 500.f, 325.f), amount++);
+		sDestroyOutOfBounds();
+		enemySpawnTimer.restart();
+	}
+}
+
 void Scene_MagicCatCademy::sDestroyOutOfBounds()
 {
 	auto bounds = getViewBounds();
@@ -384,350 +441,402 @@ void Scene_MagicCatCademy::sDestroyOutOfBounds()
 	}
 }
 
-void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
+void Scene_MagicCatCademy::sManagePowerups(sf::Time dt)
 {
-	m_player = m_entityManager.addEntity("lucy");
-	m_player->addComponent<CTransform>(pos);
-	m_player->addComponent<CBoundingBox>(sf::Vector2f(55, 60));
-	m_player->addComponent<CInput>();
-	m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
-	m_player->addComponent<CState>("idle");
-	m_player->addComponent<CGravity>(0.5f);
-	m_player->addComponent<CHealth>(100);
-	m_player->addComponent<CMagic>();
-}
+	for (auto& [powerupName, duration] : powerupDuration) {
+		duration -= dt.asSeconds();
 
-void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos)
-{
-	for (int i{ 0 }; i < 15; i++) {
-		auto hellhound = m_entityManager.addEntity("hellhound");
-		hellhound->addComponent<CTransform>(pos);
-		hellhound->addComponent<CBoundingBox>(sf::Vector2f(80, 80));
-		hellhound->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundWalk"));
-		hellhound->addComponent<CHealth>(100);
-		hellhound->addComponent<CGravity>(0.5f);
-		hellhound->addComponent<CState>("idle");
-		hellhound->addComponent<CAttack>(false);
-		pos.x += 500.f;
-	}
-}
-
-void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
-{
-	auto ground = m_entityManager.addEntity("ground");
-	ground->addComponent<CTransform>(pos);
-	ground->addComponent<CBoundingBox>(sf::Vector2f(15000, 2.f));
-}
-
-void Scene_MagicCatCademy::spawnFireObstacles(sf::Vector2f pos)
-{
-	for (int i{ 0 }; i < 15; i++) {
-		auto fire = m_entityManager.addEntity("fire");
-		fire->addComponent<CTransform>(pos);
-		fire->addComponent<CBoundingBox>(sf::Vector2f(30, 60));
-		fire->addComponent<CAnimation>(Assets::getInstance().getAnimation("fire"));
-		pos.x += 750.f;
-	}
-}
-
-void Scene_MagicCatCademy::drawLives(int lives)
-{
-	for (auto life : m_entityManager.getEntities("life")) {
-		life->destroy();
+		if (duration <= 0.0f) {
+			if (powerupName == "speedPowerup") {
+				speed = 1.f;
+			}
+			else if (powerupName == "magicCooldownPowerup") {
+				m_player->getComponent<CMagic>().cooldown = sf::seconds(0.5f);
+			}
+			else if (powerupName == "magicStrengthPowerup") {
+				magicStrength = 10;
+			}
+		}
 	}
 
-	sf::Vector2f pos{ 30, 30 };
-	sf::Vector2f background = m_worldView.getCenter() - m_worldView.getSize() / 2.f;
+	if (m_player->hasComponent<CImmunity>()) {
+		auto& immunityTime = m_player->getComponent<CImmunity>();
 
-	for (int i{ 0 }; i < lives; ++i) {
-		auto life = m_entityManager.addEntity("life");
-		life->addComponent<CTransform>(pos + background);
-		life->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHealthIcon"));
-		pos.x += 50;
-	}
-}
+		if (immunityTime.isImmune) {
+			immunityTime.duration -= dt.asSeconds();
 
-void Scene_MagicCatCademy::fireMagic()
-{
-	std::uniform_int_distribution<int> rand(1, 2);
-
-	int spell = rand(rng);
-
-	auto magic = m_entityManager.addEntity("magic");
-	magic->addComponent<CTransform>(m_player->getComponent<CTransform>().pos);
-	magic->addComponent<CBoundingBox>(sf::Vector2f(50.f, 50.f));
-	magic->addComponent<CLifespan>(100);
-
-	if (m_player->getComponent<CTransform>().scale.x < 0) {
-		magic->getComponent<CTransform>().vel.x = -10;
-	}
-	else {
-		magic->getComponent<CTransform>().vel.x = 10;
-	}
-	magic->getComponent<CTransform>().vel.y = 0;
-
-	if (spell == 1) {
-		magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magicOne"));
-	}
-	else if (spell == 2) {
-		magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magicStar"));
-	}
-}
-
-void Scene_MagicCatCademy::enemyAttack(std::shared_ptr<Entity> e)
-{
-	auto& tx = e->getComponent<CTransform>();
-	auto& attack = e->getComponent<CAttack>();
-
-	if (std::abs(tx.vel.x) > 0.1f)
-		tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
-
-	SoundPlayer::getInstance().play("hellhoundGrowl", tx.pos);
-
-	auto offset = (tx.scale.x < 0) ? 50 : -50;
-	tx.pos.x += offset;
-	tx.pos.y -= 80;
-
-	attack.isAttacking = true;
-	checkEnemyState(e);
-
-	attack.isAttacking = false;
-	std::cout << tx.pos.y << "\n";
-	checkEnemyState(e);
-
-}
-
-void Scene_MagicCatCademy::playerMovement()
-{
-	// no movement if player is dead
-	if (m_player->hasComponent<CState>() && m_player->getComponent<CState>().state == "dead")
-		return;
-
-	auto& dir = m_player->getComponent<CInput>().dir;
-	auto& pos = m_player->getComponent<CTransform>().pos;
-	auto& vel = m_player->getComponent<CTransform>().vel;
-	auto& gravity = m_player->getComponent<CGravity>().g;
-	auto& state = m_player->getComponent<CState>().state;
-
-	vel.x = 0.f;
-
-	if (dir & CInput::LEFT) {
-		walking = true;
-		vel.x -= 1.f;
-	}
-
-	if (dir & CInput::RIGHT) {
-		walking = true;
-		vel.x += 1.f;
-	}
-
-	if (dir & CInput::UP) {
-		jumping = true;
-		vel.y = -10.f;
-	}
-
-	vel.y += gravity;
-	vel.x = vel.x * 5.f;
-
-	for (auto e : m_entityManager.getEntities()) {
-		auto& tx = e->getComponent<CTransform>();
-		tx.prevPos = tx.pos;
-		tx.pos += tx.vel;
-	}
-}
-
-void Scene_MagicCatCademy::checkPlayerState()
-{
-	auto& tx = m_player->getComponent<CTransform>();
-
-	if (m_player->hasComponent<CState>()) {
-		std::string newState = "idle";
-
-		if (std::abs(tx.vel.x) > 0.1f)
-			tx.scale.x = (tx.vel.x > 0) ? 1 : -1;
-
-		if (walking) newState = "walking";
-		if (jumping) newState = "jumping";
-		if (firingMagic) newState = "firingMagic";
-
-		auto& state = m_player->getComponent<CState>().state;
-		if (state != "dead") {
-
-			if (state != newState) {
-				state = newState;
-
-				if (state == "walking")
-					checkEntityScale("lucyWalk", m_player);
-
-				if (state == "jumping")
-					checkEntityScale("lucyJump", m_player);
-
-				if (state == "firingMagic")
-					checkEntityScale("lucyMagic", m_player);
-
-				if (state == "idle")
-					checkEntityScale("lucyIdle", m_player);
-
+			if (immunityTime.duration <= 0.0f) {
+				immunityTime.isImmune = false;
+				m_player->removeComponent<CImmunity>();
 			}
 		}
 	}
 }
 
-void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
-{
-	std::string newState = "walking";
+	void Scene_MagicCatCademy::spawnPlayer(sf::Vector2f pos)
+	{
+		m_player = m_entityManager.addEntity("lucy");
+		m_player->addComponent<CTransform>(pos);
+		m_player->addComponent<CBoundingBox>(sf::Vector2f(55, 60));
+		m_player->addComponent<CInput>();
+		m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
+		m_player->addComponent<CState>("idle");
+		m_player->addComponent<CGravity>(0.5f);
+		m_player->addComponent<CHealth>(100);
+		m_player->addComponent<CMagic>(sf::seconds(0.5f));
+	}
 
-	if (e->hasComponent<CState>()) {
+	void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos, int amount)
+	{
+		for (int i{ 0 }; i < amount; i++) {
+			auto hellhound = m_entityManager.addEntity("hellhound");
+			hellhound->addComponent<CTransform>(pos);
+			hellhound->addComponent<CBoundingBox>(sf::Vector2f(80, 80));
+			hellhound->addComponent<CAnimation>(Assets::getInstance().getAnimation("hellhoundWalk"));
+			hellhound->addComponent<CHealth>(100);
+			hellhound->addComponent<CGravity>(0.5f);
+			hellhound->addComponent<CState>("idle");
+			hellhound->addComponent<CAttack>(false);
+			pos.x += 250.f;
+		}
+	}
 
-		if (e->getComponent<CAttack>().isAttacking) newState = "attacking";
+	void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
+	{
+		auto ground = m_entityManager.addEntity("ground");
+		ground->addComponent<CTransform>(pos);
+		ground->addComponent<CBoundingBox>(sf::Vector2f(15000, 2.f));
+	}
 
+	void Scene_MagicCatCademy::spawnFireObstacles(sf::Vector2f pos)
+	{
+		for (int i{ 0 }; i < 15; i++) {
+			auto fire = m_entityManager.addEntity("fire");
+			fire->addComponent<CTransform>(pos);
+			fire->addComponent<CBoundingBox>(sf::Vector2f(30, 60));
+			fire->addComponent<CAnimation>(Assets::getInstance().getAnimation("fire"));
+			pos.x += 1500.f;
+		}
+	}
+
+	void Scene_MagicCatCademy::drawLives(int lives)
+	{
+		for (auto life : m_entityManager.getEntities("life")) {
+			life->destroy();
+		}
+
+		sf::Vector2f pos{ 30, 30 };
+		sf::Vector2f background = m_worldView.getCenter() - m_worldView.getSize() / 2.f;
+
+		for (int i{ 0 }; i < lives; ++i) {
+			auto life = m_entityManager.addEntity("life");
+			life->addComponent<CTransform>(pos + background);
+			life->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHealthIcon"));
+			pos.x += 50;
+		}
+	}
+
+	void Scene_MagicCatCademy::dropPowerup(sf::Vector2f pos)
+	{
+		static const std::string powerups[] =
+		{ "shieldPowerup", "speedPowerup", "magicCooldownPowerup", "magicStrengthPowerup" };
+
+		std::uniform_int_distribution<int> d1(0, 1);
+		std::uniform_int_distribution<int> d2(0, 3);
+
+		if (d1(rng) <= 1) {
+			auto powerup = powerups[d2(rng)];
+			auto p = m_entityManager.addEntity("powerup");
+			p->addComponent<CTransform>(pos);
+			auto bb = p->addComponent<CAnimation>(Assets::getInstance().getAnimation(powerup)).animation.getBB();
+			p->addComponent<CBoundingBox>(bb);
+		}
+	}
+
+	void Scene_MagicCatCademy::fireMagic()
+	{
+		std::uniform_int_distribution<int> rand(1, 2);
+
+		int spell = rand(rng);
+
+		auto magic = m_entityManager.addEntity("magic");
+		magic->addComponent<CTransform>(m_player->getComponent<CTransform>().pos);
+		magic->addComponent<CBoundingBox>(sf::Vector2f(50.f, 50.f));
+		magic->addComponent<CLifespan>(100);
+
+		if (m_player->getComponent<CTransform>().scale.x < 0) {
+			magic->getComponent<CTransform>().vel.x = -10;
+		}
+		else {
+			magic->getComponent<CTransform>().vel.x = 10;
+		}
+
+		if (spell == 1) {
+			magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magicOne"));
+		}
+		else if (spell == 2) {
+			magic->addComponent<CAnimation>(Assets::getInstance().getAnimation("magicStar"));
+		}
+	}
+
+	void Scene_MagicCatCademy::enemyAttack(std::shared_ptr<Entity> e)
+	{
 		auto& tx = e->getComponent<CTransform>();
-		auto& state = e->getComponent<CState>().state;
+		auto& attack = e->getComponent<CAttack>();
 
 		if (std::abs(tx.vel.x) > 0.1f)
 			tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
 
-		if (state != "dead") {
-			if (state != newState) {
-				state = newState;
+		SoundPlayer::getInstance().play("hellhoundGrowl", tx.pos);
 
+		auto offset = (tx.scale.x < 0) ? 50 : -50;
+		tx.pos.x += offset;
+		tx.pos.y -= 80;
 
-				Animation anim;
+		attack.isAttacking = true;
+		checkEnemyState(e);
 
-				if (state == "attacking") {
-					checkEntityScale("hellhoundAttack", e);
-				}
+		attack.isAttacking = false;
+		std::cout << tx.pos.y << "\n";
+		checkEnemyState(e);
 
-				if (state == "walking") {
-					checkEntityScale("hellhoundWalk", e);
-				}
+	}
 
-				if (state == "idle") {
-					checkEntityScale("hellhoundIdle", e);
+	void Scene_MagicCatCademy::playerMovement()
+	{
+		// no movement if player is dead
+		if (m_player->hasComponent<CState>() && m_player->getComponent<CState>().state == "dead")
+			return;
+
+		auto& dir = m_player->getComponent<CInput>().dir;
+		auto& pos = m_player->getComponent<CTransform>().pos;
+		auto& vel = m_player->getComponent<CTransform>().vel;
+		auto& gravity = m_player->getComponent<CGravity>().g;
+		auto& state = m_player->getComponent<CState>().state;
+
+		vel.x = 0.f;
+
+		if (dir & CInput::LEFT) {
+			walking = true;
+			vel.x -= speed;
+		}
+
+		if (dir & CInput::RIGHT) {
+			walking = true;
+			vel.x = speed;
+		}
+
+		if (dir & CInput::UP) {
+			jumping = true;
+			vel.y = -10.f;
+		}
+
+		vel.y += gravity;
+		vel.x = vel.x * 5.f;
+
+		for (auto e : m_entityManager.getEntities()) {
+			auto& tx = e->getComponent<CTransform>();
+			tx.prevPos = tx.pos;
+			tx.pos += tx.vel;
+		}
+	}
+
+	void Scene_MagicCatCademy::checkPlayerState()
+	{
+		auto& tx = m_player->getComponent<CTransform>();
+
+		if (m_player->hasComponent<CState>()) {
+			std::string newState = "idle";
+
+			if (std::abs(tx.vel.x) > 0.1f)
+				tx.scale.x = (tx.vel.x > 0) ? 1 : -1;
+
+			if (walking) newState = "walking";
+			if (jumping) newState = "jumping";
+			if (firingMagic) newState = "firingMagic";
+
+			auto& state = m_player->getComponent<CState>().state;
+			if (state != "dead") {
+
+				if (state != newState) {
+					state = newState;
+
+					if (state == "walking")
+						checkEntityScale("lucyWalk", m_player);
+
+					if (state == "jumping")
+						checkEntityScale("lucyJump", m_player);
+
+					if (state == "firingMagic")
+						checkEntityScale("lucyMagic", m_player);
+
+					if (state == "idle")
+						checkEntityScale("lucyIdle", m_player);
+
 				}
 			}
 		}
 	}
 
-}
+	void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
+	{
+		std::string newState = "walking";
 
-void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
-{
-	if (e->hasComponent<CHealth>()) {
-		if (e->getComponent<CHealth>().hp <= 0) {
-			e->destroy();
+		if (e->hasComponent<CState>()) {
 
-			if (e->getTag() == "lucy") {
-				lives--;
+			if (e->getComponent<CAttack>().isAttacking) newState = "attacking";
 
-				for (auto h : m_entityManager.getEntities("hellhound")) {
-					h->destroy();
-				}
-				spawnPlayer(sf::Vector2f(200.f, 340.f));
-				spawnEnemies(sf::Vector2f(1500.f, 325.f));
-				m_worldView.reset(sf::FloatRect(0.f, 0.f, m_worldView.getSize().x, m_worldView.getSize().y));
+			auto& tx = e->getComponent<CTransform>();
+			auto& state = e->getComponent<CState>().state;
 
-				if (lives == 0) {
-					onEnd();
+			if (std::abs(tx.vel.x) > 0.1f)
+				tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
+
+			if (state != "dead") {
+				if (state != newState) {
+					state = newState;
+
+					Animation anim;
+
+					if (state == "attacking") {
+						checkEntityScale("hellhoundAttack", e);
+					}
+
+					if (state == "walking") {
+						checkEntityScale("hellhoundWalk", e);
+					}
+
+					if (state == "idle") {
+						checkEntityScale("hellhoundIdle", e);
+					}
 				}
 			}
 		}
-	}
-}
 
-void Scene_MagicCatCademy::keepPlayerInBounds()
-{
-	auto center = m_worldView.getCenter();
-	sf::Vector2f viewHalfSize = m_worldView.getSize() / 2.f;
-
-
-	auto left = center.x - viewHalfSize.x;
-	auto right = center.x + viewHalfSize.x;
-	auto top = center.y - viewHalfSize.y;
-	auto bot = center.y + viewHalfSize.y;
-
-	auto& player_pos = m_player->getComponent<CTransform>().pos;
-	auto halfSize = sf::Vector2f{ 20, 20 };
-
-	player_pos.x = std::max(player_pos.x, left + halfSize.x);
-	player_pos.x = std::min(player_pos.x, right - halfSize.x);
-	player_pos.y = std::max(player_pos.y, top + halfSize.y);
-	player_pos.y = std::min(player_pos.y, bot - halfSize.y);
-}
-
-sf::FloatRect Scene_MagicCatCademy::getViewBounds()
-{
-	auto center = m_worldView.getCenter();
-	auto size = m_worldView.getSize();
-	auto leftTop = center - size / 2.f;
-
-	leftTop.y -= size.y / 2.f;
-	size.y += size.y;
-	leftTop.x -= size.x / 2.f;
-	size.x += size.x;
-	return sf::FloatRect(leftTop, size);
-}
-
-void Scene_MagicCatCademy::checkEntityScale(std::string animationName, std::shared_ptr<Entity> e)
-{
-	Animation anim = Assets::getInstance().getAnimation(animationName);
-
-	bool flip = (e->getComponent<CTransform>().scale.x < 0);
-	anim.setFlipped(flip);
-
-	e->getComponent<CAnimation>().animation = anim;
-}
-
-void Scene_MagicCatCademy::onEnd()
-{
-	m_game->changeScene("MENU", nullptr, false);
-	lives = 3;
-}
-
-void Scene_MagicCatCademy::loadLevel(const std::string& path)
-{
-	std::ifstream config(path);
-	if (config.fail()) {
-		std::cerr << "Open file " << path << " failed\n";
-		config.close();
-		exit(1);
 	}
 
-	std::string token{ "" };
-	config >> token;
-	while (!config.eof()) {
-		if (token == "Bkg") {
-			std::string name;
-			sf::Vector2f pos;
-			config >> name >> pos.x >> pos.y;
-			auto e = m_entityManager.addEntity("bkg");
+	void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
+	{
+		if (e->hasComponent<CHealth>()) {
+			if (e->getComponent<CHealth>().hp <= 0) {
+				e->destroy();
 
-			auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
-			sprite.setOrigin(0.f, 0.f);
-			sprite.setPosition(pos);
+
+				if (e->getTag() == "lucy") {
+					lives--;
+
+					for (auto h : m_entityManager.getEntities("hellhound")) {
+						h->destroy();
+					}
+					spawnPlayer(sf::Vector2f(200.f, 340.f));
+					spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
+					m_worldView.reset(sf::FloatRect(0.f, 0.f, m_worldView.getSize().x, m_worldView.getSize().y));
+
+					if (lives == 0) {
+						onEnd();
+					}
+				}
+				else if (e->getTag() == "hellhound") {
+					dropPowerup(e->getComponent<CTransform>().pos);
+				}
+			}
+
 		}
-		else if (token[0] == '#') {
-			std::cout << token;
+	}
+
+	void Scene_MagicCatCademy::keepPlayerInBounds()
+	{
+		auto center = m_worldView.getCenter();
+		sf::Vector2f viewHalfSize = m_worldView.getSize() / 2.f;
+
+
+		auto left = center.x - viewHalfSize.x;
+		auto right = center.x + viewHalfSize.x;
+		auto top = center.y - viewHalfSize.y;
+		auto bot = center.y + viewHalfSize.y;
+
+		auto& player_pos = m_player->getComponent<CTransform>().pos;
+		auto halfSize = sf::Vector2f{ 20, 20 };
+
+		player_pos.x = std::max(player_pos.x, left + halfSize.x);
+		player_pos.x = std::min(player_pos.x, right - halfSize.x);
+		player_pos.y = std::max(player_pos.y, top + halfSize.y);
+		player_pos.y = std::min(player_pos.y, bot - halfSize.y);
+	}
+
+	sf::FloatRect Scene_MagicCatCademy::getViewBounds()
+	{
+		auto center = m_worldView.getCenter();
+		auto size = m_worldView.getSize();
+		auto leftTop = center - size / 2.f;
+
+		leftTop.y -= size.y / 2.f;
+		size.y += size.y;
+		leftTop.x -= size.x / 2.f;
+		size.x += size.x;
+		return sf::FloatRect(leftTop, size);
+	}
+
+	void Scene_MagicCatCademy::checkEntityScale(std::string animationName, std::shared_ptr<Entity> e)
+	{
+		Animation anim = Assets::getInstance().getAnimation(animationName);
+
+		bool flip = (e->getComponent<CTransform>().scale.x < 0);
+		anim.setFlipped(flip);
+
+		e->getComponent<CAnimation>().animation = anim;
+	}
+
+	void Scene_MagicCatCademy::onEnd()
+	{
+		m_game->changeScene("MENU", nullptr, false);
+		lives = 3;
+	}
+
+	void Scene_MagicCatCademy::loadLevel(const std::string & path)
+	{
+		std::ifstream config(path);
+		if (config.fail()) {
+			std::cerr << "Open file " << path << " failed\n";
+			config.close();
+			exit(1);
 		}
 
+		std::string token{ "" };
 		config >> token;
+		while (!config.eof()) {
+			if (token == "Bkg") {
+				std::string name;
+				sf::Vector2f pos;
+				config >> name >> pos.x >> pos.y;
+				auto e = m_entityManager.addEntity("bkg");
+
+				auto& sprite = e->addComponent<CSprite>(Assets::getInstance().getTexture(name)).sprite;
+				sprite.setOrigin(0.f, 0.f);
+				sprite.setPosition(pos);
+			}
+			else if (token[0] == '#') {
+				std::cout << token;
+			}
+
+			config >> token;
+		}
+
+		config.close();
 	}
 
-	config.close();
-}
 
-
-void Scene_MagicCatCademy::registerActions()
-{
-	registerAction(sf::Keyboard::P, "PAUSE", Action::Keyboard);
-	registerAction(sf::Keyboard::Escape, "BACK", Action::Keyboard);
-	registerAction(sf::Keyboard::Q, "QUIT", Action::Keyboard);
-	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION", Action::Keyboard);
-	registerAction(sf::Keyboard::A, "LEFT", Action::Keyboard);
-	registerAction(sf::Keyboard::Left, "LEFT", Action::Keyboard);
-	registerAction(sf::Keyboard::D, "RIGHT", Action::Keyboard);
-	registerAction(sf::Keyboard::Right, "RIGHT", Action::Keyboard);
-	registerAction(sf::Keyboard::Space, "JUMP", Action::Keyboard);
-	registerAction(1024, "SHOOT", Action::Mouse);
-	registerAction(sf::Keyboard::M, "MEOW", Action::Keyboard);
-}
+	void Scene_MagicCatCademy::registerActions()
+	{
+		registerAction(sf::Keyboard::P, "PAUSE", Action::Keyboard);
+		registerAction(sf::Keyboard::Escape, "BACK", Action::Keyboard);
+		registerAction(sf::Keyboard::Q, "QUIT", Action::Keyboard);
+		registerAction(sf::Keyboard::C, "TOGGLE_COLLISION", Action::Keyboard);
+		registerAction(sf::Keyboard::A, "LEFT", Action::Keyboard);
+		registerAction(sf::Keyboard::Left, "LEFT", Action::Keyboard);
+		registerAction(sf::Keyboard::D, "RIGHT", Action::Keyboard);
+		registerAction(sf::Keyboard::Right, "RIGHT", Action::Keyboard);
+		registerAction(sf::Keyboard::Space, "JUMP", Action::Keyboard);
+		registerAction(1024, "SHOOT", Action::Mouse);
+		registerAction(sf::Keyboard::M, "MEOW", Action::Keyboard);
+	}

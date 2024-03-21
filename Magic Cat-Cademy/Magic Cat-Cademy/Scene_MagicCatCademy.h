@@ -24,8 +24,18 @@ private:
 	bool			enemyAttacking{ false };
 
 	sf::Clock		attackTimer;
-	sf::Clock		currentAttackingTimer;
 	sf::Time		attackInterval{ sf::seconds(5.f) };
+
+	sf::Clock		enemySpawnTimer;
+	sf::Time		enemySpawnInterval{ sf::seconds(20.f) };
+
+	sf::Clock		powerupTimer;
+	sf::Time		powerupTime{ sf::seconds(5.f) };
+	float			speed{ 1.f };
+	float			magicStrength{ 10 };
+	std::map<std::string, float> powerupDuration;
+
+	sf::Time		bossTimer;
 
 	int				lives{ 3 };
 
@@ -39,13 +49,16 @@ private:
 	void			sCollision(sf::Time dt);
 	void			sLifespan(sf::Time dt);
 	void			sEnemyAttack(sf::Time dt);
+	void			sSpawnEnemies(sf::Time dt);
 	void			sDestroyOutOfBounds();
+	void			sManagePowerups(sf::Time dt);
 
 	void			spawnPlayer(sf::Vector2f pos);
-	void			spawnEnemies(sf::Vector2f pos);
+	void			spawnEnemies(sf::Vector2f pos, int amount);
 	void			spawnGroundEntity(sf::Vector2f pos);
 	void			spawnFireObstacles(sf::Vector2f pos);
 	void			drawLives(int lives);
+	void			dropPowerup(sf::Vector2f pos);
 	void			fireMagic();
 	void			enemyAttack(std::shared_ptr<Entity> e);
 	void			playerMovement();
