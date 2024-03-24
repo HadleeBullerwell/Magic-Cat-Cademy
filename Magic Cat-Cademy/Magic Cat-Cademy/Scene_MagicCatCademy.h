@@ -35,6 +35,9 @@ private:
 	float			magicStrength{ 10 };
 	std::map<std::string, float> powerupDuration;
 
+	sf::Text		health;
+	sf::Text		cooldown;
+
 	sf::Time		bossTimer;
 
 	int				lives{ 3 };
@@ -58,6 +61,9 @@ private:
 	void			spawnGroundEntity(sf::Vector2f pos);
 	void			spawnFireObstacles(sf::Vector2f pos);
 	void			drawLives(int lives);
+	void			drawLevelIntroduction(sf::Vector2f pos);
+	void			drawHealthBar(int hp, sf::Vector2f pos, int barSize);
+	void			drawMagicCooldownBar(sf::Time& cooldown, sf::Clock& cooldownTimer);
 	void			dropPowerup(sf::Vector2f pos);
 	void			fireMagic();
 	void			enemyAttack(std::shared_ptr<Entity> e);

@@ -148,4 +148,5 @@ public:
     CImmunity() : duration(0.0f), isImmune(false) {};
     CImmunity(float immunityDuration) : duration(immunityDuration), isImmune(true) {};
 };
+
 #endif //BREAKOUT_COMPONENTSH

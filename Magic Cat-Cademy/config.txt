@@ -1,6 +1,7 @@
 Window 			1500 750
 
 Font main 		../assets/Fonts/FantasyMagist.otf
+Font meow		../assets/Fonts/meow.otf
 
 Music mainTune		../assets/Music/mainTune.ogg
 Music mainMenuMusic	../assets/Music/mainMenu.wav
@@ -22,6 +23,7 @@ Texture MenuBackground ../assets/Textures/menuBackground.png
 Texture Magic		../assets/Textures/magic.png
 Texture Star		../assets/Textures/star.png
 Texture Fire		../assets/Textures/fire.png
+Texture Introduction	../assets/Textures/introductions.png
 Texture Powerup		../assets/Textures/powerups.png
 
 # Sprites
@@ -35,6 +37,7 @@ JSON			../assets/Textures/magic.json
 JSON			../assets/Textures/star.json
 JSON			../assets/Textures/fire.json
 JSON			../assets/Textures/powerups.json
+JSON			../assets/Textures/introductions.json
 
 # Animation 	Name 		Texture	Speed   Repeats
 Animation	logo		Menu	1	no
@@ -60,3 +63,5 @@ Animation	shieldPowerup		Powerup	1	no
 Animation	speedPowerup		Powerup 1	no
 Animation	magicCooldownPowerup 	Powerup	1	no
 Animation	magicStrengthPowerup	Powerup	1	no
+
+Animation	levelOneIntro		Introduction	1	no

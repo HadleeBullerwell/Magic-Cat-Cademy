@@ -1,0 +1,40 @@
+{
+  "frames": [
+    {
+      "filename": "levelOneIntro (1) .png",
+      "frame": {
+        "x": 5,
+        "y": 5,
+        "w": 691,
+        "h": 455
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 691,
+        "h": 455
+      },
+      "sourceSize": {
+        "w": 691,
+        "h": 455
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "introductions.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1390,
+      "h": 917
+    },
+    "scale": 1
+  }
+}
