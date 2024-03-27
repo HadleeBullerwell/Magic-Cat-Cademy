@@ -5,6 +5,7 @@ Font meow		../assets/Fonts/meow.otf
 
 Music mainTune		../assets/Music/mainTune.ogg
 Music mainMenuMusic	../assets/Music/mainMenu.wav
+Music bossMusic		../assets/Music/bossMusic.wav
 
 Sound meow		../assets/Sounds/catMeow.wav
 Sound sadMeow		../assets/Sounds/sadMeow.mp3
@@ -25,6 +26,7 @@ Texture Star		../assets/Textures/star.png
 Texture Fire		../assets/Textures/fire.png
 Texture Introduction	../assets/Textures/introductions.png
 Texture Powerup		../assets/Textures/powerups.png
+Texture Mars		../assets/Textures/mars.png
 
 # Sprites
 Sprite Background 	Background	0 0 15000 750
@@ -38,6 +40,7 @@ JSON			../assets/Textures/star.json
 JSON			../assets/Textures/fire.json
 JSON			../assets/Textures/powerups.json
 JSON			../assets/Textures/introductions.json
+JSON			../assets/Textures/mars.json
 
 # Animation 	Name 		Texture	Speed   Repeats
 Animation	logo		Menu	1	no
@@ -53,6 +56,10 @@ Animation	lucyHurt	Lucy 	1	no
 Animation	hellhoundWalk	Hellhound 3	yes	
 Animation	hellhoundIdle	Hellhound 1	no
 Animation	hellhoundAttack	Hellhound 10	no
+
+Animation	marsIdle	Mars 	1	no
+Animation	marsWalk	Mars 	3	yes
+Animation 	marsFire	Mars	10	no
 
 Animation	magicOne	Magic	12	no
 Animation	magicStar	Star	12	no

@@ -155,17 +155,31 @@ void Scene_MagicCatCademy::sRender()
 	}
 
 	auto hellhounds = m_entityManager.getEntities("hellhound");
+	auto mars = m_entityManager.getEntities("mars");
 
 	for (auto h : hellhounds) {
 		auto tfm = h->getComponent<CTransform>();
 
 		sf::Vector2f hellhoundPos = tfm.pos;
 
-		sf::Vector2f healthBarPosition = hellhoundPos + sf::Vector2f(-50.0f, -70.f); // Adjust as needed
+		sf::Vector2f healthBarPosition = hellhoundPos + sf::Vector2f(-50.0f, -70.f);
 
 		healthBarPosition -= m_worldView.getCenter() - m_worldView.getSize() / 2.f;
 
 		drawHealthBar(h->getComponent<CHealth>().hp, healthBarPosition, 10);
+	}
+
+
+	for (auto m : mars) {
+		auto tfm = m->getComponent<CTransform>();
+
+		sf::Vector2f hellhoundPos = tfm.pos;
+
+		sf::Vector2f healthBarPosition = hellhoundPos + sf::Vector2f(-125, -80.f);
+
+		healthBarPosition -= m_worldView.getCenter() - m_worldView.getSize() / 2.f;
+
+		drawHealthBar(m->getComponent<CHealth>().hp, healthBarPosition, 10);
 	}
 
 	m_game->window().draw(health);
@@ -180,7 +194,7 @@ void Scene_MagicCatCademy::init()
 	auto pos = sf::Vector2f(200.f, 340.f);
 
 	spawnPlayer(pos);
-	spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
+	//spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
 	spawnGroundEntity(sf::Vector2f(0, 375.f));
 	spawnFireObstacles(sf::Vector2f(750.f, 340.f));
 	drawLevelIntroduction(sf::Vector2f(m_worldView.getSize().x / 2, m_worldView.getSize().y / 2 - 100));
@@ -195,19 +209,22 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 
 	auto intro = m_entityManager.getEntities("intro");
 
-	if (intro.empty()) {
+	if (bossSpawned) {
+		panToBossPosition(dt);
+	}
+	else if (intro.empty()) {
 		m_worldView.move(m_config.scrollSpeed * dt.asSeconds() * 1, 0);
 		m_isPaused = false;
 	}
 
-	sSpawnEnemies(dt);
+	//sSpawnEnemies(dt);
 	sMovement(dt);
 	sCollision(dt);
+	sBossBattle(dt);
 	sAnimation(dt);
 	sLifespan(dt);
 	sEnemyAttack(dt);
 	sManagePowerups(dt);
-	//sDestroyOutOfBounds();
 	keepPlayerInBounds();
 	checkPlayerState();
 	drawLives(lives);
@@ -486,6 +503,34 @@ void Scene_MagicCatCademy::sSpawnEnemies(sf::Time dt)
 	}
 }
 
+void Scene_MagicCatCademy::sBossBattle(sf::Time dt)
+{
+	auto hellhounds = m_entityManager.getEntities("hellhound");
+	auto fire = m_entityManager.getEntities("fire");
+
+	std::cout << m_player->getComponent<CTransform>().pos.x << "\n";
+	if (m_player->getComponent<CTransform>().pos.x >= 1500.f && !bossSpawned) {
+
+		for (auto h : hellhounds) {
+			h->destroy();
+		}
+
+		for (auto f : fire) {
+			f->destroy();
+		}
+
+		spawnBoss(sf::Vector2f(2500.f, 325.f));
+		bossSpawned = true;
+		MusicPlayer::getInstance().stop();
+		MusicPlayer::getInstance().play("bossMusic");
+	}
+
+	if (bossAttackTimer.getElapsedTime() >= bossAttackInterval) {
+		bossAttack();
+		bossAttackTimer.restart();
+	}
+}
+
 void Scene_MagicCatCademy::sDestroyOutOfBounds()
 {
 	auto bounds = getViewBounds();
@@ -557,6 +602,18 @@ void Scene_MagicCatCademy::spawnEnemies(sf::Vector2f pos, int amount)
 		hellhound->addComponent<CAttack>(false);
 		pos.x += 250.f;
 	}
+}
+
+void Scene_MagicCatCademy::spawnBoss(sf::Vector2f pos)
+{
+	auto mars = m_entityManager.addEntity("mars");
+	mars->addComponent<CTransform>(pos);
+	mars->addComponent<CBoundingBox>(sf::Vector2f(100, 100));
+	mars->addComponent<CAnimation>(Assets::getInstance().getAnimation("marsIdle"));
+	mars->addComponent<CAttack>(false);
+	mars->addComponent<CHealth>(250);
+	mars->addComponent<CGravity>(0.5f);
+	mars->addComponent<CState>("idle");
 }
 
 void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
@@ -700,6 +757,28 @@ void Scene_MagicCatCademy::enemyAttack(std::shared_ptr<Entity> e)
 	checkEnemyState(e);
 }
 
+void Scene_MagicCatCademy::bossAttack()
+{
+	auto mars = m_entityManager.getEntities("mars");
+	
+	for (auto m : mars) {
+		std::uniform_int_distribution<int> rand(1, 2);
+
+		int attack = rand(rng);
+
+		if (attack == 1) {
+
+			// summoning fire
+
+		}
+		else {
+
+			// leap attack
+
+		}
+	}
+}
+
 void Scene_MagicCatCademy::playerMovement()
 {
 	// no movement if player is dead
@@ -826,9 +905,14 @@ void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 				for (auto h : m_entityManager.getEntities("hellhound")) {
 					h->destroy();
 				}
+				for (auto p : m_entityManager.getEntities("powerup")) {
+					p->destroy();
+				}
+
 				spawnPlayer(sf::Vector2f(200.f, 340.f));
 				spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
 				m_worldView.reset(sf::FloatRect(0.f, 0.f, m_worldView.getSize().x, m_worldView.getSize().y));
+				enemySpawnTimer.restart();
 
 				if (lives == 0) {
 					onEnd();
@@ -860,6 +944,38 @@ void Scene_MagicCatCademy::keepPlayerInBounds()
 	player_pos.x = std::min(player_pos.x, right - halfSize.x);
 	player_pos.y = std::max(player_pos.y, top + halfSize.y);
 	player_pos.y = std::min(player_pos.y, bot - halfSize.y);
+}
+
+void Scene_MagicCatCademy::panToBossPosition(sf::Time dt)
+{
+	auto mars = m_entityManager.getEntities("mars");
+
+	sf::Vector2f bossPos{};
+
+	for (auto m : mars) {
+		bossPos = { m->getComponent<CTransform>().pos.x - 500, m->getComponent<CTransform>().pos.y };
+	}
+
+	speed = 0.f;
+
+	sf::Vector2f currentView = m_worldView.getCenter();
+	sf::Vector2f panToView = bossPos;
+	panToView.y = currentView.y;
+
+	sf::Vector2f distanceToPan = panToView - currentView;
+	float distance = std::sqrt(distanceToPan.x);
+	float panSpeed = 50.f; 
+
+	if (distance <= panSpeed * dt.asSeconds()) {
+		m_worldView.setCenter(panToView); 
+		speed = 1.f;
+		return;
+	}
+
+	sf::Vector2f panDirection = distanceToPan / distance;
+	sf::Vector2f panIncrement = panDirection * panSpeed * dt.asSeconds() * 0.5f;
+	m_worldView.move(panIncrement);
+
 }
 
 sf::FloatRect Scene_MagicCatCademy::getViewBounds()

@@ -38,7 +38,9 @@ private:
 	sf::Text		health;
 	sf::Text		cooldown;
 
-	sf::Time		bossTimer;
+	bool			bossSpawned{ false };
+	sf::Clock		bossAttackTimer;
+	sf::Time		bossAttackInterval{ sf::seconds(10.f) };
 
 	int				lives{ 3 };
 
@@ -53,11 +55,13 @@ private:
 	void			sLifespan(sf::Time dt);
 	void			sEnemyAttack(sf::Time dt);
 	void			sSpawnEnemies(sf::Time dt);
+	void			sBossBattle(sf::Time dt);
 	void			sDestroyOutOfBounds();
 	void			sManagePowerups(sf::Time dt);
 
 	void			spawnPlayer(sf::Vector2f pos);
 	void			spawnEnemies(sf::Vector2f pos, int amount);
+	void			spawnBoss(sf::Vector2f pos);
 	void			spawnGroundEntity(sf::Vector2f pos);
 	void			spawnFireObstacles(sf::Vector2f pos);
 	void			drawLives(int lives);
@@ -67,11 +71,13 @@ private:
 	void			dropPowerup(sf::Vector2f pos);
 	void			fireMagic();
 	void			enemyAttack(std::shared_ptr<Entity> e);
+	void			bossAttack();
 	void			playerMovement();
 	void			checkPlayerState();
 	void			checkEnemyState(std::shared_ptr<Entity> e);
 	void			checkIfDead(std::shared_ptr<Entity> e);
 	void			keepPlayerInBounds();
+	void			panToBossPosition(sf::Time dt);
 	sf::FloatRect	getViewBounds();
 	void			checkEntityScale(std::string animationName, std::shared_ptr<Entity> e);
 	void			onEnd() override;	

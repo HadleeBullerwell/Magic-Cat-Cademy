@@ -1,0 +1,215 @@
+{
+  "frames": [
+    {
+      "filename": "marsIdle (1).png",
+      "frame": {
+        "x": 5,
+        "y": 5,
+        "w": 126,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsFire (1).png",
+      "frame": {
+        "x": 5,
+        "y": 5,
+        "w": 126,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsFire (2).png",
+      "frame": {
+        "x": 5,
+        "y": 113,
+        "w": 126,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsFire (3).png",
+      "frame": {
+        "x": 141,
+        "y": 5,
+        "w": 126,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsFire (4).png",
+      "frame": {
+        "x": 5,
+        "y": 221,
+        "w": 126,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsFire (5).png",
+      "frame": {
+        "x": 141,
+        "y": 113,
+        "w": 126,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsWalk (1).png",
+      "frame": {
+        "x": 277,
+        "y": 5,
+        "w": 126,
+        "h": 97
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 97
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 97
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsWalk (2).png",
+      "frame": {
+        "x": 5,
+        "y": 329,
+        "w": 126,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "mars.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 408,
+      "h": 432
+    },
+    "scale": 1
+  }
+}
