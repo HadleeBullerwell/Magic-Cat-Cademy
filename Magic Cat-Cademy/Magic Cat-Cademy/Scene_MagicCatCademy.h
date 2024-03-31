@@ -42,7 +42,7 @@ private:
 	bool			bossAttacking{ false };
 	bool			bossPositioned{ false };
 	sf::Clock		bossAttackTimer;
-	sf::Time		bossAttackInterval{ sf::seconds(5.f) };
+	sf::Time		bossAttackInterval{ sf::seconds(10.f) };
 
 	int				lives{ 3 };
 

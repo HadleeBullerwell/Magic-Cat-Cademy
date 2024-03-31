@@ -144,9 +144,10 @@ struct CBoss : public Component
     bool isFireAttacking{ false };
     bool isAttacking{ false };
     bool isWalking{ false };
+    bool isDodging{ false };
 
     CBoss() = default;
-    CBoss(bool isFireAttacking, bool isAttacking, bool isWalking) : isFireAttacking(isFireAttacking), isAttacking(isAttacking), isWalking(isWalking) {}
+    CBoss(bool isFireAttacking, bool isAttacking, bool isWalking, bool isDodging) : isFireAttacking(isFireAttacking), isAttacking(isAttacking), isWalking(isWalking), isDodging(isDodging) {}
 };
 
 struct CImmunity : public Component

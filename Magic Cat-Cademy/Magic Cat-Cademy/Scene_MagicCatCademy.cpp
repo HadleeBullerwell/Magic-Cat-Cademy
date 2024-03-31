@@ -196,7 +196,7 @@ void Scene_MagicCatCademy::init()
 	spawnPlayer(pos);
 
 	// when done working with boss uncomment
-	//spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
+	spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
 	spawnGroundEntity(sf::Vector2f(0, 375.f));
 	spawnFireObstacles(sf::Vector2f(750.f, 340.f));
 	drawLevelIntroduction(sf::Vector2f(m_worldView.getSize().x / 2, m_worldView.getSize().y / 2 - 100));
@@ -220,8 +220,8 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 		m_isPaused = false;
 	}
 
-	// when done working with boss uncomment
-	//sSpawnEnemies(dt);
+	if (!bossSpawned) 
+		sSpawnEnemies(dt);
 	sMovement(dt);
 	sCollision(dt);
 	sBossBattle(dt);
@@ -254,6 +254,7 @@ void Scene_MagicCatCademy::sAnimation(sf::Time dt)
 			}
 			else if (anim.animation.hasEnded() && anim.animation.getName() == "marsAttack") {
 				e->getComponent<CBoss>().isAttacking = false;
+				e->getComponent<CBoss>().isDodging = false;
 			}
 			else if (anim.animation.hasEnded() && anim.animation.getName() == "marsFire") {
 				e->getComponent<CBoss>().isFireAttacking = false;
@@ -288,9 +289,37 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 			}
 
 			if (e->getTag() == "mars") {
+
 				if (e->hasComponent<CGravity>()) {
 					auto& g = e->getComponent<CGravity>().g;
 					tfm.vel.y += g;
+				}
+
+				if (e->getComponent<CBoss>().isWalking) {
+					auto playerPos = m_player->getComponent<CTransform>().pos;
+					auto marsPos = e->getComponent<CTransform>().pos;
+					float distance = sqrt(pow(playerPos.x - marsPos.x, 2) + pow(playerPos.y - marsPos.y, 2));
+
+					std::cout << distance << "\n";
+
+					if (distance <= 50) {
+						e->getComponent<CTransform>().vel.x = 0;
+						e->getComponent<CBoss>().isWalking = false;
+						e->getComponent<CBoss>().isAttacking = true;
+						checkBossState();
+						e->getComponent<CTransform>().pos.x += 3;
+						bossAttackTimer.restart();
+
+						if (e->getComponent<CTransform>().pos.x >= 2500.f) {
+							e->getComponent<CTransform>().vel.x = 0;
+							e->getComponent<CBoss>().isAttacking = false;
+						}
+					}
+					else {
+						e->getComponent<CTransform>().vel.x -= 1;
+						e->getComponent<CBoss>().isWalking = true;
+						checkBossState();
+					}
 				}
 			}
 
@@ -422,6 +451,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 				tx.pos.y -= 50;
 
 				p->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHurt"));
+				checkIfDead(p);
 			}
 		}
 	}
@@ -588,7 +618,7 @@ void Scene_MagicCatCademy::sBossBattle(sf::Time dt)
 	auto hellhounds = m_entityManager.getEntities("hellhound");
 	auto fire = m_entityManager.getEntities("fire");
 
-	if (m_player->getComponent<CTransform>().pos.x >= 1500.f && !bossSpawned) {
+	if (m_player->getComponent<CTransform>().pos.x >= 10000.f && !bossSpawned) {
 
 		for (auto h : hellhounds) {
 			h->destroy();
@@ -600,7 +630,7 @@ void Scene_MagicCatCademy::sBossBattle(sf::Time dt)
 
 
 		// when boss is fully working, change x pos
-		spawnBoss(sf::Vector2f(2500.f, 325.f));
+		spawnBoss(sf::Vector2f(10000.f, 325.f));
 		bossSpawned = true;
 		MusicPlayer::getInstance().stop();
 		MusicPlayer::getInstance().play("bossMusic");
@@ -696,7 +726,7 @@ void Scene_MagicCatCademy::spawnBoss(sf::Vector2f pos)
 	mars->addComponent<CTransform>(pos);
 	mars->addComponent<CBoundingBox>(sf::Vector2f(100, 100));
 	mars->addComponent<CAnimation>(Assets::getInstance().getAnimation("marsIdle"));
-	mars->addComponent<CBoss>(false, false, false);
+	mars->addComponent<CBoss>(false, false, false, false);
 	mars->addComponent<CHealth>(250);
 	mars->addComponent<CGravity>(0.5f);
 	mars->addComponent<CState>("idle");
@@ -706,7 +736,7 @@ void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
 {
 	auto ground = m_entityManager.addEntity("ground");
 	ground->addComponent<CTransform>(pos);
-	ground->addComponent<CBoundingBox>(sf::Vector2f(15000, 2.f));
+	ground->addComponent<CBoundingBox>(sf::Vector2f(30000, 2.f));
 }
 
 void Scene_MagicCatCademy::spawnFireObstacles(sf::Vector2f pos)
@@ -846,7 +876,7 @@ void Scene_MagicCatCademy::bossAttack()
 	auto mars = m_entityManager.getEntities("mars");
 
 	for (auto m : mars) {
-		std::uniform_int_distribution<int> rand(1, 2);
+		std::uniform_int_distribution<int> rand(1, 3);
 		std::uniform_int_distribution<int> rand2(3, 5);
 
 		int attack = rand(rng);
@@ -868,7 +898,11 @@ void Scene_MagicCatCademy::bossAttack()
 		}
 		else if (attack == 2) {
 			m->getComponent<CTransform>().vel.y -= 15;
-			m->getComponent<CBoss>().isAttacking = true;
+			m->getComponent<CBoss>().isDodging = true;
+			checkBossState();
+		}
+		else if (attack == 3) {
+			m->getComponent<CBoss>().isWalking = true;
 			checkBossState();
 		}
 	}
@@ -1001,6 +1035,7 @@ void Scene_MagicCatCademy::checkBossState()
 			if (m->getComponent<CBoss>().isAttacking) newState = "attacking";
 			if (m->getComponent<CBoss>().isFireAttacking) newState = "fireAttacking";
 			if (m->getComponent<CBoss>().isWalking) newState = "walking";
+			if (m->getComponent<CBoss>().isDodging) newState = "dodging";
 
 			auto& tx = m->getComponent<CTransform>();
 			auto& state = m->getComponent<CState>().state;
@@ -1019,6 +1054,10 @@ void Scene_MagicCatCademy::checkBossState()
 					}
 
 					if (state == "attacking") {
+						checkEntityScale("marsAttack", m);
+					}
+
+					if (state == "dodging") {
 						checkEntityScale("marsAttack", m);
 					}
 
