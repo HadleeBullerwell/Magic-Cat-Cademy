@@ -4,7 +4,7 @@
       "filename": "marsIdle (1).png",
       "frame": {
         "x": 5,
-        "y": 5,
+        "y": 338,
         "w": 126,
         "h": 98
       },
@@ -26,10 +26,35 @@
       }
     },
     {
+      "filename": "marsIdle (2).png",
+      "frame": {
+        "x": 141,
+        "y": 221,
+        "w": 124,
+        "h": 101
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 124,
+        "h": 101
+      },
+      "sourceSize": {
+        "w": 124,
+        "h": 101
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
       "filename": "marsFire (1).png",
       "frame": {
         "x": 5,
-        "y": 5,
+        "y": 338,
         "w": 126,
         "h": 98
       },
@@ -53,31 +78,6 @@
     {
       "filename": "marsFire (2).png",
       "frame": {
-        "x": 5,
-        "y": 113,
-        "w": 126,
-        "h": 98
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 126,
-        "h": 98
-      },
-      "sourceSize": {
-        "w": 126,
-        "h": 98
-      },
-      "pivot": {
-        "x": 0.5,
-        "y": 0.5
-      }
-    },
-    {
-      "filename": "marsFire (3).png",
-      "frame": {
         "x": 141,
         "y": 5,
         "w": 126,
@@ -101,10 +101,35 @@
       }
     },
     {
-      "filename": "marsFire (4).png",
+      "filename": "marsFire (3).png",
       "frame": {
         "x": 5,
-        "y": 221,
+        "y": 230,
+        "w": 126,
+        "h": 98
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 98
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsFire (4).png",
+      "frame": {
+        "x": 141,
+        "y": 113,
         "w": 126,
         "h": 98
       },
@@ -128,8 +153,8 @@
     {
       "filename": "marsFire (5).png",
       "frame": {
-        "x": 141,
-        "y": 113,
+        "x": 277,
+        "y": 5,
         "w": 126,
         "h": 98
       },
@@ -154,7 +179,7 @@
       "filename": "marsWalk (1).png",
       "frame": {
         "x": 277,
-        "y": 5,
+        "y": 113,
         "w": 126,
         "h": 97
       },
@@ -178,8 +203,8 @@
     {
       "filename": "marsWalk (2).png",
       "frame": {
-        "x": 5,
-        "y": 329,
+        "x": 413,
+        "y": 5,
         "w": 126,
         "h": 98
       },
@@ -194,6 +219,56 @@
       "sourceSize": {
         "w": 126,
         "h": 98
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsAttack (1).png",
+      "frame": {
+        "x": 5,
+        "y": 5,
+        "w": 126,
+        "h": 101
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 101
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 101
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "marsAttack (2).png",
+      "frame": {
+        "x": 5,
+        "y": 116,
+        "w": 126,
+        "h": 104
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 126,
+        "h": 104
+      },
+      "sourceSize": {
+        "w": 126,
+        "h": 104
       },
       "pivot": {
         "x": 0.5,

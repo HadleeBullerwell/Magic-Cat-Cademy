@@ -139,6 +139,16 @@ struct CAttack : public Component
     CAttack(bool isAttacking) : isAttacking(isAttacking) {}
 };
 
+struct CBoss : public Component
+{
+    bool isFireAttacking{ false };
+    bool isAttacking{ false };
+    bool isWalking{ false };
+
+    CBoss() = default;
+    CBoss(bool isFireAttacking, bool isAttacking, bool isWalking) : isFireAttacking(isFireAttacking), isAttacking(isAttacking), isWalking(isWalking) {}
+};
+
 struct CImmunity : public Component
 {
 public:

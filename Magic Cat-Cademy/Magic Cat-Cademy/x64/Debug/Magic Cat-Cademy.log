@@ -1,31 +1,37 @@
 ﻿  Scene_MagicCatCademy.cpp
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(424,38): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(480,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,37): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,37): warning C4244:         with
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,37): warning C4244:         [
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,37): warning C4244:             T=float
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,37): warning C4244:         ]
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,33): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,33): warning C4244:         with
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,33): warning C4244:         [
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,33): warning C4244:             T=float
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(670,33): warning C4244:         ]
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(744,26): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(744,26): warning C4244:         with
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(744,26): warning C4244:         [
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(744,26): warning C4244:             T=float
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(744,26): warning C4244:         ]
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(829,27): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(829,27): warning C4244:         with
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(829,27): warning C4244:         [
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(829,27): warning C4244:             T=float
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(829,27): warning C4244:         ]
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(870,27): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(870,27): warning C4244:         with
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(870,27): warning C4244:         [
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(870,27): warning C4244:             T=float
-C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(870,27): warning C4244:         ]
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(459,38): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(478,41): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(560,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,37): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,37): warning C4244:         with
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,37): warning C4244:         [
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,37): warning C4244:             T=float
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,37): warning C4244:         ]
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,33): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,33): warning C4244:         with
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,33): warning C4244:         [
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,33): warning C4244:             T=float
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(756,33): warning C4244:         ]
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(831,26): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(831,26): warning C4244:         with
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(831,26): warning C4244:         [
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(831,26): warning C4244:             T=float
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(831,26): warning C4244:         ]
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(924,27): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(924,27): warning C4244:         with
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(924,27): warning C4244:         [
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(924,27): warning C4244:             T=float
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(924,27): warning C4244:         ]
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(967,27): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(967,27): warning C4244:         with
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(967,27): warning C4244:         [
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(967,27): warning C4244:             T=float
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(967,27): warning C4244:         ]
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(1009,28): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(1009,28): warning C4244:         with
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(1009,28): warning C4244:         [
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(1009,28): warning C4244:             T=float
+C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(1009,28): warning C4244:         ]
 C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Entity.h(47,42): warning C4244: 'argument': conversion from '_Ty' to 'int', possible loss of data
 C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Entity.h(47,42): warning C4244:         with
 C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Entity.h(47,42): warning C4244:         [
@@ -34,7 +40,7 @@ C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Entity.h(47,42): warning C
   (compiling source file 'Scene_MagicCatCademy.cpp')
   C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Entity.h(47,42):
   the template instantiation context (the oldest one first) is
-  	C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(659,7):
+  	C:\Magic-Cat-Cademy\Magic Cat-Cademy\Magic Cat-Cademy\Scene_MagicCatCademy.cpp(745,7):
   	see reference to function template instantiation 'T &Entity::addComponent<CLifespan,float>(float &&)' being compiled
           with
           [

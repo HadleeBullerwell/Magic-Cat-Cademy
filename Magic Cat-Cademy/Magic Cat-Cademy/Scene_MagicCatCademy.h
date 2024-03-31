@@ -39,8 +39,10 @@ private:
 	sf::Text		cooldown;
 
 	bool			bossSpawned{ false };
+	bool			bossAttacking{ false };
+	bool			bossPositioned{ false };
 	sf::Clock		bossAttackTimer;
-	sf::Time		bossAttackInterval{ sf::seconds(10.f) };
+	sf::Time		bossAttackInterval{ sf::seconds(5.f) };
 
 	int				lives{ 3 };
 
@@ -56,6 +58,7 @@ private:
 	void			sEnemyAttack(sf::Time dt);
 	void			sSpawnEnemies(sf::Time dt);
 	void			sBossBattle(sf::Time dt);
+	void			sBossMovement(sf::Time dt);
 	void			sDestroyOutOfBounds();
 	void			sManagePowerups(sf::Time dt);
 
@@ -75,8 +78,10 @@ private:
 	void			playerMovement();
 	void			checkPlayerState();
 	void			checkEnemyState(std::shared_ptr<Entity> e);
+	void			checkBossState();
 	void			checkIfDead(std::shared_ptr<Entity> e);
 	void			keepPlayerInBounds();
+	void			keepBossInBounds();
 	void			panToBossPosition(sf::Time dt);
 	sf::FloatRect	getViewBounds();
 	void			checkEntityScale(std::string animationName, std::shared_ptr<Entity> e);

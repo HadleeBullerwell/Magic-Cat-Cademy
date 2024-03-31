@@ -14,6 +14,7 @@ Sound magic		../assets/Sounds/magic.mp3
 Sound hellhoundHurt	../assets/Sounds/hellhoundHurt.mp3
 Sound hellhoundGrowl	../assets/Sounds/hellhoundGrowl.mp3
 Sound hellhoundBark	../assets/Sounds/hellhoundBark.mp3
+Sound fire		../assets/Sounds/fire.wav
 
 # Textures
 Texture Background 	../assets/Textures/background.png
@@ -57,9 +58,10 @@ Animation	hellhoundWalk	Hellhound 3	yes
 Animation	hellhoundIdle	Hellhound 1	no
 Animation	hellhoundAttack	Hellhound 10	no
 
-Animation	marsIdle	Mars 	1	no
+Animation	marsIdle	Mars 	3	yes
 Animation	marsWalk	Mars 	3	yes
 Animation 	marsFire	Mars	10	no
+Animation	marsAttack	Mars	10	no
 
 Animation	magicOne	Magic	12	no
 Animation	magicStar	Star	12	no
