@@ -96,8 +96,7 @@ Upon loading, you will have the name of the game across the top in a fantasy-sty
 
 ## Sketch of Menu
 
-![Menu](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/c900f1d8-fa6f-4ccb-ab29-da2933ed049f)
-
+![Menu](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/9be6451e-2458-4dd1-91ed-859557ff4ca6)
 
 ## Controls –
 ### Movement – 
