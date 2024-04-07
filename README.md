@@ -52,7 +52,7 @@ These are the main enemies on each level, and you will only encounter the other 
 
 ![Mars](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/3b5892db-1796-495a-8467-b343aac2ef82)
 ![Cerberus](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/40fa45c7-f868-4a55-8971-e36a8704a7b4)
-![Juno)](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/7e07cb77-d5d1-4275-96e9-f1eb6b6794c9)
+![Juno)](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/5a697923-9dc3-4bbd-83fb-cc0bb73d94af)
 ![Hellhound Minion)](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/9549ce05-ba53-46a9-8970-482e1952bc46)
 
 ## Side Characters – 
