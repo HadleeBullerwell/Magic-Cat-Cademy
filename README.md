@@ -23,7 +23,7 @@ The game is played in the third person; you will control Lucy without directly s
 
 ## Sketch of Main Character -
 
-![Lucy](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/425c35d4-e986-4c8f-8fcb-9b70f466550c)
+![Lucy](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/cb7e5411-ef8a-4164-9612-1fcc51b94591)
 
 ## Opponents –
 There is one main species of opponents, hellhounds, but the main leaders must be defeated, along with their hellhound minions. 
@@ -50,8 +50,8 @@ These are the main enemies on each level, and you will only encounter the other 
 
 ## Sketch of Opponents –
 
-![Hellhound](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/500dfd12-7f75-49bf-83c5-0a011e8c354f)
-![Hellhounds](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/5abf78d9-33fa-464e-bc61-6ccf0ab1c9b5)
+![Mars](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/3b5892db-1796-495a-8467-b343aac2ef82)
+![Hellhound Minion)](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/9549ce05-ba53-46a9-8970-482e1952bc46)
 
 ## Side Characters – 
 ### Sierra – 
@@ -71,9 +71,9 @@ Her powers focus on spawning water. Although she is a cat, she does enjoy water.
 
 ## Sketch of Side Characters - 
 
-![Sierra](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/35cbd85f-8029-4358-98ae-9a0b330f8f42)
-![Nova](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/80457f1b-2fbd-46ef-b732-3f63396a7323)
-![Karma](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/065d5f5f-3415-41ca-b595-cf0bb513f31a)
+![Sierra)](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/95420641-d4b8-4a8a-86f8-0f20ed932e1b)
+![Nova](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/06fb91d7-8ba1-4d9a-947d-fe8c1b34a164)
+![Karma](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/14d0bcf6-3aa0-4408-930b-ad13c1add4db)
 
 ## Environment –
 As mentioned previously, Felandia has multiple biomes that have been taken over, such as the cozy meadows, scorching savannah, and tropical rainforest. 
@@ -89,7 +89,7 @@ A rainforest with many tall trees. It is littered with forestry foliage, bushes 
 
 ## Sketch of World -
 
-![Environment](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/e04f7726-9708-4047-814d-394161bcd8b9)
+![Cozy Meadows](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/83ff600f-7f3c-47bb-8747-9b82dd027648)
 
 ## Menus –
 Upon loading, you will have the name of the game across the top in a fantasy-style font. Underneath, you will see the option to play, select a level, and then options. I will have a solid colour filling the background. The colours and fonts, such as purples, browns, blues, and more, will represent the magic aspect of the game. 
