@@ -57,6 +57,9 @@
     <ClCompile Include="Scene_MagicCatCademy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scene_Controls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -102,6 +105,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene_MagicCatCademy.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Controls.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

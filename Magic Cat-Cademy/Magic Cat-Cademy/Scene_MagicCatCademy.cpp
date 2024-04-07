@@ -20,6 +20,9 @@ Scene_MagicCatCademy::Scene_MagicCatCademy(GameEngine* gameEngine, const std::st
 	loadLevel(levelPath);
 	registerActions();
 
+	fadeOverlay.setSize(sf::Vector2f(m_worldView.getSize().x, m_worldView.getSize().y));
+	fadeOverlay.setFillColor(sf::Color(0, 0, 0, 0));
+
 	MusicPlayer::getInstance().play("mainTune");
 	MusicPlayer::getInstance().setVolume(50);
 
@@ -37,23 +40,23 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 	if (action.type() == "START") {
 		if (action.name() == "PAUSE") { setPaused(!m_isPaused); }
 		else if (action.name() == "QUIT") { m_game->quitLevel(); }
-		else if (action.name() == "BACK") { m_game->backLevel(); }
 
 		else if (action.name() == "TOGGLE_TEXTURE") { m_drawTextures = !m_drawTextures; }
 		else if (action.name() == "TOGGLE_COLLISION") { m_drawAABB = !m_drawAABB; }
 		else if (action.name() == "TOGGLE_GRID") { m_drawGrid = !m_drawGrid; }
 
-		// Player control
-		if (action.name() == "LEFT") m_player->getComponent<CInput>().dir = CInput::LEFT;
-		else if (action.name() == "RIGHT") { m_player->getComponent<CInput>().dir = CInput::RIGHT; }
-		else if (action.name() == "JUMP") { m_player->getComponent<CInput>().dir = CInput::UP; }
-		else if (action.name() == "MEOW") { SoundPlayer::getInstance().play("meow", m_player->getComponent<CTransform>().pos); }
-		else if (action.name() == "SHOOT") {
-			if (m_player->getComponent<CMagic>().cooldownTimer.getElapsedTime() >= m_player->getComponent<CMagic>().cooldown) {
-				fireMagic();
-				firingMagic = true;
-				SoundPlayer::getInstance().play("magic", m_player->getComponent<CTransform>().pos);
-				m_player->getComponent<CMagic>().cooldownTimer.restart();
+		if (!bossDefeated) {
+			if (action.name() == "LEFT") m_player->getComponent<CInput>().dir = CInput::LEFT;
+			else if (action.name() == "RIGHT") { m_player->getComponent<CInput>().dir = CInput::RIGHT; }
+			else if (action.name() == "JUMP" && isGrounded) { m_player->getComponent<CInput>().dir = CInput::UP; }
+			else if (action.name() == "MEOW") { SoundPlayer::getInstance().play("meow", m_player->getComponent<CTransform>().pos); }
+			else if (action.name() == "SHOOT") {
+				if (m_player->getComponent<CMagic>().cooldownTimer.getElapsedTime() >= m_player->getComponent<CMagic>().cooldown) {
+					fireMagic();
+					firingMagic = true;
+					SoundPlayer::getInstance().play("magic", m_player->getComponent<CTransform>().pos);
+					m_player->getComponent<CMagic>().cooldownTimer.restart();
+				}
 			}
 		}
 	}
@@ -79,6 +82,8 @@ void Scene_MagicCatCademy::sDoAction(const Command& action)
 
 void Scene_MagicCatCademy::sRender()
 {
+	m_game->window().setView(m_worldView);
+
 	sf::Vector2f pos{ 1275, 0 };
 	sf::Vector2f background = m_worldView.getCenter() - m_worldView.getSize() / 2.f;
 
@@ -100,7 +105,6 @@ void Scene_MagicCatCademy::sRender()
 	cooldown.setOutlineColor(sf::Color(54, 1, 77));
 	cooldown.setOutlineThickness(1.5f);
 
-	m_game->window().setView(m_worldView);
 
 	for (auto e : m_entityManager.getEntities("bkg")) {
 		if (e->getComponent<CSprite>().has) {
@@ -182,11 +186,18 @@ void Scene_MagicCatCademy::sRender()
 		drawHealthBar(m->getComponent<CHealth>().hp, healthBarPosition, 10);
 	}
 
+
+
 	m_game->window().draw(health);
 	m_game->window().draw(cooldown);
 	drawLives(lives);
 	drawHealthBar(m_player->getComponent<CHealth>().hp, sf::Vector2f{ 1350, 30 }, 30);
 	drawMagicCooldownBar(m_player->getComponent<CMagic>().cooldown, m_player->getComponent<CMagic>().cooldownTimer);
+
+	if (fadeAlpha > 0.0f) {
+		fadeOverlay.setPosition(m_worldView.getCenter() - (m_worldView.getSize() / 2.0f));
+		m_game->window().draw(fadeOverlay);
+	}
 }
 
 void Scene_MagicCatCademy::init()
@@ -195,7 +206,7 @@ void Scene_MagicCatCademy::init()
 
 	spawnPlayer(pos);
 
-	// when done working with boss uncomment
+	// when demonstrating boss battle comment
 	spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
 	spawnGroundEntity(sf::Vector2f(0, 375.f));
 	spawnFireObstacles(sf::Vector2f(750.f, 340.f));
@@ -204,6 +215,8 @@ void Scene_MagicCatCademy::init()
 
 void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 {
+	SoundPlayer::getInstance().removeStoppedSounds();
+
 	if (m_isPaused)
 		return;
 
@@ -220,8 +233,18 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 		m_isPaused = false;
 	}
 
-	if (!bossSpawned) 
-		sSpawnEnemies(dt);
+	if (fadingToBlack) {
+		fadeAlpha += fadeSpeed * dt.asSeconds();
+		if (fadeAlpha >= 255.f) {
+			fadeAlpha = 255.f;
+			fadingToBlack = false;
+			onEnd();
+		}
+		fadeOverlay.setFillColor(sf::Color(0, 0, 0, static_cast<sf::Uint8>(fadeAlpha)));
+	}
+
+	// when demonstrating boss battle comment
+	sSpawnEnemies(dt);
 	sMovement(dt);
 	sCollision(dt);
 	sBossBattle(dt);
@@ -230,11 +253,7 @@ void Scene_MagicCatCademy::sUpdate(sf::Time dt)
 	sEnemyAttack(dt);
 	sManagePowerups(dt);
 	keepPlayerInBounds();
-
-	if (bossSpawned && bossPositioned) {
-		keepBossInBounds();
-	}
-
+	keepBossInBounds();
 	checkPlayerState();
 	checkBossState();
 	drawLives(lives);
@@ -259,6 +278,12 @@ void Scene_MagicCatCademy::sAnimation(sf::Time dt)
 			else if (anim.animation.hasEnded() && anim.animation.getName() == "marsFire") {
 				e->getComponent<CBoss>().isFireAttacking = false;
 			}
+			else if (anim.animation.hasEnded() && anim.animation.getName() == "explosion") {
+				e->destroy();
+			}
+			else if (anim.animation.hasEnded() && anim.animation.getName() == "lucyHurt") {
+				m_player->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyIdle"));
+			}
 		}
 	}
 }
@@ -278,7 +303,7 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 				sf::Vector2f direction = playerPos - tfm.pos;
 				direction = normalize(direction);
 
-				tfm.vel.x = direction.x * 70.f * dt.asSeconds();
+				tfm.vel.x = direction.x * 40.f * dt.asSeconds();
 
 				if (e->hasComponent<CGravity>()) {
 					auto& g = e->getComponent<CGravity>().g;
@@ -300,25 +325,57 @@ void Scene_MagicCatCademy::sMovement(sf::Time dt)
 					auto marsPos = e->getComponent<CTransform>().pos;
 					float distance = sqrt(pow(playerPos.x - marsPos.x, 2) + pow(playerPos.y - marsPos.y, 2));
 
-					std::cout << distance << "\n";
-
-					if (distance <= 50) {
+					if (distance <= 75) {
+						e->addComponent<CBoundingBox>(sf::Vector2f(120, 100));
 						e->getComponent<CTransform>().vel.x = 0;
 						e->getComponent<CBoss>().isWalking = false;
-						e->getComponent<CBoss>().isAttacking = true;
+						e->getComponent<CBoss>().isReturning = true;
 						checkBossState();
-						e->getComponent<CTransform>().pos.x += 3;
 						bossAttackTimer.restart();
-
-						if (e->getComponent<CTransform>().pos.x >= 2500.f) {
-							e->getComponent<CTransform>().vel.x = 0;
-							e->getComponent<CBoss>().isAttacking = false;
-						}
 					}
 					else {
 						e->getComponent<CTransform>().vel.x -= 1;
 						e->getComponent<CBoss>().isWalking = true;
 						checkBossState();
+					}
+				}
+
+				if (e->getComponent<CBoss>().isReturning) {
+					e->addComponent<CBoundingBox>(sf::Vector2f(100, 100));
+					auto& tfm = e->getComponent<CTransform>();
+					tfm.vel.x += 2;
+					auto originalPos = sf::Vector2f(2500.f, 325.f);
+					tfm.scale.x = -1;
+
+					if (tfm.pos.x >= originalPos.x) {
+						tfm.vel.x = 0;
+						tfm.scale.x = 1;
+						e->getComponent<CBoss>().isReturning = false;
+						checkBossState();
+					}
+				}
+
+
+			}
+
+			if (e->getTag() == "sierra") {
+				auto playerPos = m_player->getComponent<CTransform>().pos;
+				auto sierraPos = e->getComponent<CTransform>().pos;
+				float distance = sqrt(pow(playerPos.x - sierraPos.x, 2) + pow(playerPos.y - sierraPos.y, 2));
+
+				if (distance <= 100) {
+					m_player->getComponent<CTransform>().vel.x = 0;
+					e->getComponent<CTransform>().vel.x = 0;
+					checkNPCState(e);
+
+					if (endScene.getElapsedTime() >= endSceneTimer) {
+						speed = 0.5;
+						m_player->getComponent<CInput>().dir = CInput::RIGHT;
+						e->getComponent<CTransform>().vel.x += 2;
+						e->getComponent<CTransform>().scale.x = 1;
+						checkNPCState(e);
+
+						fadingToBlack = true;
 					}
 				}
 			}
@@ -355,6 +412,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 						p->getComponent<CTransform>().pos.y += overlap.y;
 					}
 					p->getComponent<CTransform>().vel.y = 0.f;
+					isGrounded = true;
 				}
 			}
 		}
@@ -371,8 +429,10 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 					}
 				}
 
-				SoundPlayer::getInstance().play("hellhoundBark", h->getComponent<CTransform>().pos);
-				SoundPlayer::getInstance().play("sadMeow", p->getComponent<CTransform>().pos);
+				SoundPlayer::getInstance().play("hellhoundBark");
+				SoundPlayer::getInstance().play("sadMeow");
+
+
 				p->getComponent<CHealth>().hp -= 15;
 				p->addComponent<CAnimation>(Assets::getInstance().getAnimation("lucyHurt"));
 
@@ -397,7 +457,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 					}
 				}
 
-				SoundPlayer::getInstance().play("sadMeow", p->getComponent<CTransform>().pos);
+				SoundPlayer::getInstance().play("sadMeow");
 				p->getComponent<CHealth>().hp -= 5;
 
 				auto& tx = p->getComponent<CTransform>();
@@ -442,7 +502,7 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 			auto overlap = Physics::getOverlap(boss, p);
 
 			if (overlap.x > 0 && overlap.y > 0) {
-				SoundPlayer::getInstance().play("sadMeow", p->getComponent<CTransform>().pos);
+				SoundPlayer::getInstance().play("sadMeow");
 				p->getComponent<CHealth>().hp -= 10;
 
 				auto& tx = p->getComponent<CTransform>();
@@ -484,20 +544,22 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 			auto overlap = Physics::getOverlap(m, h);
 
 			if (overlap.x > 0 && overlap.y > 0) {
-				SoundPlayer::getInstance().play("hellhoundHurt", h->getComponent<CTransform>().pos);
+				SoundPlayer::getInstance().play("hellhoundHurt");
 				m->destroy();
 				h->getComponent<CHealth>().hp -= magicStrength;
 				checkIfDead(h);
 
-				if (h->hasComponent<CGravity>()) {
-					auto& g = h->getComponent<CGravity>().g;
-					auto& tfm = h->getComponent<CTransform>();
-					tfm.vel.x += 50;
-					tfm.vel.y -= 7.5;
-					tfm.vel.y += g;
-				}
+				auto& tx = h->getComponent<CTransform>();
+				auto offset = (tx.scale.x > 0) ? -50 : 50;
+
+				auto& g = h->getComponent<CGravity>().g;
+				auto& tfm = h->getComponent<CTransform>();
+				tfm.pos.x -= offset;
+				tfm.vel.y -= 5;
+				tfm.vel.y += g;
 			}
 		}
+
 
 		for (auto mars : m_entityManager.getEntities("mars")) {
 			auto overlap = Physics::getOverlap(m, mars);
@@ -605,11 +667,13 @@ void Scene_MagicCatCademy::sEnemyAttack(sf::Time dt)
 
 void Scene_MagicCatCademy::sSpawnEnemies(sf::Time dt)
 {
-	int amount = 4;
-	if (enemySpawnTimer.getElapsedTime() >= enemySpawnInterval) {
-		spawnEnemies(sf::Vector2f(m_player->getComponent<CTransform>().pos.x + 1000.f, 325.f), amount);
-		sDestroyOutOfBounds();
-		enemySpawnTimer.restart();
+	if (!bossSpawned) {
+		int amount = 4;
+		if (enemySpawnTimer.getElapsedTime() >= enemySpawnInterval) {
+			spawnEnemies(sf::Vector2f(m_player->getComponent<CTransform>().pos.x + 1000.f, 325.f), amount);
+			sDestroyOutOfBounds();
+			enemySpawnTimer.restart();
+		}
 	}
 }
 
@@ -618,7 +682,10 @@ void Scene_MagicCatCademy::sBossBattle(sf::Time dt)
 	auto hellhounds = m_entityManager.getEntities("hellhound");
 	auto fire = m_entityManager.getEntities("fire");
 
-	if (m_player->getComponent<CTransform>().pos.x >= 10000.f && !bossSpawned) {
+	if (m_player->getComponent<CTransform>().pos.x >= 7500 && !bossSpawned) {
+
+	//if (m_player->getComponent<CTransform>().pos.x >= 1500 && !bossSpawned) { use to demonstrate boss battle
+		bossAttackTimer.restart();
 
 		for (auto h : hellhounds) {
 			h->destroy();
@@ -628,10 +695,15 @@ void Scene_MagicCatCademy::sBossBattle(sf::Time dt)
 			f->destroy();
 		}
 
-
-		// when boss is fully working, change x pos
-		spawnBoss(sf::Vector2f(10000.f, 325.f));
+		spawnBoss(sf::Vector2f(8250, 325.f));
+		//spawnBoss(sf::Vector2f(2500, 325.f)); // use to demonstrate boss battle
 		bossSpawned = true;
+
+		spawnSierra(sf::Vector2f(8400, 340.f));
+		drawCage(sf::Vector2f(8400, 320.f));
+		//spawnSierra(sf::Vector2f(2650, 340.f)); // use to demonstrate boss battle
+		//drawCage(sf::Vector2f(2650, 320.f)); // use to demonstrate boss battle
+
 		MusicPlayer::getInstance().stop();
 		MusicPlayer::getInstance().play("bossMusic");
 	}
@@ -642,10 +714,6 @@ void Scene_MagicCatCademy::sBossBattle(sf::Time dt)
 	}
 }
 
-void Scene_MagicCatCademy::sBossMovement(sf::Time dt)
-{
-
-}
 
 void Scene_MagicCatCademy::sDestroyOutOfBounds()
 {
@@ -726,10 +794,20 @@ void Scene_MagicCatCademy::spawnBoss(sf::Vector2f pos)
 	mars->addComponent<CTransform>(pos);
 	mars->addComponent<CBoundingBox>(sf::Vector2f(100, 100));
 	mars->addComponent<CAnimation>(Assets::getInstance().getAnimation("marsIdle"));
-	mars->addComponent<CBoss>(false, false, false, false);
-	mars->addComponent<CHealth>(250);
+	mars->addComponent<CBoss>();
+	mars->addComponent<CHealth>(10);
 	mars->addComponent<CGravity>(0.5f);
 	mars->addComponent<CState>("idle");
+}
+
+void Scene_MagicCatCademy::spawnSierra(sf::Vector2f pos)
+{
+	auto sierra = m_entityManager.addEntity("sierra");
+	sierra->addComponent<CTransform>(pos);
+	sierra->addComponent<CBoundingBox>(sf::Vector2f(55, 60));
+	sierra->addComponent<CAnimation>(Assets::getInstance().getAnimation("sierraIdle"));
+	sierra->addComponent<CNPC>();
+	sierra->addComponent<CState>("idle");
 }
 
 void Scene_MagicCatCademy::spawnGroundEntity(sf::Vector2f pos)
@@ -808,12 +886,19 @@ void Scene_MagicCatCademy::drawMagicCooldownBar(sf::Time& cooldown, sf::Clock& c
 	m_game->window().draw(cooldownBar);
 }
 
+void Scene_MagicCatCademy::drawCage(sf::Vector2f pos)
+{
+	auto cage = m_entityManager.addEntity("cage");
+	cage->addComponent<CTransform>(pos);
+	cage->addComponent<CAnimation>(Assets::getInstance().getAnimation("cageLocked"));
+}
+
 void Scene_MagicCatCademy::dropPowerup(sf::Vector2f pos)
 {
 	static const std::string powerups[] =
 	{ "shieldPowerup", "speedPowerup", "magicCooldownPowerup", "magicStrengthPowerup" };
 
-	std::uniform_int_distribution<int> d1(1, 3);
+	std::uniform_int_distribution<int> d1(1, 5);
 	std::uniform_int_distribution<int> d2(0, 3);
 
 	if (d1(rng) <= 3) {
@@ -862,10 +947,10 @@ void Scene_MagicCatCademy::enemyAttack(std::shared_ptr<Entity> e)
 
 	SoundPlayer::getInstance().play("hellhoundGrowl", tx.pos);
 
-	auto offset = (tx.scale.x < 0) ? 50 : -50;
+	auto offset = (tx.scale.x < 0) ? 60 : -60;
 	tx.pos.x += offset;
-	tx.pos.y -= 80;
-	tx.vel.x += 1.5f;
+	tx.pos.y -= 50;
+	tx.vel.x += 2.f;
 
 	attack.isAttacking = true;
 	checkEnemyState(e);
@@ -886,7 +971,7 @@ void Scene_MagicCatCademy::bossAttack()
 			checkBossState();
 			SoundPlayer::getInstance().play("fire");
 			int fireAmount = rand2(rng);
-			auto pos = m_worldView.getSize();
+			auto pos = m_player->getComponent<CTransform>().pos;
 			for (int i{ 0 }; i < fireAmount; i++) {
 				auto fire = m_entityManager.addEntity("fire");
 				fire->addComponent<CTransform>(sf::Vector2f{ pos.x, 340.f });
@@ -902,9 +987,34 @@ void Scene_MagicCatCademy::bossAttack()
 			checkBossState();
 		}
 		else if (attack == 3) {
+			m->getComponent<CTransform>().vel.x -= 1;
 			m->getComponent<CBoss>().isWalking = true;
 			checkBossState();
+
 		}
+	}
+}
+
+void Scene_MagicCatCademy::freeSierra()
+{
+	MusicPlayer::getInstance().play("mainTune");
+
+	for (auto c : m_entityManager.getEntities("cage")) {
+		c->addComponent<CAnimation>(Assets::getInstance().getAnimation("cageUnlocked"));
+	}
+
+	for (auto f : m_entityManager.getEntities("fire")) {
+		f->destroy();
+	}
+
+	// cats walk towards each other, meow, then walk off screen, screen fades to black
+	for (auto s : m_entityManager.getEntities("sierra")) {
+		s->getComponent<CTransform>().vel.x -= 2;
+		s->getComponent<CNPC>().isWalking = true;
+		checkNPCState(s);
+		SoundPlayer::getInstance().play("meow", s->getComponent<CTransform>().pos);
+		SoundPlayer::getInstance().play("meow", m_player->getComponent<CTransform>().pos);
+		endScene.restart();
 	}
 }
 
@@ -934,6 +1044,7 @@ void Scene_MagicCatCademy::playerMovement()
 
 	if (dir & CInput::UP) {
 		jumping = true;
+		isGrounded = false;
 		vel.y = -10.f;
 	}
 
@@ -1004,8 +1115,6 @@ void Scene_MagicCatCademy::checkEnemyState(std::shared_ptr<Entity> e)
 			if (state != newState) {
 				state = newState;
 
-				Animation anim;
-
 				if (state == "attacking") {
 					checkEntityScale("hellhoundAttack", e);
 				}
@@ -1036,6 +1145,7 @@ void Scene_MagicCatCademy::checkBossState()
 			if (m->getComponent<CBoss>().isFireAttacking) newState = "fireAttacking";
 			if (m->getComponent<CBoss>().isWalking) newState = "walking";
 			if (m->getComponent<CBoss>().isDodging) newState = "dodging";
+			if (m->getComponent<CBoss>().isReturning) newState = "returning";
 
 			auto& tx = m->getComponent<CTransform>();
 			auto& state = m->getComponent<CState>().state;
@@ -1047,21 +1157,15 @@ void Scene_MagicCatCademy::checkBossState()
 				if (state != newState) {
 					state = newState;
 
-					Animation anim;
-
 					if (state == "fireAttacking") {
 						checkEntityScale("marsFire", m);
 					}
 
-					if (state == "attacking") {
+					if (state == "attacking" || state == "dodging") {
 						checkEntityScale("marsAttack", m);
 					}
 
-					if (state == "dodging") {
-						checkEntityScale("marsAttack", m);
-					}
-
-					if (state == "walking") {
+					if (state == "walking" || state == "returning") {
 						checkEntityScale("marsWalk", m);
 					}
 
@@ -1074,12 +1178,57 @@ void Scene_MagicCatCademy::checkBossState()
 	}
 }
 
+void Scene_MagicCatCademy::checkNPCState(std::shared_ptr<Entity> e)
+{
+	std::string newState = "idle";
+
+	auto sierra = m_entityManager.getEntities("sierra");
+
+	for (auto s : sierra) {
+		if (s->hasComponent<CState>()) {
+
+			if (s->getComponent<CNPC>().isWalking) newState = "walking";
+
+			auto& tx = s->getComponent<CTransform>();
+			auto& state = s->getComponent<CState>().state;
+
+			if (std::abs(tx.vel.x) > 0.1f)
+				tx.scale.x = (tx.vel.x < 0) ? 1 : -1;
+
+			if (state != "dead") {
+				if (state != newState) {
+					state = newState;
+
+					if (state == "walking") {
+						checkEntityScale("sierraWalk", e);
+					}
+
+					if (state == "idle") {
+						checkEntityScale("sierraIdle", e);
+					}
+
+				}
+			}
+
+		}
+	}
+}
+
+void Scene_MagicCatCademy::checkEntityScale(std::string animationName, std::shared_ptr<Entity> e)
+{
+	Animation anim = Assets::getInstance().getAnimation(animationName);
+
+	bool flip = (e->getComponent<CTransform>().scale.x < 0);
+	anim.setFlipped(flip);
+
+	e->getComponent<CAnimation>().animation = anim;
+}
+
 void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 {
 	if (e->hasComponent<CHealth>()) {
 		if (e->getComponent<CHealth>().hp <= 0) {
 			e->destroy();
-
 
 			if (e->getTag() == "lucy") {
 				lives--;
@@ -1091,17 +1240,25 @@ void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 					p->destroy();
 				}
 
+				if (lives == 0) {
+					onEnd();
+				}
+
 				spawnPlayer(sf::Vector2f(200.f, 340.f));
 				spawnEnemies(sf::Vector2f(1500.f, 325.f), 3);
 				m_worldView.reset(sf::FloatRect(0.f, 0.f, m_worldView.getSize().x, m_worldView.getSize().y));
 				enemySpawnTimer.restart();
-
-				if (lives == 0) {
-					onEnd();
-				}
 			}
 			else if (e->getTag() == "hellhound") {
 				dropPowerup(e->getComponent<CTransform>().pos);
+			}
+			else if (e->getTag() == "mars") {
+				auto explosion = m_entityManager.addEntity("explosion");
+				explosion->addComponent<CTransform>(sf::Vector2f(e->getComponent<CTransform>().pos));
+				explosion->addComponent<CAnimation>(Assets::getInstance().getAnimation("explosion"));
+				bossDefeated = true;
+
+				freeSierra();
 			}
 		}
 
@@ -1110,30 +1267,7 @@ void Scene_MagicCatCademy::checkIfDead(std::shared_ptr<Entity> e)
 
 void Scene_MagicCatCademy::keepPlayerInBounds()
 {
-	auto center = m_worldView.getCenter();
-	sf::Vector2f viewHalfSize = m_worldView.getSize() / 2.f;
-
-
-	auto left = center.x - viewHalfSize.x;
-	auto right = center.x + viewHalfSize.x;
-	auto top = center.y - viewHalfSize.y;
-	auto bot = center.y + viewHalfSize.y;
-
-	auto& player_pos = m_player->getComponent<CTransform>().pos;
-
-	auto halfSize = sf::Vector2f{ 20, 20 };
-
-	player_pos.x = std::max(player_pos.x, left + halfSize.x);
-	player_pos.x = std::min(player_pos.x, right - halfSize.x);
-	player_pos.y = std::max(player_pos.y, top + halfSize.y);
-	player_pos.y = std::min(player_pos.y, bot - halfSize.y);
-
-
-}
-
-void Scene_MagicCatCademy::keepBossInBounds()
-{
-	for (auto m : m_entityManager.getEntities("mars")) {
+	if (!bossDefeated) {
 		auto center = m_worldView.getCenter();
 		sf::Vector2f viewHalfSize = m_worldView.getSize() / 2.f;
 
@@ -1143,14 +1277,39 @@ void Scene_MagicCatCademy::keepBossInBounds()
 		auto top = center.y - viewHalfSize.y;
 		auto bot = center.y + viewHalfSize.y;
 
-		auto& marsPos = m->getComponent<CTransform>().pos;
+		auto& player_pos = m_player->getComponent<CTransform>().pos;
 
 		auto halfSize = sf::Vector2f{ 20, 20 };
 
-		marsPos.x = std::max(marsPos.x, left + halfSize.x);
-		marsPos.x = std::min(marsPos.x, right - halfSize.x);
-		marsPos.y = std::max(marsPos.y, top + halfSize.y);
-		marsPos.y = std::min(marsPos.y, bot - halfSize.y);
+		player_pos.x = std::max(player_pos.x, left + halfSize.x);
+		player_pos.x = std::min(player_pos.x, right - halfSize.x);
+		player_pos.y = std::max(player_pos.y, top + halfSize.y);
+		player_pos.y = std::min(player_pos.y, bot - halfSize.y);
+	}
+}
+
+void Scene_MagicCatCademy::keepBossInBounds()
+{
+	if (bossSpawned && bossPositioned) {
+		for (auto m : m_entityManager.getEntities("mars")) {
+			auto center = m_worldView.getCenter();
+			sf::Vector2f viewHalfSize = m_worldView.getSize() / 2.f;
+
+
+			auto left = center.x - viewHalfSize.x;
+			auto right = center.x + viewHalfSize.x;
+			auto top = center.y - viewHalfSize.y;
+			auto bot = center.y + viewHalfSize.y;
+
+			auto& marsPos = m->getComponent<CTransform>().pos;
+
+			auto halfSize = sf::Vector2f{ 20, 20 };
+
+			marsPos.x = std::max(marsPos.x, left + halfSize.x);
+			marsPos.x = std::min(marsPos.x, right - halfSize.x);
+			marsPos.y = std::max(marsPos.y, top + halfSize.y);
+			marsPos.y = std::min(marsPos.y, bot - halfSize.y);
+		}
 	}
 }
 
@@ -1200,19 +1359,12 @@ sf::FloatRect Scene_MagicCatCademy::getViewBounds()
 	return sf::FloatRect(leftTop, size);
 }
 
-void Scene_MagicCatCademy::checkEntityScale(std::string animationName, std::shared_ptr<Entity> e)
-{
-	Animation anim = Assets::getInstance().getAnimation(animationName);
 
-	bool flip = (e->getComponent<CTransform>().scale.x < 0);
-	anim.setFlipped(flip);
-
-	e->getComponent<CAnimation>().animation = anim;
-}
 
 void Scene_MagicCatCademy::onEnd()
 {
-	m_game->changeScene("MENU", nullptr, false);
+	MusicPlayer::getInstance().play("mainMenuMusic");
+	m_game->quitLevel();
 	lives = 3;
 }
 
@@ -1252,7 +1404,6 @@ void Scene_MagicCatCademy::loadLevel(const std::string& path)
 void Scene_MagicCatCademy::registerActions()
 {
 	registerAction(sf::Keyboard::P, "PAUSE", Action::Keyboard);
-	registerAction(sf::Keyboard::Escape, "BACK", Action::Keyboard);
 	registerAction(sf::Keyboard::Q, "QUIT", Action::Keyboard);
 	registerAction(sf::Keyboard::C, "TOGGLE_COLLISION", Action::Keyboard);
 	registerAction(sf::Keyboard::A, "LEFT", Action::Keyboard);

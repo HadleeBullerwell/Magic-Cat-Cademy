@@ -145,9 +145,14 @@ struct CBoss : public Component
     bool isAttacking{ false };
     bool isWalking{ false };
     bool isDodging{ false };
+    bool isReturning{ false };
 
     CBoss() = default;
-    CBoss(bool isFireAttacking, bool isAttacking, bool isWalking, bool isDodging) : isFireAttacking(isFireAttacking), isAttacking(isAttacking), isWalking(isWalking), isDodging(isDodging) {}
+    CBoss(bool isFireAttacking, 
+        bool isAttacking,
+        bool isWalking, bool 
+        isDodging) 
+        : isFireAttacking(isFireAttacking), isAttacking(isAttacking), isWalking(isWalking), isDodging(isDodging), isReturning(isReturning) {}
 };
 
 struct CImmunity : public Component
@@ -158,6 +163,14 @@ public:
 
     CImmunity() : duration(0.0f), isImmune(false) {};
     CImmunity(float immunityDuration) : duration(immunityDuration), isImmune(true) {};
+};
+
+struct CNPC : public Component {
+public:
+    bool isWalking;
+
+    CNPC() : isWalking(false) {};
+    CNPC(bool isWalking) : isWalking(isWalking) {};
 };
 
 #endif //BREAKOUT_COMPONENTSH

@@ -7,10 +7,12 @@ class Scene_Menu : public Scene
 private:
 	std::vector<std::string>	m_menuStrings;
 	sf::Text					m_menuText;
+	sf::Text					m_menuItem;
 	std::vector<std::string>	m_levelPaths;
 	int							m_menuIndex{0};
 	std::string					m_title;
 	sf::View					m_worldView;
+	sf::Vector2f				m_worldViewPosition;
 
 	void displayLogo(sf::Vector2f pos);
 	void spawnCat(sf::Vector2f pos);

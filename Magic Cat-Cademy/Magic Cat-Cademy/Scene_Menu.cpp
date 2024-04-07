@@ -1,5 +1,6 @@
 #include "Scene_Menu.h"
 #include "Scene_MagicCatCademy.h"
+#include "Scene_Controls.h"
 #include "SoundPlayer.h"
 #include "Entity.h"
 #include "MusicPlayer.h"
@@ -15,6 +16,7 @@ void Scene_Menu::onEnd()
 
 Scene_Menu::Scene_Menu(GameEngine* gameEngine)
 	: Scene(gameEngine)
+	, m_worldView(gameEngine->window().getDefaultView())
 {
 	MusicPlayer::getInstance().play("mainMenuMusic");
 	MusicPlayer::getInstance().setVolume(50);
@@ -73,14 +75,27 @@ void Scene_Menu::init()
 
 	m_title = "Magic Cat-Cademy";
 	m_menuStrings.push_back("PLAY");
-	m_menuStrings.push_back("SETTINGS");
+	m_menuStrings.push_back("CONTROLS");
 	m_menuStrings.push_back("QUIT");
 
 	m_levelPaths.push_back("../assets/level1.txt");
-	m_levelPaths.push_back("../assets/level1.txt");
-	m_levelPaths.push_back("../assets/level1.txt");
 
 	m_menuText.setFont(Assets::getInstance().getFont("main"));
+
+	m_worldViewPosition.x = (m_game->window().getSize().x / 2.f) - 740;
+	m_worldViewPosition.y = (m_game->window().getSize().y - m_menuStrings.size() * m_menuItem.getLocalBounds().height) / 2.f - 100;
+
+	m_menuText.setString(m_title);
+	m_menuText.setCharacterSize(75);
+	m_menuText.setOutlineThickness(3);
+	m_menuText.setOrigin(m_menuText.getLocalBounds().width / 2, m_menuText.getLocalBounds().height / 2);
+	m_menuText.setPosition(300, 225);
+
+	m_menuItem.setFont(Assets::getInstance().getFont("main"));
+	m_menuItem.setCharacterSize(50);
+	m_menuItem.setOutlineThickness(3);
+	m_menuItem.setPosition(m_worldViewPosition);
+
 
 	const size_t CHAR_SIZE{ 64 };
 	m_menuText.setCharacterSize(CHAR_SIZE);
@@ -96,9 +111,7 @@ void Scene_Menu::update(sf::Time dt)
 
 void Scene_Menu::sRender()
 {
-	sf::View view = m_game->window().getView();
-	view.setCenter(m_game->window().getSize().x / 2.f, m_game->window().getSize().y / 2.f);
-	m_game->window().setView(view);
+	m_game->window().setView(m_worldView);
 
 	static const sf::Color selectedColor(255, 255, 255);
 	static const sf::Color outlineColor(54, 1, 77);
@@ -112,28 +125,18 @@ void Scene_Menu::sRender()
 	}
 
 	m_menuText.setFillColor(normalColor);
-	m_menuText.setString(m_title);
-	m_menuText.setCharacterSize(75);
-	m_menuText.setOutlineThickness(3);
 	m_menuText.setOutlineColor(outlineColor);
-	m_menuText.setOrigin(m_menuText.getLocalBounds().width / 2, m_menuText.getLocalBounds().height / 2);
-	m_menuText.setPosition(300, 225);
+
+
 	m_game->window().draw(m_menuText);
-
-
 
 	for (size_t i{ 0 }; i < m_menuStrings.size(); ++i)
 	{
-		sf::Text menuItem;
-		menuItem.setFont(Assets::getInstance().getFont("main"));
-		menuItem.setCharacterSize(50);
-		menuItem.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
-		menuItem.setOutlineThickness(3);
-		menuItem.setOutlineColor(outlineColor);
-		menuItem.setOrigin(menuItem.getLocalBounds().width / 2, menuItem.getLocalBounds().height / 2);
-		menuItem.setPosition(menuItem.getPosition().x + 20 , 185 + (i + 1) * 96);
-		menuItem.setString(m_menuStrings.at(i));
-		m_game->window().draw(menuItem);
+		m_menuItem.setString(m_menuStrings.at(i));
+		m_menuItem.setOutlineColor(outlineColor);
+		m_menuItem.setFillColor((i == m_menuIndex ? selectedColor : normalColor));
+		m_menuItem.setPosition(m_worldViewPosition.x, m_worldViewPosition.y + i * m_menuItem.getCharacterSize() * 2);
+		m_game->window().draw(m_menuItem);
 	}
 
 	for (auto& e : m_entityManager.getEntities()) {
@@ -163,13 +166,21 @@ void Scene_Menu::sDoAction(const Command& action)
 		}
 		else if (action.name() == "PLAY")
 		{
-			SoundPlayer::getInstance().play("select");
-			m_game->changeScene("PLAY", std::make_shared<Scene_MagicCatCademy>(m_game, m_levelPaths[m_menuIndex]));
+			if (m_menuIndex == 0) {
+				SoundPlayer::getInstance().play("select");
+				m_game->changeScene("PLAY", std::make_shared<Scene_MagicCatCademy>(m_game, m_levelPaths[m_menuIndex]));
+			}
+			else if (m_menuIndex == 1) {
+				SoundPlayer::getInstance().play("select");
+				m_game->changeScene("CONTROLS", std::make_shared<Scene_Controls>(m_game));
+			}
+			else {
+				SoundPlayer::getInstance().play("select");
+				onEnd();
+			}
+
 		}
-		else if (action.name() == "QUIT")
-		{
-			onEnd();
-		}
+
 	}
 
 }

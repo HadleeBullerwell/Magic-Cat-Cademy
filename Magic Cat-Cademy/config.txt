@@ -19,19 +19,23 @@ Sound fire		../assets/Sounds/fire.wav
 # Textures
 Texture Background 	../assets/Textures/background.png
 Texture Lucy            ../assets/Textures/lucyAtlas.png
+Texture Sierra		../assets/Textures/sierra.png
 Texture Hellhound	../assets/Textures/hellhound.png
 Texture Menu		../assets/Textures/menu.png
 Texture MenuBackground ../assets/Textures/menuBackground.png
+Texture	ControlsBackground ../assets/Textures/controlsBackground.png
 Texture Magic		../assets/Textures/magic.png
 Texture Star		../assets/Textures/star.png
 Texture Fire		../assets/Textures/fire.png
 Texture Introduction	../assets/Textures/introductions.png
 Texture Powerup		../assets/Textures/powerups.png
 Texture Mars		../assets/Textures/mars.png
+Texture Explosion	../assets/Textures/explosion.png
 
 # Sprites
-Sprite Background 	Background	0 0 15000 750
-Sprite MenuBackground	MenuBackground	0 0 574   324
+Sprite Background 	Background		0 0 	15000 750
+Sprite MenuBackground	MenuBackground		0 0 	574   324
+Sprite ControlsBackground ControlsBackground	0 0 	574   324
 
 JSON 			../assets/Textures/lucyAtlas.json
 JSON			../assets/Textures/hellhound.json
@@ -42,6 +46,8 @@ JSON			../assets/Textures/fire.json
 JSON			../assets/Textures/powerups.json
 JSON			../assets/Textures/introductions.json
 JSON			../assets/Textures/mars.json
+JSON			../assets/Textures/sierra.json
+JSON			../assets/Textures/explosion.json
 
 # Animation 	Name 		Texture	Speed   Repeats
 Animation	logo		Menu	1	no
@@ -62,6 +68,14 @@ Animation	marsIdle	Mars 	3	yes
 Animation	marsWalk	Mars 	3	yes
 Animation 	marsFire	Mars	10	no
 Animation	marsAttack	Mars	10	no
+
+Animation	explosion	Explosion 10	no
+
+Animation	cageLocked	Sierra	1	yes
+Animation	cageUnlocked	Sierra	1	yes
+
+Animation 	sierraIdle	Sierra	1	yes
+Animation	sierraWalk	Sierra	3	yes
 
 Animation	magicOne	Magic	12	no
 Animation	magicStar	Star	12	no
