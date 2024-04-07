@@ -21,7 +21,7 @@ Her main type of magic is working with a wand, casting spells of different kinds
 
 The game is played in the third person; you will control Lucy without directly seeing her perspective. You will be watching from the side view and will control her movements and attacks against the opponents.
 
-## Sketch of Main Character -
+## Main Character -
 
 ![Lucy](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/cb7e5411-ef8a-4164-9612-1fcc51b94591)
 
@@ -48,9 +48,11 @@ The minions of Cerberus are tasked with causing as much destruction as possible 
 
 These are the main enemies on each level, and you will only encounter the other three hellhounds at the end of each level. 
 
-## Sketch of Opponents –
+## Opponents –
 
 ![Mars](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/3b5892db-1796-495a-8467-b343aac2ef82)
+![Cerberus](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/40fa45c7-f868-4a55-8971-e36a8704a7b4)
+![Juno)](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/7e07cb77-d5d1-4275-96e9-f1eb6b6794c9)
 ![Hellhound Minion)](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/9549ce05-ba53-46a9-8970-482e1952bc46)
 
 ## Side Characters – 
@@ -69,7 +71,7 @@ A brown maine-coon cat with long fur. She is the eldest of the leaders. She rule
 
 Her powers focus on spawning water. Although she is a cat, she does enjoy water. She is one of the strongest water magicians in Felandia, and taught water magic at the academy. 
 
-## Sketch of Side Characters - 
+## Side Characters - 
 
 ![Sierra)](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/95420641-d4b8-4a8a-86f8-0f20ed932e1b)
 ![Nova](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/06fb91d7-8ba1-4d9a-947d-fe8c1b34a164)
@@ -94,7 +96,7 @@ A rainforest with many tall trees. It is littered with forestry foliage, bushes 
 ## Menus –
 Upon loading, you will have the name of the game across the top in a fantasy-style font. Underneath, you will see the option to play, select a level, and then options. I will have a solid colour filling the background. The colours and fonts, such as purples, browns, blues, and more, will represent the magic aspect of the game. 
 
-## Sketch of Menu
+## Menu
 
 ![Menu](https://github.com/HadleeBullerwell/Magic-Cat-Cademy/assets/113120608/9be6451e-2458-4dd1-91ed-859557ff4ca6)
 
