@@ -86,5 +86,6 @@ Animation	shieldPowerup		Powerup	1	no
 Animation	speedPowerup		Powerup 1	no
 Animation	magicCooldownPowerup 	Powerup	1	no
 Animation	magicStrengthPowerup	Powerup	1	no
+Animation	extraLifePowerup	Powerup 1	no
 
 Animation	levelOneIntro		Introduction	1	no

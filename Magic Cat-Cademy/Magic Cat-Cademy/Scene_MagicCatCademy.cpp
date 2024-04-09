@@ -493,6 +493,14 @@ void Scene_MagicCatCademy::sCollision(sf::Time dt)
 					magicStrength = 20;
 					powerupDuration["magicStrengthPowerup"] = 5.f;
 				}
+				else if (powerupName == "extraLifePowerup") {
+					if (lives == 9) {
+						powerup->destroy();
+					}
+					else {
+						lives += 1;
+					}
+				}
 
 				powerup->destroy();
 			}
@@ -684,7 +692,7 @@ void Scene_MagicCatCademy::sBossBattle(sf::Time dt)
 
 	if (m_player->getComponent<CTransform>().pos.x >= 7500 && !bossSpawned) {
 
-	//if (m_player->getComponent<CTransform>().pos.x >= 1500 && !bossSpawned) { use to demonstrate boss battle
+		//if (m_player->getComponent<CTransform>().pos.x >= 1500 && !bossSpawned) { use to demonstrate boss battle
 		bossAttackTimer.restart();
 
 		for (auto h : hellhounds) {
@@ -896,13 +904,13 @@ void Scene_MagicCatCademy::drawCage(sf::Vector2f pos)
 void Scene_MagicCatCademy::dropPowerup(sf::Vector2f pos)
 {
 	static const std::string powerups[] =
-	{ "shieldPowerup", "speedPowerup", "magicCooldownPowerup", "magicStrengthPowerup" };
+	{ "shieldPowerup", "speedPowerup", "magicCooldownPowerup", "magicStrengthPowerup", "extraLifePowerup"};
 
 	std::uniform_int_distribution<int> d1(1, 5);
-	std::uniform_int_distribution<int> d2(0, 3);
+	std::uniform_int_distribution<int> d2(0, 4);
 
 	if (d1(rng) <= 3) {
-		auto powerup = powerups[d2(rng)];
+		auto powerup = "extraLifePowerup"; //powerups[d2(rng)];
 		auto p = m_entityManager.addEntity("powerup");
 		p->addComponent<CTransform>(pos);
 		auto bb = p->addComponent<CAnimation>(Assets::getInstance().getAnimation(powerup)).animation.getBB();

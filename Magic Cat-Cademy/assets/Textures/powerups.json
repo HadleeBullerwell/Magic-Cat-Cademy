@@ -99,6 +99,31 @@
         "x": 0.5,
         "y": 0.5
       }
+    },
+    {
+      "filename": "extraLifePowerup (1).png",
+      "frame": {
+        "x": 5,
+        "y": 113,
+        "w": 38,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 38,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 38,
+        "h": 35
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
     }
   ],
   "meta": {
