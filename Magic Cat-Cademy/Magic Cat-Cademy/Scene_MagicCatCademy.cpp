@@ -703,12 +703,12 @@ void Scene_MagicCatCademy::sBossBattle(sf::Time dt)
 			f->destroy();
 		}
 
-		spawnBoss(sf::Vector2f(8250, 325.f));
+		spawnBoss(sf::Vector2f(8500, 325.f));
 		//spawnBoss(sf::Vector2f(2500, 325.f)); // use to demonstrate boss battle
 		bossSpawned = true;
 
-		spawnSierra(sf::Vector2f(8400, 340.f));
-		drawCage(sf::Vector2f(8400, 320.f));
+		spawnSierra(sf::Vector2f(8650, 340.f));
+		drawCage(sf::Vector2f(8650, 320.f));
 		//spawnSierra(sf::Vector2f(2650, 340.f)); // use to demonstrate boss battle
 		//drawCage(sf::Vector2f(2650, 320.f)); // use to demonstrate boss battle
 
@@ -803,7 +803,7 @@ void Scene_MagicCatCademy::spawnBoss(sf::Vector2f pos)
 	mars->addComponent<CBoundingBox>(sf::Vector2f(100, 100));
 	mars->addComponent<CAnimation>(Assets::getInstance().getAnimation("marsIdle"));
 	mars->addComponent<CBoss>();
-	mars->addComponent<CHealth>(10);
+	mars->addComponent<CHealth>(250);
 	mars->addComponent<CGravity>(0.5f);
 	mars->addComponent<CState>("idle");
 }
@@ -904,13 +904,13 @@ void Scene_MagicCatCademy::drawCage(sf::Vector2f pos)
 void Scene_MagicCatCademy::dropPowerup(sf::Vector2f pos)
 {
 	static const std::string powerups[] =
-	{ "shieldPowerup", "speedPowerup", "magicCooldownPowerup", "magicStrengthPowerup", "extraLifePowerup"};
+	{ "shieldPowerup", "speedPowerup", "magicCooldownPowerup", "magicStrengthPowerup", "extraLifePowerup" };
 
 	std::uniform_int_distribution<int> d1(1, 5);
 	std::uniform_int_distribution<int> d2(0, 4);
 
 	if (d1(rng) <= 3) {
-		auto powerup = "extraLifePowerup"; //powerups[d2(rng)];
+		auto powerup = powerups[d2(rng)];
 		auto p = m_entityManager.addEntity("powerup");
 		p->addComponent<CTransform>(pos);
 		auto bb = p->addComponent<CAnimation>(Assets::getInstance().getAnimation(powerup)).animation.getBB();
