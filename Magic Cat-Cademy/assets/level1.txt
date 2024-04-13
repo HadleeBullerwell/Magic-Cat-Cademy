@@ -6,3 +6,6 @@ World 1500 750
 Bkg Background 0 0
 
 Scroll Speed 60
+Speed 1
+Magic Strength 10
+Lives 3

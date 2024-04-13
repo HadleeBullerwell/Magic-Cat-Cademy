@@ -1,0 +1,65 @@
+{
+  "frames": [
+    {
+      "filename": "pauseUiResume (1).png",
+      "frame": {
+        "x": 5,
+        "y": 5,
+        "w": 472,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 472,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 472,
+        "h": 151
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "pauseUiQuit (1).png",
+      "frame": {
+        "x": 5,
+        "y": 166,
+        "w": 344,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 344,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 344,
+        "h": 151
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "pauseUi.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 482,
+      "h": 322
+    },
+    "scale": 1
+  }
+}

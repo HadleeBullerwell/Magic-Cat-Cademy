@@ -31,6 +31,7 @@ Texture Introduction	../assets/Textures/introductions.png
 Texture Powerup		../assets/Textures/powerups.png
 Texture Mars		../assets/Textures/mars.png
 Texture Explosion	../assets/Textures/explosion.png
+Texture	PauseUI		../assets/Textures/pauseUi.png
 
 # Sprites
 Sprite Background 	Background		0 0 	15000 750
@@ -48,6 +49,7 @@ JSON			../assets/Textures/introductions.json
 JSON			../assets/Textures/mars.json
 JSON			../assets/Textures/sierra.json
 JSON			../assets/Textures/explosion.json
+JSON			../assets/Textures/pauseUi.json
 
 # Animation 	Name 		Texture	Speed   Repeats
 Animation	logo		Menu	1	no
@@ -89,3 +91,5 @@ Animation	magicStrengthPowerup	Powerup	1	no
 Animation	extraLifePowerup	Powerup 1	no
 
 Animation	levelOneIntro		Introduction	1	no
+Animation	pauseUiResume		PauseUI		1 	no
+Animation	pauseUiQuit		PauseUI		1	no

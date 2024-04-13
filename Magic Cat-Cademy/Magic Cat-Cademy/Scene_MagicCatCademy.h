@@ -3,6 +3,9 @@
 
 struct LevelConfig {
 	float       scrollSpeed{ 60.f };
+	float			speed{ 1.f };
+	float			magicStrength{ 10 };
+	int				lives{ 3 };
 };
 
 class Scene_MagicCatCademy : public Scene
@@ -23,12 +26,11 @@ private:
 	sf::Time		attackInterval{ sf::seconds(5.f) };
 
 	sf::Clock		enemySpawnTimer;
-	sf::Time		enemySpawnInterval{ sf::seconds(20.f) };
+	sf::Time		enemySpawnInterval{ sf::seconds(22.5f) };
 
 	sf::Clock		powerupTimer;
 	sf::Time		powerupTime{ sf::seconds(5.f) };
-	float			speed{ 1.f };
-	float			magicStrength{ 10 };
+
 	std::map<std::string, float> powerupDuration;
 
 	sf::Text		health;
@@ -47,8 +49,6 @@ private:
 	bool			fadingToBlack{ false };
 	float			fadeAlpha = 0.0f;
 	float			fadeSpeed = 50.0f;
-
-	int				lives{ 3 };
 
 	bool			m_drawTextures{ true };
 	bool			m_drawAABB{ false };
@@ -77,6 +77,7 @@ private:
 	void			drawHealthBar(int hp, sf::Vector2f pos, int barSize);
 	void			drawMagicCooldownBar(sf::Time& cooldown, sf::Clock& cooldownTimer);
 	void			drawCage(sf::Vector2f pos);
+	void			drawPauseUI();
 
 	void			dropPowerup(sf::Vector2f pos);
 	void			fireMagic();
@@ -84,7 +85,6 @@ private:
 	void			bossAttack();
 	void			freeSierra();
 	void			playerMovement();
-	void			fadeToBlack(sf::RenderWindow& window, sf::Time dt);
 
 	void			checkPlayerState();
 	void			checkEnemyState(std::shared_ptr<Entity> e);
